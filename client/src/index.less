@@ -107,7 +107,7 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
     font-size: 14px;
     border-width: 0px 0px 1px 0px;
     border-color: #bbb;
-    background: #fff;
+    background: rgba(255,255,255,0);
     transition: all ease .2s;
 
     &:focus {
@@ -129,6 +129,7 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
   display: flex;
   justify-content: center;
   align-items: center;
+  border-radius: 10px;
   .overlay {
     cursor: initial;
     position: absolute;
@@ -142,16 +143,18 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
 }
 
 .modal {
-  border-radius: 2px;
   position: absolute;
   z-index: 100;
   background: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: inherit;
   .modal-title-bar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-radius: 5px 5px 0 0;
+    border-radius: inherit;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
     background: rgba(0, 123, 255, 0.2);
     padding: 15px 0 15px 20px;
     .modal-title {
@@ -462,34 +465,98 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
 #forgot-password {
   height: 100vh;
   width: 100vw;
+  overflow: hidden;
   display: flex;
   align-items: center;
   flex-direction: column;
-  background: #777;
-  background: url(./assets/background.jpg) center no-repeat; 
+  background: #E8EDE4;
+  background: linear-gradient(85.38deg, #E8EDE4 -23.38%, #F8F2EB 97.65%);
   object-fit: cover;
 
+  .ellipses {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+    .container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      top: 0;
+      left: 0;
+      .ellipse {
+        position: absolute;
+        box-shadow: 10px 14px 104px rgba(0, 0, 0, 0.12);
+        filter: blur(200px);
+        border-radius: 50%;
+      }
+      .ellipse.ellipse-medium {
+        width: 427px;
+        height: 427px;
+      }
+      .ellipse.ellipse-small {
+        width: 279px;
+        height: 279px;
+      }
+      .ellipse.ellipse-green {
+        background: rgba(49, 129, 97, 0.25);
+      }
+      .ellipse.ellipse-orange {
+        background: #F9E1C3;
+      }
+      .pos-1 {
+        left: -180px;
+        bottom: -200px;
+      }
+      .pos-2 {
+        left: 50%;
+        top: 10px;
+      }
+      .pos-3 {
+        left: -88px;
+        top: -89px;
+      }
+      .pos-4 {
+        left: 27.5%;
+        top: 81px;
+      }
+      .pos-5 {
+        right: 32.5%;
+        top: 55%;
+      }
+
+
+    }
+
+  }
   .logo {
-    color: white;
+    color: #333;
     font-weight: 900;
     font-size: 50px;
     user-select: none;
     @media (max-width: 600px) {
       display: none;
     }
+    position: relative;
   }
+  
 
   form {
+    background: rgba(2555,255,255,0.25);
     position: relative;
-    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+    // box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+    box-shadow: 0px 0px 50px 5px #DFD9CE;
     margin-top: 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 80px 40px;
-    background: white;
-    border-radius: 10px;
+    border: 3px solid white;
+    border-radius: 15px;
     width: 450px;
+    
     
     
     @media (max-width: 600px) {
@@ -498,33 +565,6 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
       margin-top: 0;
       width: 100%;
       padding-inline: 30px;
-    }
-
-    .suggest {
-      font-size: 15px;
-      margin-top: 30px;
-      a {
-        text-decoration: underline;
-        &:hover {
-          color: rgb(0, 123, 255);
-        }
-      }
-
-      .suggest-link {
-        display: inline-flex;
-        flex-direction: row-reverse;
-        align-items: center;
-        a:hover + .BsIcon {
-          transform: translateX(4px);
-        }
-
-        .BsIcon {
-          position: initial;
-          display: inline;
-          margin-right: 8px;
-          transition: transform ease .2s;
-        }
-      }
     }
 
     .title {
@@ -548,10 +588,27 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
       font-weight: 600;
       align-self: flex-end;
       color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      &, svg {
+        transition: all ease .2s;
+      }
+      transform: translate(16px, 0);
       &:hover {
         color: rgb(0, 123, 255);
-        text-decoration: underline;
+        transform: translate(-5px, 0);
+        svg {
+          transform: translate(5px, 0);
+          opacity: 1;
+        }
+  
       }
+      svg {
+        transform: translate(-50px, 0);
+        opacity: 0;
+      }
+
     }
   }
 }

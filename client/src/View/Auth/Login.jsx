@@ -4,12 +4,21 @@ import { Link } from "react-router-dom";
 import { Button } from 'antd'
 import InputField from "../../Components/InputField";
 export default function Login(props) {
-    const handleSubmit = (e) => {
+const handleSubmit = (e) => {
         e.preventDefault();
         props.handleLogin();
     }
     return (
         <div id="login">
+            <div className="ellipses">
+                <div className="container">
+                    <div className="ellipse ellipse-medium ellipse-orange pos-1"></div>
+                    <div className="ellipse ellipse-medium ellipse-orange pos-2"></div>
+                    <div className="ellipse ellipse-medium ellipse-green pos-3"></div>
+                    <div className="ellipse ellipse-small ellipse-green pos-4"></div>
+                    <div className="ellipse ellipse-small ellipse-green pos-5"></div>
+                </div>
+            </div>
             <div className="logo">DUT</div>
             <form onSubmit={handleSubmit}>
                 <div className="title">Đăng nhập</div>
@@ -17,17 +26,11 @@ export default function Login(props) {
                 <InputField type="password" label="Mật khẩu" required />
                 <Link to="/unauth/forgot-password" className="forgot-password">
                     Quên mật khẩu?
+                    <BsArrowRight/>
                 </Link>
                 <Button type="primary" htmlType="submit" size="large" className="submit-btn">
                     Đăng nhập
                 </Button>
-                <div className="suggest suggest-sign-in">
-                    <span>Chưa có tài khoản? </span>
-                    <div className="suggest-link">
-                        <Link to="/unauth/register">Đăng ký ngay</Link>
-                        <BsArrowRight className="BsIcon"/>
-                    </div>
-                </div>
             </form>
         </div>
     );
