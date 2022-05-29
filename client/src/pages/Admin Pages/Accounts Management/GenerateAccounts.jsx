@@ -24,7 +24,7 @@ export default function GenerateAccounts() {
                         }
                     >
                         {classes.map(item => (
-                            <Option value={item}>{item}</Option>
+                            <Option key={item} value={item}>{item}</Option>
                         ))}
                     </Select>
                 </div>

@@ -1,4 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 // default settings 
 * {
@@ -9,6 +12,7 @@
 
 a {
   color: #333;
+
   &:hover {
     color: #333;
   }
@@ -18,6 +22,7 @@ ul {
   padding: 0;
   margin: 0;
 }
+
 ul li {
   list-style: none;
 }
@@ -27,7 +32,8 @@ img {
   height: 100%;
 }
 
-button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
+button:not(.cancel-btn, .normal-btn, .ant-btn),
+input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
   border: none;
 }
 
@@ -36,39 +42,8 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
 }
 
 
-.submit-btn {
-  width: 100%;
-  margin-top: 20px;
-}
-.normal-btn {
-  border: 1px solid rgba(0,0,0,0.2);
-  background: rgba(0,0,0,0.03);
-  cursor: pointer;
-  user-select: none;
-  padding: 10px 25px;
-  border-radius: 2px;
-  transition: all ease .25s;
-  &:hover {
-    color:rgb(0, 123, 255);
-    border-color: rgb(0, 123, 255);
-    background: #fff;
-  }
-}
 .ant-btn-primary span {
   color: white;
-}
-
-.cancel-btn {
-  .normal-btn;
-  &:hover {
-    background: rgba(255,0,0,0.05);
-    color: rgb(255, 0, 0);
-    border-color: rgb(255, 0, 0);
-  }
-  &:focus-visible {
-    outline: 1px solid rgb(255, 0, 0);
-
-  }
 }
 
 .input-field {
@@ -107,7 +82,7 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
     font-size: 14px;
     border-width: 0px 0px 1px 0px;
     border-color: #bbb;
-    background: rgba(255,255,255,0);
+    background: rgba(255, 255, 255, 0);
     transition: all ease .2s;
 
     &:focus {
@@ -130,6 +105,7 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
   justify-content: center;
   align-items: center;
   border-radius: 10px;
+
   .overlay {
     cursor: initial;
     position: absolute;
@@ -138,8 +114,18 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
     z-index: 50;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
   }
+
+  .modal-loading {
+    z-index: 1000;
+    .lds-ring {
+      transform: scale(0.7);
+    }
+    .lds-ring > div {
+      border-color: black transparent transparent transparent;
+    }
+  } 
 }
 
 .modal {
@@ -148,6 +134,7 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
   background: white;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   border-radius: inherit;
+
   .modal-title-bar {
     display: flex;
     align-items: center;
@@ -157,10 +144,12 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
     border-end-end-radius: 0;
     background: rgba(0, 123, 255, 0.2);
     padding: 15px 0 15px 20px;
+
     .modal-title {
       padding: 0;
       margin: 0;
     }
+
     .modal-close-icon {
       cursor: pointer;
       font-size: 18px;
@@ -173,10 +162,12 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
 
   form {
     padding: 12px 30px 30px 30px;
+
     .input-field {
       width: 400px;
       margin-top: 30px;
     }
+
     .buttons {
       margin-top: 30px;
       display: flex;
@@ -207,11 +198,13 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     display: flex;
     flex-direction: column;
+
     p {
       --font-color: red;
       max-width: 220px;
       text-align: center;
     }
+
     button {
       margin-top: 20px;
       align-self: center;
@@ -226,7 +219,7 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
     z-index: 50;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
   }
 
 }
@@ -235,7 +228,7 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
 #navbar {
   height: 50px;
   position: fixed;
-  z-index: 2;
+  z-index: 20;
   width: 100%;
   right: 0;
   display: flex;
@@ -256,12 +249,13 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
       font-size: 20px;
       width: 20px;
       height: 20px;
-      box-sizing:content-box;
+      box-sizing: content-box;
       cursor: pointer;
       border-radius: 50%;
       transition: background ease .3s;
+
       &:hover {
-        background: rgba(0,0,0,0.07);
+        background: rgba(0, 0, 0, 0.07);
       }
     }
 
@@ -275,13 +269,14 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
 
       &:hover {
         background: rgba(0, 0, 0, 0.07);
+
         .navbar-profile-drop-down {
           opacity: 1;
           pointer-events: inherit;
           transform: translateY(15px);
         }
       }
-      
+
       &:hover>.drop-down-icon {
         transform: translateY(3px);
       }
@@ -307,12 +302,15 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
         opacity: 0;
         pointer-events: none;
         .box-shadow-default;
+
         a {
           text-decoration: none;
         }
+
         li {
           padding-inline: 20px;
           padding-block: 12px;
+
           &:hover {
             background: rgba(0, 123, 255, 0.1);
           }
@@ -346,12 +344,15 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
   .logo {
     font-size: 15px;
   }
-  .sidebar-menu-item > a {
+
+  .sidebar-menu-item>a {
     padding-inline: 0;
   }
+
   .sidebar-menu-item-icon {
     padding-inline: 20px;
   }
+
   .sidebar-menu-item-name {
     font-size: 0;
     opacity: 0;
@@ -359,15 +360,18 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
 }
 
 #sidebar {
-  &, & * {
+
+  &,
+  & * {
     transition: all ease .3s;
   }
 
   .box-shadow-default;
   position: relative;
-  z-index: 3;
+  z-index: 30;
   background: white;
   user-select: none;
+
   .logo {
     color: black;
     font-weight: 900;
@@ -379,32 +383,40 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
     align-items: center;
     .box-shadow-default;
   }
+
   .sidebar-menu {
     margin-top: 20px;
+
     &-item {
       a {
         display: flex;
         align-items: center;
         padding: 16px 20px 16px 30px;
         cursor: pointer;
-        &:hover{
+
+        &:hover {
           text-decoration: none;
         }
+
         &:not(.active):hover {
-          background: rgba(0,0,0,0.1);
+          background: rgba(0, 0, 0, 0.1);
         }
-        border-left: 3px solid rgba(0,0,0,0);
+
+        border-left: 3px solid rgba(0, 0, 0, 0);
       }
+
       a.active {
         background: rgba(0, 123, 255, 0.1);
         --font-color: rgba(0, 123, 255);
         border-left-color: rgba(0, 123, 255, 1);
       }
+
       &-icon {
         font-size: 18px;
         height: 18px;
         padding: 0 31px 0 0px;
       }
+
       &-name {
         transition: all ease .3s, opacity 0s;
         font-size: 14px;
@@ -412,6 +424,7 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
       }
     }
   }
+
   .minimize-maximize-btn {
     position: absolute;
     font-size: 18px;
@@ -429,34 +442,47 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
 }
 
 #logged {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: hidden;
+
+  .content {
+    position: relative;
+    overflow-x: hidden;
+    height: 100%;
+    flex: auto;
+    background: #F0F2F5;
     display: flex;
-    width: 100vw;
-    height: 100vh;
-    overflow-y: hidden;
-    .content {
-      position: relative;
-      overflow-x: hidden;
-      height: 100%;
+
+    &-outer-container {
+      position: absolute;
       flex: auto;
-      background: #F0F2F5;
-      display: flex;
-      &-container {
-        position: absolute;
+      margin: 65px 30px 30px 30px;
+      background: white;
+      border-radius: 10px;
+      min-height: calc(100vh - 95px);
+      width: calc(100% - 60px);
+
+      .content-inner-container {
+        position: relative;
+        width: 100%;
         min-height: calc(100vh - 95px);
-        width: calc(100% - 60px);
-        flex: auto;
-        margin: 65px 30px 30px 30px;
-        background: white;
         padding: 20px 40px 20px 40px;
-        border-radius: 10px;
-        & > {
-          .title {
-            font-weight: 800;
-            --font-color: rgba(0, 123, 255, 1);
-          }
-        }
+        // background: red;
+        border-radius: inherit;
       }
+
+      .title {
+        font-weight: 800;
+        text-transform: uppercase;
+        --font-color: rgba(0, 123, 255, 1);
+      }
+
+
+
     }
+  }
 }
 
 
@@ -480,48 +506,59 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
     position: absolute;
     left: 0;
     top: 0;
+
     .container {
       width: 100%;
       height: 100%;
       position: relative;
       top: 0;
       left: 0;
+
       .ellipse {
         position: absolute;
         box-shadow: 10px 14px 104px rgba(0, 0, 0, 0.12);
         filter: blur(200px);
         border-radius: 50%;
       }
+
       .ellipse.ellipse-medium {
         width: 427px;
         height: 427px;
       }
+
       .ellipse.ellipse-small {
         width: 279px;
         height: 279px;
       }
+
       .ellipse.ellipse-green {
         background: rgba(49, 129, 97, 0.25);
       }
+
       .ellipse.ellipse-orange {
         background: #F9E1C3;
       }
+
       .pos-1 {
         left: -180px;
         bottom: -200px;
       }
+
       .pos-2 {
         left: 50%;
         top: 10px;
       }
+
       .pos-3 {
         left: -88px;
         top: -89px;
       }
+
       .pos-4 {
         left: 27.5%;
         top: 81px;
       }
+
       .pos-5 {
         right: 32.5%;
         top: 55%;
@@ -531,20 +568,23 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
     }
 
   }
+
   .logo {
     color: #333;
     font-weight: 900;
     font-size: 50px;
     user-select: none;
+
     @media (max-width: 600px) {
       display: none;
     }
+
     position: relative;
   }
-  
+
 
   form {
-    background: rgba(2555,255,255,0.25);
+    background: rgba(2555, 255, 255, 0.25);
     position: relative;
     // box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
     box-shadow: 0px 0px 50px 5px #DFD9CE;
@@ -556,9 +596,9 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
     border: 3px solid white;
     border-radius: 15px;
     width: 450px;
-    
-    
-    
+
+
+
     @media (max-width: 600px) {
       height: 100vh;
       border-radius: 0px;
@@ -577,6 +617,7 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
     input[type="submit"]:focus-visible {
       outline: 1px solid rgb(0, 123, 255);
     }
+
     input[type="submit"] {
       width: 100%;
       border-radius: 2px;
@@ -591,19 +632,25 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
       display: flex;
       align-items: center;
       justify-content: center;
-      &, svg {
+
+      &,
+      svg {
         transition: all ease .2s;
       }
+
       transform: translate(16px, 0);
+
       &:hover {
         color: rgb(0, 123, 255);
         transform: translate(-5px, 0);
+
         svg {
           transform: translate(5px, 0);
           opacity: 1;
         }
-  
+
       }
+
       svg {
         transform: translate(-50px, 0);
         opacity: 0;
@@ -627,22 +674,26 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
 #profile {
   .profile-content {
     display: flex;
+
     &-left {
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 270px;
+
       .avatar {
         position: relative;
         width: 120px;
         height: 120px;
         margin-block: 40px;
+
         img {
           border-radius: 50%;
         }
+
         &-edit {
           position: absolute;
-          background: rgb(230,230,230);
+          background: rgb(230, 230, 230);
           cursor: pointer;
           bottom: 0;
           right: 0;
@@ -655,40 +706,51 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
           align-items: center;
         }
       }
+
       a {
         text-decoration: none;
       }
+
       .change-password-btn {
         margin-top: 20px;
       }
     }
+
     &-right {
       flex: auto;
+
       hr {
-        border: .5px solid rgba(0,0,0,0.2);
+        border: .5px solid rgba(0, 0, 0, 0.2);
         margin-block: 12px;
       }
-      .personal-information, .school-information {
+
+      .personal-information,
+      .school-information {
         display: flex;
         margin-top: 20px;
+
         ul {
           width: 100%;
+
           li {
             display: flex;
+
             div {
               margin-bottom: 24px;
               font-size: 14px;
             }
+
             div:first-child {
               min-width: 120px;
               width: 23%;
               text-align: right;
               font-weight: 600;
             }
+
             div:nth-child(2) {
               margin-left: 30px;
               text-overflow: ellipsis;
-              white-space: nowrap; 
+              white-space: nowrap;
               overflow: hidden;
             }
           }
@@ -704,23 +766,34 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
   }
 }
 
-#students {
+#students, #user-list {
+  .select-field {
+    display: flex;
+    gap: 15px;
+    .ant-select {
+      width: 250px;  
+    }
+  }
+
   .ant-pagination.ant-table-pagination.ant-table-pagination-right {
     margin-top: 0;
   }
+
   .ant-table {
-    
+
     .students-table-avatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
     }
+
     .ant-table-cell {
       padding: 12px 16px;
       cursor: default;
     }
   }
-  .ant-table-tbody > tr > td.ant-table-cell-row-hover {
+
+  .ant-table-tbody>tr>td.ant-table-cell-row-hover {
     background: rgba(0, 123, 255, 0.1);
   }
 }
@@ -730,31 +803,36 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
     .input-field {
       margin: 0;
     }
+
     width: 500px;
     align-items: flex-end;
     display: flex;
     margin: 0 auto 10px;
+
     .ant-btn {
       margin-left: 20px;
     }
   }
+
   .ant-table-cell {
     padding: 10px;
   }
+
   .ant-pagination {
     margin: 30px 0;
   }
-  
+
 }
 
-#gen-accounts {
-  .select-field {
-    & > span {
-      margin-right: 30px;
+#account-management {
+  #single-user-manage {
+    .ant-input.ant-input-disabled {
+      background: white;
+      color: black;
     }
-  }
-  .ant-select {
-    width: 160px;
+    .ant-form-item {
+      margin-bottom: 12px;
+    }
   }
 }
 
@@ -762,32 +840,72 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
   .calendar-container {
     height: 80vh;
   }
+
   .rbc-toolbar-label {
     font-weight: 700;
-    color: rgb(0,123,255);
+    color: rgb(0, 123, 255);
   }
 
   .rbc-allday-cell {
     display: none;
   }
+
   .rbc-header {
     line-height: 50px;
     font-size: 15px;
   }
 
+  .rbc-event {
+    font-size: 12px;
+  }
+
   button {
     cursor: pointer;
   }
-  
+
+  .rbc-time-header-content .rbc-row.rbc-time-header-cell {
+    .rbc-header .rbc-button-link span {
+      user-select: none;
+      font-size: 0;
+      &::after {
+        font-size: 12px;
+      }
+    }
+    .rbc-header:first-child .rbc-button-link span::after {
+      content: 'CN';
+    }
+    .rbc-header:nth-child(2) .rbc-button-link span::after {
+      content: 'Thứ 2';
+    }
+    .rbc-header:nth-child(3) .rbc-button-link span::after {
+      content: 'Thứ 3';
+    }
+    .rbc-header:nth-child(4) .rbc-button-link span::after {
+      content: 'Thứ 4';
+    }
+    .rbc-header:nth-child(5) .rbc-button-link span::after {
+      content: 'Thứ 5';
+    }
+    .rbc-header:nth-child(6) .rbc-button-link span::after {
+      content: 'Thứ 6';
+    }
+    .rbc-header:nth-child(7) .rbc-button-link span::after {
+      content: 'Thứ 7';
+    }
+    
+  }
+
   .rbc-toolbar .rbc-btn-group:nth-child(3) {
     * {
       border-radius: 0;
       transition: all ease .2s;
     }
+
     button {
       border: none;
-      border-bottom: 2px solid rgba(0,0,0,0); 
+      border-bottom: 2px solid rgba(0, 0, 0, 0);
       cursor: pointer;
+
       &:hover {
         background: white;
       }
@@ -805,11 +923,69 @@ button:not(.cancel-btn, .normal-btn, .ant-btn), input[type="submit"]:not(.cancel
   .rbc-event {
     background: rgb(0, 123, 255);
     border: none;
+
     * {
       color: white;
     }
+
     &:focus {
       outline: none;
     }
+  }
+}
+
+
+
+//loading
+.loading {
+  background: rgba(0,0,0,0.1);
+  z-index: 20;
+}
+
+
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid #fff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.msg-modal {
+  &.hide {
+      display: none;
+  }
+  background: rgba(0,0,0,0.3);
+  z-index: 1000;
+  &-box {
+
   }
 }

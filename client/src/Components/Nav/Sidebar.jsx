@@ -1,45 +1,71 @@
 import { React, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { BsHouseDoor, BsPerson, BsTrophy, BsDoorOpen, BsChevronCompactLeft, BsChevronCompactRight } from "react-icons/bs";
+import { BsHouseDoor, BsPerson, BsTrophy, BsDoorOpen, BsChevronCompactLeft, BsChevronCompactRight, BsPersonBoundingBox, BsJournalBookmarkFill, BsDoorClosed } from "react-icons/bs";
 import { Tooltip } from "antd";
-export default function Sidebar(props) {
+export default function Sidebar({url, auth}) {
     const menuItems = [
         {
             id: "menu-item-dashboard",
             name: "Lịch học",
             iconComponent: <BsHouseDoor className="BsIcon" />,
             link: '/schedule',
+            role: 'student',
         },
         {
             id: "menu-item-student-list",
             name: "Danh sách sinh viên",
             iconComponent: <BsPerson className="BsIcon" />,
             link: '/students',
+            role: 'all',
         },
         {
-            id: "menu-item-class-list",
-            name: "Đăng ký lớp",
+            id: "menu-item-course-register",
+            name: "Đăng ký học phần",
             iconComponent: <BsDoorOpen className="BsIcon" />,
-            link: '/classes',
+            link: '/course-register',
+            role: 'student'
         },
         {
             id: "menu-item-score",
             name: "Điểm",
             iconComponent: <BsTrophy className="BsIcon" />,
             link: '/score',
+            role: 'student',
+        },
+        {
+            id: "menu-item-manage-account",
+            name: "Quản lý tài khoản",
+            iconComponent: <BsPersonBoundingBox className="BsIcon" />,
+            link: '/manage-account',
+            role: 'admin',
+        },
+        {
+            id: "menu-item-manage-class",
+            name: "Quản lý lớp SH",
+            iconComponent: <BsDoorClosed className="BsIcon" />,
+            link: '/manage-class',
+            role: 'admin',
+        },
+        {
+            id: "menu-item-manage-course",
+            name: "Quản lý lớp HP",
+            iconComponent: <BsJournalBookmarkFill className="BsIcon" />,
+            link: '/manage-course',
+            role: 'admin',
         },
         {
             id: "menu-item-create-account",
-            name: "Tạo tài khoản",
-            iconComponent: <BsPerson className="BsIcon" />,
-            link: '/create-account'
+            name: "Học phần phụ trách",
+            iconComponent: <BsJournalBookmarkFill className="BsIcon" />,
+            link: '/course-in-charge',
+            role: 'teacher',
         },
-        {
-            id: "menu-item-generate-accounts",
-            name: "Sinh tài khoản",
-            iconComponent: <BsPerson className="BsIcon" />,
-            link: '/generate-accounts'
-        },
+        // {
+        //     id: "menu-item-generate-accounts",
+        //     name: "Sinh tài khoản",
+        //     iconComponent: <BsPerson className="BsIcon" />,
+        //     link: '/generate-accounts'
+        // },
     ];
     const [isMinimize, setIsMinimize] = useState(false);
     const handleSizing = () => {
@@ -50,13 +76,15 @@ export default function Sidebar(props) {
             <div className="logo">DUT</div>
             <ul className="sidebar-menu">
                 {menuItems.map((menuItem) => (
+                    (menuItem.role === auth.role || menuItem.role === "all")
+                    &&
                     <Tooltip
                         placement="right"
                         title={isMinimize ? menuItem.name : null}
                         key={menuItem.id}
                     >
                         <li className="sidebar-menu-item">
-                            <NavLink to={`${props.url}${menuItem.link}`}>
+                            <NavLink to={`${url}${menuItem.link}`}>
                                 <span className="sidebar-menu-item-icon">{menuItem.iconComponent}</span>
                                 <span className="sidebar-menu-item-name">{menuItem.name}</span>
                             </NavLink>

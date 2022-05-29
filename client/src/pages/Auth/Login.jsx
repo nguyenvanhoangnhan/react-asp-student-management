@@ -2,7 +2,7 @@ import React from "react";
 import { BsEnvelope, BsLock, BsArrowRight } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { Button } from 'antd'
-import InputField from "../../Components/InputField";
+import InputField from "../../components/InputField";
 export default function Login(props) {
 const handleSubmit = (e) => {
         e.preventDefault();
@@ -22,13 +22,13 @@ const handleSubmit = (e) => {
             <div className="logo">DUT</div>
             <form onSubmit={handleSubmit}>
                 <div className="title">Đăng nhập</div>
-                <InputField type="text" label="Mã số sinh viên" required />
+                <InputField type="text" label="Mã số sinh viên / giảng viên" required />
                 <InputField type="password" label="Mật khẩu" required />
                 <Link to="/unauth/forgot-password" className="forgot-password">
                     Quên mật khẩu?
                     <BsArrowRight/>
                 </Link>
-                <Button type="primary" htmlType="submit" size="large" className="submit-btn">
+                <Button type="primary" htmlType="submit" size="large" className="mt-5" block>
                     Đăng nhập
                 </Button>
             </form>

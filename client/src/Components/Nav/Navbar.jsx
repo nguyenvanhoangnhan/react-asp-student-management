@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from 'react-router-dom'
 import {BsChevronDown, BsBell} from 'react-icons/bs'
-const Navbar = (props) => {
+const Navbar = ({ auth, handleLogout }) => {
+
     return (
         <nav id="navbar">
             <div className="navbar-left">
@@ -16,7 +17,7 @@ const Navbar = (props) => {
                     </div>
                     <div className="profile-name-role">
                         <div className="profile-name">Nguyễn Văn Hoàng Nhân</div>
-                        <div className="profile-role">Sinh viên</div>
+                        <div className="profile-role">{ auth.role === "student" ? "Sinh Viên" : auth.role === "teacher" ? "Giảng viên" : "Admin" }</div>
                     </div>
                     <div className="drop-down-icon">
                         <BsChevronDown value={{ color: 'rgba(0,134,103,1)' }} className='BsIcon' />
@@ -25,7 +26,7 @@ const Navbar = (props) => {
                         <Link to="/auth/profile">
                             <li>Thông tin cá nhân</li>
                         </Link>
-                        <li onClick={props.handleLogout}>Đăng xuất</li> 
+                        <li onClick={handleLogout}>Đăng xuất</li> 
                     </ul>
                 </div>
             </div>

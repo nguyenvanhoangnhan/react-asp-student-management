@@ -2,7 +2,7 @@ import React from "react";
 import {BsArrowLeft } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { Button } from "antd"
-import InputField from "../../Components/InputField";
+import InputField from "../../components/InputField";
 export default function ForgotPassword(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -27,7 +27,7 @@ export default function ForgotPassword(props) {
                 <div style={{marginBottom: '20px'}}>Enter your email, phone number and we'll send you a link to access your account
                 </div>
                 <InputField label="Email/ Phone Number" type="text" required />
-                <Button type="primary" htmlType="submit" size="large" className="submit-btn">
+                <Button type="primary" htmlType="submit" size="large" className="mt-5" block >
                     Request new password
                 </Button>
             </form>

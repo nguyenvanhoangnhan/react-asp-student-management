@@ -1,7 +1,7 @@
 import React from 'react';
 import { BsX, BsLock } from 'react-icons/bs';
 import { Link, useHistory } from 'react-router-dom';
-import InputField from '../../../Components/InputField';
+import InputField from '../components/InputField';
 import {Button} from 'antd'
 export default function ChangePasswordModal() {
     const history = useHistory()

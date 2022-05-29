@@ -1,99 +1,101 @@
 import { useState, useRef, React } from "react";
 import { Button, Table, Tooltip } from "antd";
-import InputField from "../../../Components/InputField";
+import InputField from "../../components/InputField";
 import Input from "rc-input";
 
 export default function Classes() {
+    document.title = "Đăng ký học phần";
+
     const dataSource = [
         {
             key: "1",
             classID: "102.123455.20.99",
             nameOfClass: "Lập trình .NET",
-            lectureName: "Đặng Hoài Phương",
+            teacher: "Đặng Hoài Phương",
             classSchedule: "T4 8-9",
         },
         {
             key: "2",
             classID: "102.123456.20.99",
             nameOfClass: "Lý thuyết thông tin",
-            lectureName: "Ninh Khánh Duy",
+            teacher: "Ninh Khánh Duy",
             classSchedule: "T3 6-9",
         },
         {
             key: "3",
             classID: "102.123456.20.99",
             nameOfClass: "Lý thuyết thông tin",
-            lectureName: "Ninh Khánh Duy",
+            teacher: "Ninh Khánh Duy",
             classSchedule: "T3 6-9",
         },
         {
             key: "4",
             classID: "102.123456.20.99",
             nameOfClass: "Lý thuyết thông tin",
-            lectureName: "Ninh Khánh Duy",
+            teacher: "Ninh Khánh Duy",
             classSchedule: "T3 6-9",
         },
         {
             key: "5",
             classID: "102.123456.20.99",
             nameOfClass: "Lý thuyết thông tin",
-            lectureName: "Ninh Khánh Duy",
+            teacher: "Ninh Khánh Duy",
             classSchedule: "T3 6-9",
         },
         {
             key: "6",
             classID: "102.123456.20.99",
             nameOfClass: "Lý thuyết thông tin",
-            lectureName: "Ninh Khánh Duy",
+            teacher: "Ninh Khánh Duy",
             classSchedule: "T3 6-9",
         },
         {
             key: "7",
             classID: "102.123456.20.99",
             nameOfClass: "Lý thuyết thông tin",
-            lectureName: "Ninh Khánh Duy",
+            teacher: "Ninh Khánh Duy",
             classSchedule: "T3 6-9",
         },
         {
             key: "8",
             classID: "102.123456.20.99",
             nameOfClass: "Lý thuyết thông tin",
-            lectureName: "Ninh Khánh Duy",
+            teacher: "Ninh Khánh Duy",
             classSchedule: "T3 6-9",
         },
         {
             key: "9",
             classID: "102.123456.20.99",
             nameOfClass: "Lý thuyết thông tin",
-            lectureName: "Ninh Khánh Duy",
+            teacher: "Ninh Khánh Duy",
             classSchedule: "T3 6-9",
         },
         {
             key: "10",
             classID: "102.123456.20.99",
             nameOfClass: "Lý thuyết thông tin",
-            lectureName: "Ninh Khánh Duy",
+            teacher: "Ninh Khánh Duy",
             classSchedule: "T3 6-9",
         },
         {
             key: "11",
             classID: "102.123456.20.99",
             nameOfClass: "Lý thuyết thông tin",
-            lectureName: "Ninh Khánh Duy",
+            teacher: "Ninh Khánh Duy",
             classSchedule: "T3 6-9",
         },
         {
             key: "12",
             classID: "102.123456.20.99",
             nameOfClass: "Lý thuyết thông tin",
-            lectureName: "Ninh Khánh Duy",
+            teacher: "Ninh Khánh Duy",
             classSchedule: "T3 6-9",
         },
         {
             key: "13",
             classID: "102.123456.20.99",
             nameOfClass: "Lý thuyết thông tin",
-            lectureName: "Ninh Khánh Duy",
+            teacher: "Ninh Khánh Duy",
             classSchedule: "T3 6-9",
         },
     ];
@@ -134,14 +136,14 @@ export default function Classes() {
         },
         {
             title: "Giảng viên",
-            dataIndex: "lectureName",
-            key: "lectureName",
+            dataIndex: "teacher",
+            key: "teacher",
             ellipsis: {
                 showTitle: false,
             },
-            render: (lectureName) => (
-                <Tooltip placement="topLeft" title={lectureName}>
-                    {lectureName}
+            render: (teacher) => (
+                <Tooltip placement="topLeft" title={teacher}>
+                    {teacher}
                 </Tooltip>
             ),
         },

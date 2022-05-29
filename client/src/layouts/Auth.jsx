@@ -1,7 +1,7 @@
-import React from "react";
-import { Switch, useRouteMatch, Route, Redirect} from "react-router-dom";
-import Login from "./Login";
-import ForgotPassword from "./ForgotPassword";
+import React from "react"
+import { Switch, useRouteMatch, Route, Redirect} from "react-router-dom"
+import Login from "../pages/Auth/Login"
+import ForgotPassword from "../pages/Auth/ForgotPassword"
 export default function Auth(props) {
     let { path, url } = useRouteMatch();
     return (

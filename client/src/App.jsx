@@ -1,29 +1,36 @@
 import React from "react";
 import { useState } from "react";
-import { BsWindowSidebar } from "react-icons/bs";
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
-import Auth from "./View/Logged/LoggedView";
-import Unauth from "./View/Auth/Auth";
+import LoggedView from "./layouts/LoggedView";
+import Auth from "./layouts/Auth"
 
 function App() {
-    const [auth, setAuth] = useState(true);
-    
+    const [auth, setAuth] = useState({
+        role: 'admin'
+    })
+
     const handleLogout = () => {
-        setAuth(false);
+        setAuth(false)
     }
+
     const handleLogin = () => {
-        setAuth(true);
+        setAuth({
+            role: 'student'
+        })
     }
+
+
+
     return (
         <div className="App">
             <Router>
                 <Switch>
                     <Route path="/auth">
-                        <Auth auth={auth} handleLogout={handleLogout} />
+                        <LoggedView auth={auth} handleLogout={handleLogout} />
                         {!auth && <Redirect to="/unauth" />}
                     </Route>
                     <Route path="/unauth">
-                        <Unauth auth={auth} handleLogin={handleLogin} />
+                        <Auth auth={auth} handleLogin={handleLogin} />
                         {auth && <Redirect to="/auth" />}
                     </Route>
                     {auth ? <Redirect to="/auth" /> : <Redirect to="/unauth" />}

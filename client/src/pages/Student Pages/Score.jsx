@@ -1,6 +1,8 @@
 import React from "react";
 import { Table, Tooltip } from "antd";
 export default function Score() {
+    document.title = "Điểm";
+
     const dataSource = [
         {
             key: "1",

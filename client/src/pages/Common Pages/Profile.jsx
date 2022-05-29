@@ -1,10 +1,12 @@
 import React from "react";
 import { BsPencil } from "react-icons/bs";
-import ChangePasswordModal from "./ChangePasswordModal";
+import ChangePasswordModal from "../../components/ChangePasswordModal";
 import { Switch, Route, useRouteMatch, Link } from "react-router-dom";
 import { Button } from 'antd';
 
 export default function Profile() {
+    document.title = "Thông tin cá nhân"
+
     const user = {
         name: "Nguyễn Văn Hoàng Nhân",
         dob: "12/03/2002",
