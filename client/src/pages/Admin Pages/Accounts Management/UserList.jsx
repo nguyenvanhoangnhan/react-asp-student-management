@@ -69,6 +69,7 @@ export default function UserList({ setLoading }) {
         axios
             .get("/api/faculty/classes")
             .then((res) => {
+                console.log(res);
                 setFaculties([
                     { facultyId: 0, facultyName: "Tất cả", classes: [] },
                     ...res.data,
@@ -104,6 +105,7 @@ export default function UserList({ setLoading }) {
     };
 
     const handleSelectClass = (data) => {
+        console.log(data)
         setLoading(true);
         data = JSON.parse(data);
 
@@ -144,9 +146,10 @@ export default function UserList({ setLoading }) {
 
         // handle select single class
         axios
-            .get(`/api/user/class/${data.id}`)
+            .get(`/api/user/class/${data.classroomId}`)
             .then((res) => {
                 let tempData = [];
+                console.log(res)
                 let currentClassName = data.name;
                 res.data.forEach((item) => {
                     tempData.push({
@@ -175,6 +178,7 @@ export default function UserList({ setLoading }) {
             console.log(err)
         }) 
     }
+    
 
     return (
         <div id="user-list">

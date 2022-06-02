@@ -861,6 +861,26 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
 #account-management #single-user-manage .ant-form-item {
   margin-bottom: 12px;
 }
+#account-management #gen-accounts .ant-form {
+  width: 384px;
+}
+#account-management #gen-accounts .ant-btn-primary[disabled] {
+  color: black;
+}
+#account-management #gen-accounts .ant-upload.ant-upload-select {
+  width: 384px;
+}
+#account-management #gen-accounts .ant-upload.ant-upload-select .ant-btn {
+  width: 100%;
+}
+#account-management #gen-accounts .ant-upload-list.ant-upload-list-picture {
+  width: 100%;
+}
+#account-management #gen-accounts .success .download-btn {
+  background: #15803D;
+  outline-color: #15803D;
+  border-color: #15803D;
+}
 #schedule .calendar-container {
   height: 80vh;
 }

@@ -8,7 +8,7 @@ export default function ManageSingleUserModal({handleDeleteClass}) {
     let { id } = useParams();
     const history = useHistory();
     const goBack = () => {
-        history.goBack();
+    history.push("/auth/manage-class/list")
     };
     const [formData, setFormData] = useState({
         userInformation: {

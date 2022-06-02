@@ -77,16 +77,17 @@ export default function UserList({ setLoading }) {
     // on <Select /> value change => Class select option list change
     const handleSelectFaculty = (data) => {
         data = JSON.parse(data);
-        console.log(data);
         let id = data.facultyId;
 
+        
+        console.log(data);  
         if (id === 0) {
             let tempClasses = []
-            faculties.forEach((faculty) => {   
+            faculties.forEach((faculty) => { 
                 tempClasses = tempClasses.concat(faculty.classes.map(_class => {
                     return {
-                        key: _class.id,
-                        id: _class.id,
+                        key: _class.classroomId,
+                        id: _class.classroomId,
                         name: _class.name,
                         faculty: faculty.facultyName,
                     }
@@ -98,8 +99,8 @@ export default function UserList({ setLoading }) {
     
         setClasses(data.classes.map(_class => {
             return {
-                key: _class.id,
-                id: _class.id,
+                key: _class.classroomId,
+                id: _class.classroomId,
                 name: _class.name,
                 faculty: data.facultyName,
             }

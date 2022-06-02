@@ -72,9 +72,8 @@ export default function CreateAccount({setLoading}) {
 
         let data = {
             "name": e.name,
-            "gender": (e.gender == 'male' ? true : false),
+            "gender": (e.gender === 'male' ? true : false),
             "role": e.role,
-            "userInformationId": e.id,
             "classroomId": e.class,
         }
         
@@ -89,7 +88,7 @@ export default function CreateAccount({setLoading}) {
                     isShow: true,
                     Fn: () => setModal({...modal, isShow: false}),
                     isDanger: false,
-                    msg: 'Thêm thành công'
+                    msg: `Thêm thành công\nTài khoản: ${res.data.username}\nMật khẩu:${res.data.password}`
                 })
             })
             .catch((err) => {
@@ -206,23 +205,11 @@ export default function CreateAccount({setLoading}) {
                                 }
                             >
                                 {classes.map((item) => (
-                                    <Select.Option key={item.id} value={item.id}>
+                                    <Select.Option key={item.classroomId} value={item.classroomId}>
                                         {item.name}
                                     </Select.Option>
                                 ))}
                             </Select>
-                        </Form.Item>
-                        <Form.Item
-                            label="MSSV"
-                            name="id"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Bạn chưa nhập MSSV!",
-                                },
-                            ]}
-                        >
-                            <Input className="id" onChange={handleInput} />
                         </Form.Item>
                     </>
                 )}

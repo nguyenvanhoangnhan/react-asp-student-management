@@ -6,7 +6,7 @@ import "./antdcustom.css"
 import App from "./App";
 import axios from 'axios'
 
-axios.defaults.baseURL = "https://pbl3-vippro123.azurewebsites.net/"
+axios.defaults.baseURL = "https://pbl3api.azurewebsites.net/"
 axios.defaults.timeout = "5000"
 axios.defaults.timeoutErrorMessage = "Request timeout"
 
