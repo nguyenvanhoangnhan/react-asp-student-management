@@ -18,9 +18,7 @@ function App() {
             role: 'student'
         })
     }
-
-
-
+    
     return (
         <div className="App">
             <Router>

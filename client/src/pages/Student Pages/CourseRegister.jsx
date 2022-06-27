@@ -176,7 +176,7 @@ export default function Classes() {
     
     const inputSearchEl = useRef(null);
 
-const [searchText, setSearchText] = useState("");
+    const [searchText, setSearchText] = useState("");
     
     const handleSearch = (e) => {
         e.preventDefault();
@@ -190,9 +190,9 @@ const [searchText, setSearchText] = useState("");
     return (
         <div id="classes">
             <h3 className="title">ĐĂNG KÝ THAM GIA LỚP HỌC PHẦN</h3>
-            <form onSubmit={handleSearch} action="" className="classes-search">
+            <form onSubmit={handleSearch} action="" className="courses-search items-end flex">
                 <InputField type="text" label="Tìm kiếm" ref={inputSearchEl} />
-                <Button type="primary" size="large" htmlType="submit">Search</Button>
+                <Button type="primary" size="large" htmlType="submit" className="ml-5">Search</Button>
             </form>
             <Table
                 dataSource={dataSource.filter(

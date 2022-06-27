@@ -25,13 +25,13 @@ export default function CreateAccount({setLoading}) {
     useEffect(() => {
         setLoading(true);
         axios
-        .get("/api/faculty/classes")
+            .get("/api/faculty/")
             .then((res) => {
-                setLoading(false)
                 setFaculties(res.data);
+                setLoading(false);
             })
             .catch((err) => {
-                setLoading(false)
+                setLoading(false);
                 console.error("Error on fetching faculties:", err);
             });
     }, [])
@@ -43,27 +43,18 @@ export default function CreateAccount({setLoading}) {
         })
     }
 
-
-    const handleSelectFaculty = (id) => {
+    const handleSelectFaculty = (data) => {
+        data = JSON.parse(data);
         setFormData({
             ...formData,
-            faculty: id,
+            faculty: data.facultyId,
         })
 
-        if (id === 0) {
-            let all = [{
-                "id": 0,
-                "name": "Tất cả",
-                "falcutyId": id,
-            }];
-            faculties.forEach(fal => {
-                all = all.concat(fal.classes)
-            })
-            console.log(all)
-            setClasses(all);
-            return;
-        }
-        setClasses(faculties.filter(fac => fac.facultyId === id)[0].classes)
+        axios.get(`/api/faculty/classes/${data.facultyId}`).then(res => {
+            setClasses(res.data)
+        }).catch(err => {
+            console.error("Error on fetching class list", err)
+        })
     }
     
     const handleSubmit = (e) => {
@@ -74,8 +65,13 @@ export default function CreateAccount({setLoading}) {
             "name": e.name,
             "gender": (e.gender === 'male' ? true : false),
             "role": e.role,
-            "classroomId": e.class,
+            "className": e.class,
+            "userId": e.id,
+            "dob": "string",
+            "email": "string",
+            "phoneNumber": "string",
         }
+        console.log(data)
         
         axios
             .post(
@@ -88,7 +84,7 @@ export default function CreateAccount({setLoading}) {
                     isShow: true,
                     Fn: () => setModal({...modal, isShow: false}),
                     isDanger: false,
-                    msg: `Thêm thành công\nTài khoản: ${res.data.username}\nMật khẩu:${res.data.password}`
+                    msg: `Thêm thành công\nTài khoản: ${res.data.username}\nMật khẩu: ${res.data.password}`
                 })
             })
             .catch((err) => {
@@ -181,9 +177,9 @@ export default function CreateAccount({setLoading}) {
                                 {faculties.map((item) => (
                                     <Select.Option
                                         key={item.facultyId}
-                                        value={item.facultyId}
+                                        value={JSON.stringify(item)}
                                     >
-                                        {item.facultyName}
+                                        {item.name}
                                     </Select.Option>
                                 ))}
                             </Select>
@@ -205,11 +201,23 @@ export default function CreateAccount({setLoading}) {
                                 }
                             >
                                 {classes.map((item) => (
-                                    <Select.Option key={item.classroomId} value={item.classroomId}>
+                                    <Select.Option key={item.classroomId} value={item.name}>
                                         {item.name}
                                     </Select.Option>
                                 ))}
                             </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="MSSV"
+                            name="id"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Bạn chưa nhập MSSV!",
+                                },
+                            ]}
+                        >
+                            <Input className="id" onChange={handleInput} />
                         </Form.Item>
                     </>
                 )}
@@ -246,7 +254,7 @@ export default function CreateAccount({setLoading}) {
                     rules={[
                         {
                             required: true,
-                            message: "Bạn chưa chọn giới tính!",
+                        message: "Bạn chưa chọn giới tính!",
                         },
                     ]}
                 >

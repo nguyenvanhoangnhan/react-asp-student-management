@@ -4,33 +4,24 @@ import { BsX } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Button, Form, Input } from "antd";
-export default function ManageSingleUserModal({handleDeleteUser}) {
+export default function ManageSingleUserModal({handleDeleteClass}) {
     let { id } = useParams();
     const history = useHistory();
     const goBack = () => {
-        history.goBack();
+    history.push("/auth/manage-course/list")
     };
-    const [formData, setFormData] = useState({
-        userInformation: {
-            name: "",
-        },
-        classroom: {
-            name: "",
-        },
-    }); 
+
 
 
     const [loading, setLoading] = useState(true);
     const formRef = useRef(null);
     useEffect(() => {
         axios
-            .get(`/api/user/${id}`)
+            .get(`/api/course-classroom/${id}`)
             .then((res) => {
-                setFormData(res.data);
                 formRef.current.setFieldsValue({
                     id: id,
-                    name: res.data.userInformation.name,
-                    classroom: res.data.classroom.name,
+                    name: res.data.name,
                 });
                 setLoading(false);
             })
@@ -40,24 +31,6 @@ export default function ManageSingleUserModal({handleDeleteUser}) {
             });
     }, []);
 
-    const formItemLayout = {
-        labelCol: {
-            xs: {
-                span: 24,
-            },
-            sm: {
-                span: 24,
-            },
-        },
-        wrapperCol: {
-            xs: {
-                span: 24,
-            },
-            sm: {
-                span: 24,
-            },
-        },
-    };
 
     return (
         <div id="single-user-manage" className="modal-container">
@@ -73,7 +46,7 @@ export default function ManageSingleUserModal({handleDeleteUser}) {
             )}
             <div className="modal">
                 <div className="modal-title-bar">
-                    <h4 className="modal-title">User {id}</h4>
+                    <h4 className="modal-title">Class {id}</h4>
                     <div className="modal-close-icon" onClick={goBack}>
                         <BsX />
                     </div>
@@ -83,7 +56,7 @@ export default function ManageSingleUserModal({handleDeleteUser}) {
                     // {...formItemLayout}
                     layout='vertical'
                     className="form-user w-96"
-                    // onFinish={}
+                    onFinish={e => {e.preventDefault()}}
                     ref={formRef}
                 >
                     <Form.Item
@@ -108,7 +81,7 @@ export default function ManageSingleUserModal({handleDeleteUser}) {
                     </Form.Item>
                     <Form.Item
                         name="name"
-                        label="Tên"
+                        label="Tên lớp"
                         rules={[
                             {
                                 type: "text",
@@ -121,38 +94,12 @@ export default function ManageSingleUserModal({handleDeleteUser}) {
                         ]}
                     >
                         <Input
-                            value={formData.name}
                             size="large"
                         />
                     </Form.Item>
-                    <Form.Item
-                        name="classroom"
-                        label="Lớp"
-                        rules={[
-                            {
-                                type: "text",
-                                message: "The input is not valid!",
-                            },
-                            {
-                                required: true,
-                                message: "Please input !",
-                            },
-                        ]}
-                    >
-                        <Input
-                            // onChange={handleInput}
-                            value={formData.classroom.name}
-                            size="large"
-                        />
-                    </Form.Item>
+
                     <Form.Item>
                         <Button size="large" block>Sửa thông tin</Button>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button size="large" block>Khôi phục mật khẩu</Button>
-                    </Form.Item>
-                    <Form.Item>
-                        <Button size="large" block danger onClick={() => { handleDeleteUser(id); goBack() } }>Xóa</Button>
                     </Form.Item>
                 </Form>
             </div>

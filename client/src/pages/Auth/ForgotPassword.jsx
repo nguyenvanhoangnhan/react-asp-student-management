@@ -8,7 +8,7 @@ export default function ForgotPassword(props) {
         e.preventDefault();
     }
     return (
-        <div id="forgot-password">
+        <div id="forgot-password" className="h-screen w-screen overflow-hidden flex items-center flex-col object-cover">
             <div className="ellipses">
                 <div className="container">
                     <div className="ellipse ellipse-medium ellipse-orange pos-1"></div>
@@ -19,11 +19,11 @@ export default function ForgotPassword(props) {
                 </div>
             </div>
             <div className="logo">LOGO</div>
-            <form onSubmit={handleSubmit}>
-                <Link to="/unauth/login" className="back">
+            <form onSubmit={handleSubmit} className="flex flex-col items-center mt-16 px-10 py-20 rounded-2xl bg-white bg-opacity-25 relative">
+                <Link to="/unauth/login" className="back absolute left-5 top-4 p-1 text-xl flex justify-center items-center">
                     <BsArrowLeft/>
                 </Link>
-                <div className="title">Quên <br />mật khẩu?</div>
+                <div className="title font-black text-3xl mb-8 self-start">Quên <br />mật khẩu?</div>
                 <div style={{marginBottom: '20px'}}>Enter your email, phone number and we'll send you a link to access your account
                 </div>
                 <InputField label="Email/ Phone Number" type="text" required />

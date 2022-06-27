@@ -3,10 +3,11 @@ import axios from "axios";
 import { Form, Input, Button, Select } from "antd";
 import MsgModal from "../../../components/MsgModal";
 
-export default function CreateAccount({setLoading}) {
-    document.title = "Tạo tài khoản"
+export default function CreateClass({setLoading}) {
+    document.title = "Tạo lớp sinh hoạt"
 
     const [faculties, setFaculties] = useState([])
+    const [programs, setPrograms] = useState([])
     const [modal, setModal] = useState({
         isShow: false,
         Fn: () => { },
@@ -14,49 +15,51 @@ export default function CreateAccount({setLoading}) {
         msg: '',
     })
     useEffect(() => {
-        setLoading(true);
-        axios
-        .get("/api/faculty/classes")
-            .then((res) => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                let resFaculties = await axios.get("/api/faculty")
+                setFaculties(resFaculties.data);
+                let resPrograms = await axios.get("/api/education-program")
+                setPrograms(resPrograms.data)    
+            } catch(err) {
+                console.error("error:" , err.message)
+            } finally {
                 setLoading(false)
-                setFaculties(res.data);
-            })
-            .catch((err) => {
-                setLoading(false)
-                console.error("Error on fetching faculties:", err);
-            });
+            }
+
+        }
+        fetchData();
+        
     }, [])
 
     
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         setLoading(true)
         let data = {
-            nameOfClassroom: e.name,
-            facultyId: e.faculty,              
+            name: e.name,
+            facultyId: e.faculty,  
+            educationalProgramId: e.program
         }
-        axios
-            .post(`/api/classroom` ,data)
-            .then((res) => {
-                setLoading(false)
-                console.log(res)
-                setModal({
-                    isShow: true,
-                    Fn: () => setModal({...modal, isShow: false}),
-                    isDanger: false,
-                    msg: 'Thêm thành công'
-                })
+        try {
+            await axios.post(`/api/classroom`, data)
+            setModal({
+                isShow: true,
+                Fn: () => setModal({...modal, isShow: false}),
+                isDanger: false,
+                msg: 'Thêm thành công'
             })
-            .catch((err) => {
-                setLoading(false)
-                console.error("Error on submit:", err)
-                setModal({
-                    isShow: true,
-                    Fn: () => setModal({...modal, isShow: false}),
-                    isDanger: true,
-                    msg: 'Thêm thất bại'
-                })
+        } catch (err) {
+            console.error("Error on submit:", err)
+            setModal({
+                isShow: true,
+                Fn: () => setModal({...modal, isShow: false}),
+                isDanger: true,
+                msg: 'Thêm thất bại'
             })
-
+        } finally {
+            setLoading(false)
+        }
     }
 
     
@@ -100,7 +103,25 @@ export default function CreateAccount({setLoading}) {
                     <Select>
                         {faculties.map((item) => (
                             <Select.Option key={item.facultyId} value={item.facultyId}>
-                                {item.facultyName}
+                                {item.name}
+                            </Select.Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    label="Chương trình đào tạo"
+                    name="program"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Bạn chưa chọn chương trình!",
+                        },
+                    ]}
+                >
+                    <Select>
+                        {programs.map((item) => (
+                            <Select.Option key={item.educationalProgramId} value={item.educationalProgramId}>
+                                {item.name}
                             </Select.Option>
                         ))}
                     </Select>

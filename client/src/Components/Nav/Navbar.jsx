@@ -13,7 +13,7 @@ const Navbar = ({ auth, handleLogout }) => {
                 </div>
                 <div className="navbar-profile">
                     <div className="avatar">
-                        <img src="https://imgflip.com/s/meme/Doge.jpg" alt="1" />
+                        <img src="https://aui.atlassian.com/aui/8.8/docs/images/avatar-person.svg" alt="1" />
                     </div>
                     <div className="profile-name-role">
                         <div className="profile-name">Nguyễn Văn Hoàng Nhân</div>

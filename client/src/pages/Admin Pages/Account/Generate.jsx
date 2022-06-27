@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Form, Select, Upload, Button, Table, Tooltip } from "antd";
+import { Form, Upload, Button, Table, Tooltip } from "antd";
 import { UploadOutlined, DownloadOutlined, CheckOutlined } from "@ant-design/icons";
 import { BsCheck2 } from "react-icons/bs";
 import {
@@ -8,14 +8,25 @@ import {
     write as xlsxWrite,
     writeFile as xlsxWriteFile,
 } from "xlsx";
-import _ from "lodash";
+import axios from "axios";
+import MsgModal from "../../../components/MsgModal";
+
+
 export default function GenerateAccounts() {
+    document.title = "Sinh tài khoản"
     const uploadRef = useRef(null);
     const [data, setData] = useState(null);
     const [success, setSuccess] = useState(false);
-    const [file, setFile] = useState(null);
+    const [file, setFile] = useState(   null);
     const [uploadFileList, setUploadFileList] = useState([]); 
     const [uploadMsg, setUploadMsg] = useState(null);
+    const [modal, setModal] = useState({
+        isShow: false,
+        Fn: () => { },
+        isDanger: false,
+        msg: '',
+    })
+
     const responseColumns = [
         {
             title: "Tên",
@@ -42,10 +53,11 @@ export default function GenerateAccounts() {
                 </Tooltip>
             ),
         },
+        
         {
             title: "Tài khoản",
-            dataIndex: "account/username",
-            key: "account/username",
+            dataIndex: "username",
+            key: "username",
             ellipsis: {
                 showTitle: false,
             },
@@ -58,8 +70,8 @@ export default function GenerateAccounts() {
         },
         {
             title: "Mật khẩu",
-            dataIndex: "account/password",
-            key: "account/password",
+            dataIndex: "password",
+            key: "password",
             ellipsis: {
                 showTitle: false,
             },
@@ -89,32 +101,58 @@ export default function GenerateAccounts() {
             return;
         }
         setUploadMsg(null)
+        console.log(e.fileList[0]);
         setFile(e.fileList[0].originFileObj)
     };
 
     const handleSubmit = (e) => {
         if (file != null) {
-            setSuccess(true);
+            console.log(file)
+            const formData = new FormData();
+            formData.append("files", file);
+            formData.append("fileName", file.name);
+            console.log(formData);
+            // post file to api
+            axios.post("/api/account/upload-file", formData).then((res) => {
+                console.log(res.data);
+                
+                setData(res.data.map((item, index) => {
+                    return {
+                        key: index,
+                        name: item.name,
+                        className: item.className,
+                        username: item.account.username,
+                        password: item.account.password,
+                    };
+                }));
+                setSuccess(true);
+            }).catch(err => {
+                setModal({
+                    isShow: true,
+                    Fn: () => setModal({...modal, isShow: false}),
+                    isDanger: true,
+                    msg: 'Sinh tài khoản thất bại!'
+                })
+                console.error("error: ", err);
+
+            })
         }
     };
 
+    // Convert JSON stored in 'data' -> .xlsx file and download
     const handleDownloadXlsx = (e) => {
-        JSONtoExcelFile(
-            data.map((item) => {
-                return {
-                    name: item.name,
-                    className: item.className,
-                    username: item.account.username,
-                    password: item.account.password,
-                };
-            })
-        );
+        if (data === null) {
+            return;
+        }
+        JSONtoExcelFile(data);
     };
 
+    // clear form, back to initial state
     const handleFinish = (e) => {
-        setSuccess(false);
-        setFile(null);
+        setSuccess(false)
+        setFile(null)
         setUploadFileList([])
+        setData(null)
     }
 
     const JSONtoExcelFile = (json) => {
@@ -162,6 +200,7 @@ export default function GenerateAccounts() {
 
     return (
         <div id="gen-accounts">
+            <MsgModal msg={modal.msg} Fn={modal.Fn} show={modal.isShow} danger={modal.isDanger} />
             <div className="top flex flex-col xl:flex-row xl:gap-10 w-96 xl:w-full mb-5">
                 <Form size="default" onFinish={handleSubmit} layout="vertical">
                     <Form.Item label="File thông tin tài khoản" required>
@@ -191,7 +230,7 @@ export default function GenerateAccounts() {
                             htmlType="submit"
                             className="gen-btn"
                             block
-                            disabled={!file}
+                            disabled={!file || success}
                         >
                             Sinh
                         </Button>
@@ -200,7 +239,7 @@ export default function GenerateAccounts() {
                 {success && (
                     <div className="success flex flex-col justify-center items-center flex-1">
                         <span className="text-green-700 text-lg mb-3">
-                            Sinh tài khoản thành công! <BsCheck2 />{" "}
+                            Sinh tài khoản thành công! <CheckOutlined />{" "}
                         </span>
                         <div className="btns flex flex-col gap-2">
                             <Button
@@ -211,13 +250,16 @@ export default function GenerateAccounts() {
                             >
                                 Tải xuống file .xlsx
                             </Button>
-                            <Button
-                                type="primary"
-                                icon={<CheckOutlined /> }
-                                onClick={handleFinish}
-                            >
-                                Hoàn tất
-                            </Button>
+                            <Tooltip placement="right" title={'Trở về form ban đầu'}>
+                                <Button
+                                    type="primary"
+                                    icon={<CheckOutlined /> }
+                                    onClick={handleFinish}
+                                >
+                                    Hoàn tất
+                                </Button>
+                            </Tooltip>
+                            
                         </div>
                         
                     </div>

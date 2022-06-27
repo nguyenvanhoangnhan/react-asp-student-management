@@ -4,6 +4,9 @@
 @tailwind utilities;
 
 // default settings 
+  //for antd
+@ant-prefix: ant;
+@item-hover-bg: #f5f5f5;
 * {
   margin: 0;
   font-family: 'Montserrat', sans-serif;
@@ -47,21 +50,8 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
 }
 
 .input-field {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  margin-block: 12px;
-  width: 100%;
-
   span {
-    position: absolute;
-    top: 20px;
-    left: 0px;
-    color: rgba(0, 0, 0, 0.5);
-    padding-inline: 4px;
-    pointer-events: none;
     transition: all ease .3s;
-    font-weight: 600;
     font-size: 15px;
   }
 
@@ -73,24 +63,38 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
     color: #333;
   }
 
-  input,
-  input:autofill {
+  input {
     width: 100%;
     height: 50px;
-    padding: 0px 0px;
     padding-top: 10px;
     font-size: 14px;
-    border-width: 0px 0px 1px 0px;
+    border-width: 0px 0px 2px 0px !important;
     border-color: #bbb;
-    background: rgba(255, 255, 255, 0);
     transition: all ease .2s;
-
     &:focus {
       outline: none;
       border-color: rgb(0, 123, 255);
       border-bottom-width: 2px;
     }
   }
+
+  // input:autofill {
+  //   width: 100%;
+  //   height: 50px;
+  //   padding: 0px 0px;
+  //   padding-top: 10px;
+  //   font-size: 14px;
+  //   border-width: 0px 0px 1px 0px !important;
+  //   border-color: #bbb;
+  //   background: rgba(255, 255, 255, 0);
+  //   transition: all ease .2s;
+
+  //   &:focus {
+  //     outline: none;
+  //     border-color: rgb(0, 123, 255);
+  //     border-bottom-width: 2px;
+  //   }
+  // }
 }
 
 .modal-container {
@@ -442,62 +446,30 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
 }
 
 #logged {
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  overflow-y: hidden;
-
   .content {
-    position: relative;
-    overflow-x: hidden;
-    height: 100%;
-    flex: auto;
     background: #F0F2F5;
-    display: flex;
-
     &-outer-container {
-      position: absolute;
-      flex: auto;
-      margin: 65px 30px 30px 30px;
-      background: white;
-      border-radius: 10px;
       min-height: calc(100vh - 95px);
       width: calc(100% - 60px);
 
       .content-inner-container {
-        position: relative;
-        width: 100%;
         min-height: calc(100vh - 95px);
-        padding: 20px 40px 20px 40px;
-        // background: red;
         border-radius: inherit;
       }
-
       .title {
         font-weight: 800;
         text-transform: uppercase;
         --font-color: rgba(0, 123, 255, 1);
       }
-
-
-
     }
   }
 }
 
 
 #login,
-#register,
 #forgot-password {
-  height: 100vh;
-  width: 100vw;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
   background: #E8EDE4;
   background: linear-gradient(85.38deg, #E8EDE4 -23.38%, #F8F2EB 97.65%);
-  object-fit: cover;
 
   .ellipses {
     width: 100vw;
@@ -517,7 +489,7 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
       .ellipse {
         position: absolute;
         box-shadow: 10px 14px 104px rgba(0, 0, 0, 0.12);
-        filter: blur(200px);
+        filter: blur(50px);
         border-radius: 50%;
       }
 
@@ -564,7 +536,6 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
         top: 55%;
       }
 
-
     }
 
   }
@@ -582,52 +553,21 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
     position: relative;
   }
 
-
   form {
-    background: rgba(2555, 255, 255, 0.25);
-    position: relative;
-    // box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
     box-shadow: 0px 0px 50px 5px #DFD9CE;
-    margin-top: 60px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 80px 40px;
     border: 3px solid white;
-    border-radius: 15px;
     width: 450px;
-
-
 
     @media (max-width: 600px) {
       height: 100vh;
       border-radius: 0px;
+      border: none;
       margin-top: 0;
       width: 100%;
       padding-inline: 30px;
     }
-
-    .title {
-      font-weight: 900;
-      font-size: 30px;
-      margin-bottom: 30px;
-      align-self: flex-start;
-    }
-
-    input[type="submit"]:focus-visible {
-      outline: 1px solid rgb(0, 123, 255);
-    }
-
-    input[type="submit"] {
-      width: 100%;
-      border-radius: 2px;
-    }
-
+  
     .forgot-password {
-      margin-top: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      align-self: flex-end;
       color: #333;
       display: flex;
       align-items: center;
@@ -638,7 +578,10 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
         transition: all ease .2s;
       }
 
-      transform: translate(16px, 0);
+      svg {
+        transform: translate(-50px, 0);
+        opacity: 0;
+      }
 
       &:hover {
         color: rgb(0, 123, 255);
@@ -648,27 +591,9 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
           transform: translate(5px, 0);
           opacity: 1;
         }
-
       }
-
-      svg {
-        transform: translate(-50px, 0);
-        opacity: 0;
-      }
-
     }
   }
-}
-
-#forgot-password .back {
-  position: absolute;
-  left: 20px;
-  top: 15px;
-  padding: 5px;
-  font-size: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 #profile {
@@ -799,19 +724,14 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
 }
 
 #classes {
-  .classes-search {
+  .courses-search {
     .input-field {
       margin: 0;
     }
 
     width: 500px;
-    align-items: flex-end;
     display: flex;
     margin: 0 auto 10px;
-
-    .ant-btn {
-      margin-left: 20px;
-    }
   }
 
   .ant-table-cell {
@@ -826,8 +746,17 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
 
 #account-management {
   #single-user-manage {
+    .form-user {
+      width: 800px;
+    }
+    .ant-col.ant-form-item-label {
+      padding-bottom: 2px;
+    }
+    .ant-row.ant-form-item {
+      margin-bottom: 6px;
+    }
     .ant-input.ant-input-disabled {
-      background: white;
+      background: #eee;
       color: black;
     }
     .ant-form-item {
@@ -839,7 +768,9 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
       width: 384px;
     }
     .ant-btn-primary[disabled] {
-      color: black;
+      span {
+        color: rgba(0,0,0,0.5);
+      }
     }
     .ant-upload.ant-upload-select {
       width: 384px;
@@ -855,6 +786,8 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
         background: #15803D;
         outline-color: #15803D;
         border-color: #15803D;
+      }
+      .btns {
       }
     }
     
@@ -961,13 +894,6 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
 
 
 
-//loading
-.loading {
-  background: rgba(0,0,0,0.1);
-  z-index: 20;
-}
-
-
 .lds-ring {
   display: inline-block;
   position: relative;
@@ -1012,5 +938,71 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
   z-index: 1000;
   &-box {
 
+  }
+}
+
+
+
+.custom-select-dropdown {
+  .@{ant-prefix}-select-tree {
+    .@{ant-prefix}-select-tree-treenode {
+
+      .@{ant-prefix}-select-tree-switcher {
+        position: absolute;
+        width: 100%;
+        text-align: left;
+        z-index: 2;
+        left: 7px;
+
+        .@{ant-prefix}-select-tree-switcher-icon {
+          visibility: hidden;
+        }
+
+        &:hover+.@{ant-prefix}-select-tree-node-content-wrapper {
+          background-color: @item-hover-bg;
+        }
+      }
+
+      .@{ant-prefix}-select-tree-node-content-wrapper {
+        margin-left: 24px;
+      }
+
+      &.@{ant-prefix}-select-tree-treenode-switcher-open {
+        .@{ant-prefix}-select-tree-node-content-wrapper {
+
+          &:before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: -16px;
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid #161616;
+            z-index: 1;
+            transform: rotate(0deg);
+          }
+        }
+      }
+
+      &.@{ant-prefix}-select-tree-treenode-switcher-close {
+        .@{ant-prefix}-select-tree-node-content-wrapper {
+          &:before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: -16px;
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid #161616;
+            z-index: 1;
+            transform: rotate(-90deg);
+          }
+        }
+      }
+    }
   }
 }

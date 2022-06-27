@@ -31,7 +31,7 @@ export default function Profile() {
             <div className="profile-content">
                 <div className="profile-content-left">
                     <div className="avatar">
-                        <img src="https://imgflip.com/s/meme/Doge.jpg" alt="" />
+                        <img src="https://aui.atlassian.com/aui/8.8/docs/images/avatar-person.svg" alt="" />
                         <div className="avatar-edit">
                             <BsPencil />
                         </div>

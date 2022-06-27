@@ -1,6 +1,7 @@
 import { React, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { BsHouseDoor, BsPerson, BsTrophy, BsDoorOpen, BsChevronCompactLeft, BsChevronCompactRight, BsPersonBoundingBox, BsJournalBookmarkFill, BsDoorClosed } from "react-icons/bs";
+import { BsHouseDoor, BsPerson, BsTrophy, BsDoorOpen , BsChevronCompactLeft, BsChevronCompactRight, BsPersonBoundingBox, BsJournalBookmarkFill, BsDoorClosed, BsFillMenuButtonFill } from "react-icons/bs";
+import { BiBuildingHouse } from "react-icons/bi";
 import { Tooltip } from "antd";
 export default function Sidebar({url, auth}) {
     const menuItems = [
@@ -16,7 +17,7 @@ export default function Sidebar({url, auth}) {
             name: "Danh sách sinh viên",
             iconComponent: <BsPerson className="BsIcon" />,
             link: '/students',
-            role: 'all',
+            role: 'student',
         },
         {
             id: "menu-item-course-register",
@@ -48,9 +49,23 @@ export default function Sidebar({url, auth}) {
         },
         {
             id: "menu-item-manage-course",
-            name: "Quản lý lớp HP",
+            name: "Quản lý học phần",
             iconComponent: <BsJournalBookmarkFill className="BsIcon" />,
             link: '/manage-course',
+            role: 'admin',
+        },
+        {
+            id: "menu-item-manage-course-classroom",
+            name: "Quản lý lớp học phần",
+            iconComponent: <BiBuildingHouse className="BsIcon" />,
+            link: '/manage-course-classroom',
+            role: 'admin',
+        },
+        {
+            id: "menu-item-manage-program",
+            name: "Quản lý chương trình học",
+            iconComponent: <BsFillMenuButtonFill className="BsIcon" />,
+            link: '/manage-program',
             role: 'admin',
         },
         {
@@ -60,12 +75,6 @@ export default function Sidebar({url, auth}) {
             link: '/course-in-charge',
             role: 'teacher',
         },
-        // {
-        //     id: "menu-item-generate-accounts",
-        //     name: "Sinh tài khoản",
-        //     iconComponent: <BsPerson className="BsIcon" />,
-        //     link: '/generate-accounts'
-        // },
     ];
     const [isMinimize, setIsMinimize] = useState(false);
     const handleSizing = () => {

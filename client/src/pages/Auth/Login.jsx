@@ -9,7 +9,7 @@ const handleSubmit = (e) => {
         props.handleLogin();
     }
     return (
-        <div id="login">
+        <div id="login" className="h-screen w-screen overflow-hidden flex items-center flex-col object-cover">
             <div className="ellipses">
                 <div className="container">
                     <div className="ellipse ellipse-medium ellipse-orange pos-1"></div>
@@ -20,11 +20,11 @@ const handleSubmit = (e) => {
                 </div>
             </div>
             <div className="logo">DUT</div>
-            <form onSubmit={handleSubmit}>
-                <div className="title">Đăng nhập</div>
+            <form onSubmit={handleSubmit} className="flex flex-col items-center mt-16 px-10 py-20 rounded-2xl bg-white bg-opacity-25 relative">
+                <div className="title font-black text-3xl mb-8 self-start">Đăng nhập</div>
                 <InputField type="text" label="Mã số sinh viên / giảng viên" required />
                 <InputField type="password" label="Mật khẩu" required />
-                <Link to="/unauth/forgot-password" className="forgot-password">
+                <Link to="/unauth/forgot-password" className="flex forgot-password mt-2 text-sm font-semibold self-end translate-x-4">
                     Quên mật khẩu?
                     <BsArrowRight/>
                 </Link>
