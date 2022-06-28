@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef  } from "react";
 import { Table, Tooltip, Select, Button } from "antd";
 import axios from "axios";
 // import ManageSingleEduProgramModal from "./SingleModal"
+import { SearchOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Switch, useRouteMatch, Route, useHistory } from "react-router-dom";
 import InputField from "../../../components/InputField";
 export default function UserList({ setLoading }) {
@@ -31,7 +32,6 @@ export default function UserList({ setLoading }) {
             ellipsis: {
                 showTitle: false,
             },
-            width: "30%",
             render: (name) => (
                 <Tooltip placement="topLeft" title={name}>
                     {name}
@@ -42,15 +42,20 @@ export default function UserList({ setLoading }) {
             title: "Xóa",
             dataIndex: "educationalProgramId",
             key: "delete",
-            width: "80px",
+            width: "240px",
             ellipsis: {
                 showTitle: false,
             },
             render: (educationalProgramId) => {
                 return (
-                    <Button type="primary" danger onClick={() => handleDelete(educationalProgramId)}>
-                        Xóa
-                    </Button>
+                    <div className="flex gap-3">
+                        <Button type="primary" icon={<SearchOutlined />} onClick={() => navigate.push(`${path}/program/${educationalProgramId}`)}>
+                            Chi tiết
+                        </Button>
+                        <Button type="primary" icon={<DeleteOutlined />} danger onClick={() => handleDelete(educationalProgramId)}>
+                            Xóa
+                        </Button>
+                    </div>
                 )
             }
         },
@@ -85,8 +90,8 @@ export default function UserList({ setLoading }) {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const res = await axios.get("/api/education-program/")
-                setPrograms(res.data);
+                const {data} = await axios.get("/api/education-program/")
+                setPrograms(data);
             }
             catch (err) {
                 console.log(err);
@@ -120,20 +125,7 @@ export default function UserList({ setLoading }) {
                     pageSizeOptions: ["10", "20", "50", "100"],
                 }}
                 rowKey="educationalProgramId"
-                onRow={(record, rowIndex) => {
-                    return {
-                        onClick: event => {
-                            navigate.push(`${path}/program/${record.educationalProgramId}`)
-                        },
-                    };
-                }}
             />
-
-            <Switch>
-                <Route path={`${path}/program/:id`}>
-                    {/* <ManageSingleEduProgramModal/> */}
-                </Route>
-            </Switch>
 
         </div>
     );

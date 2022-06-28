@@ -12,7 +12,7 @@ import axios from "axios";
 import MsgModal from "../../../components/MsgModal";
 
 
-export default function GenerateAccounts() {
+export default function GenerateAccounts({setLoading}) {
     document.title = "Sinh tài khoản"
     const uploadRef = useRef(null);
     const [data, setData] = useState(null);
@@ -107,6 +107,7 @@ export default function GenerateAccounts() {
 
     const handleSubmit = (e) => {
         if (file != null) {
+            setLoading(true);
             console.log(file)
             const formData = new FormData();
             formData.append("files", file);
@@ -134,7 +135,8 @@ export default function GenerateAccounts() {
                     msg: 'Sinh tài khoản thất bại!'
                 })
                 console.error("error: ", err);
-
+            }).finally(() => {
+                setLoading(false)
             })
         }
     };

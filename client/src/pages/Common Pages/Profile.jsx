@@ -1,13 +1,48 @@
-import React from "react";
-import { BsPencil } from "react-icons/bs";
+import React, { useEffect } from "react";
+import { BsAppIndicator, BsPencil } from "react-icons/bs";
 import ChangePasswordModal from "../../components/ChangePasswordModal";
 import { Switch, Route, useRouteMatch, Link } from "react-router-dom";
 import { Button } from 'antd';
+import axios from "axios";
+import { useState } from "react";
 
-export default function Profile() {
+export default function Profile({ user, handleLogout }) {
     document.title = "Thông tin cá nhân"
 
-    const user = {
+    useEffect(() => {
+        console.log(user);
+        const fetchData = async () => {
+            const { data: userInfor } = await axios.get(`/api/user/${user.name}`) //user.name = username = id
+            console.log(userInfor);
+            setInfo(userInfor)
+        }
+        fetchData();
+      
+    }, [])
+
+    const [info, setInfo] = useState({
+        userInformation: {
+          userId: "",
+          name: "",
+          dob: "1/1/1900",
+          phoneNumber: "",
+          email: "",
+          gender: true,
+          imageUrl: ""
+        },
+        classroomName: "",
+        educationalProgram: {
+          educationalProgramId: "",
+          name: ""
+        },
+        faculty: {
+          facultyId: "",
+          name: ""
+        }
+      });
+    
+
+    const abcd = {
         name: "Nguyễn Văn Hoàng Nhân",
         dob: "12/03/2002",
         gender: 1,
@@ -24,7 +59,7 @@ export default function Profile() {
         <div id="profile">
             <Switch>
                 <Route exact path="/auth/profile/change-password">
-                    <ChangePasswordModal />
+                    <ChangePasswordModal user={user} handleLogout={handleLogout}  />
                 </Route>
             </Switch>
             <h3 className="title">THÔNG TIN CÁ NHÂN</h3>
@@ -45,27 +80,23 @@ export default function Profile() {
                         <ul>
                             <li>
                                 <div>Họ Tên</div>
-                                <div>{user.name}</div>
+                                <div>{info.userInformation.name}</div>
                             </li>
                             <li>
                                 <div>Ngày sinh</div>
-                                <div>{user.dob}</div>
+                                <div>{info.userInformation.dob}</div>
                             </li>
                             <li>
                                 <div>Giới tính</div>
-                                <div>{user.gender ? "Nam" : "Nữ"}</div>
-                            </li>
-                            <li>
-                                <div>CCCD</div>
-                                <div>{user.cccd}</div>
+                                <div>{info.userInformation.gender ? "Nam" : "Nữ"}</div>
                             </li>
                             <li>
                                 <div>Điện thoại</div>
-                                <div>{user.phone}</div>
+                                <div>{info.userInformation.phoneNumber}</div>
                             </li>
                             <li>
                                 <div>Email</div>
-                                <div>{user.email}</div>
+                                <div>{info.userInformation.email}</div>
                             </li>
                         </ul>
                     </div>
@@ -74,23 +105,19 @@ export default function Profile() {
                         <ul>
                             <li>
                                 <div>Khoa</div>
-                                <div>{user.faculty}</div>
+                                <div>{info.faculty.name}</div>
                             </li>
                             <li>
                                 <div>Lớp</div>
-                                <div>{user.className}</div>
+                                <div>{info.classroomName}</div>
                             </li>
                             <li>
                                 <div>Chương trình đào tạo</div>
-                                <div>{user.studyProgram}</div>
-                            </li>
-                            <li>
-                                <div>Ngày nhập học</div>
-                                <div>{user.admissionDate}</div>
+                                <div>{info.educationalProgram.name}</div>
                             </li>
                             <li>
                                 <div>MSSV</div>
-                                <div>{user.id}</div>
+                                <div>{info.userInformation.userId}</div>
                             </li>
                         </ul>
                     </div>

@@ -23,12 +23,12 @@ export default function ManageSingleUserModal({handleDeleteClass}) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await axios.get(`/api/course/${id}`)
-                setFormData(res.data);
+                const {data} = await axios.get(`/api/course/${id}`)
+                setFormData(data);
                 formRef.current.setFieldsValue({
                     courseId: id,
-                    name: res.data.name,
-                    credits: res.data.credits,
+                    name: data.name,
+                    credits: data.credits,
                 });
             } catch (err)  {
                 console.log(err);

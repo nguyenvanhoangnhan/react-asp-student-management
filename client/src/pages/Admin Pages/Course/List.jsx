@@ -112,8 +112,8 @@ export default function UserList({ setLoading }) {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const res = await axios.get("/api/course/")
-                setCourses(res.data);
+                const { data } = await axios.get("/api/course/")
+                setCourses( data );
             }
             catch (err) {
                 console.log(err);

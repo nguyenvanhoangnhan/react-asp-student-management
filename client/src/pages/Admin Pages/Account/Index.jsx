@@ -11,7 +11,6 @@ export default function AccountManagement({setLoading}) {
     const handleFnSelect = (e) => {
         navigate.push(`${path}/${e.target.value}`);
     } 
-
     let defaultRdGrValue = document.location.pathname.includes("list") ? "list" : 
         (document.location.pathname.includes("generate") ? "generate" : "create"); 
     return (

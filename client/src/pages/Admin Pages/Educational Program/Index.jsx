@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import { Route, Switch, useRouteMatch, Redirect } from "react-router-dom";
 import CreateEduProgram from "./Create";
 import EduProgramList from "./List";
+import DetailList from './DetailList'
 import { Radio } from 'antd'
 import { useHistory } from 'react-router-dom'
+import AddCourse from "./AddCourse";
 export default function ClassManagement({setLoading}) {
     let { path, url } = useRouteMatch();
     const navigate = useHistory()
@@ -25,8 +27,14 @@ export default function ClassManagement({setLoading}) {
                     <Route path={`${path}/create`}>
                         <CreateEduProgram setLoading={setLoading}/>
                     </Route>
+                    <Route path={`${path}/list/program/:id`}>
+                        <DetailList setLoading={setLoading} />
+                    </Route>
+                    <Route path={`${path}/list/add/:id`}>
+                        <AddCourse setLoading={setLoading} />
+                    </Route>
                     <Route path={`${path}/list`}>
-                        <EduProgramList setLoading={setLoading}/>
+                        <EduProgramList setLoading={setLoading} />
                     </Route>
                     <Redirect to={`${path}/create`} />
                 </Switch>

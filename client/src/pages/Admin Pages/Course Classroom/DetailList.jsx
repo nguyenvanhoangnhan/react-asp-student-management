@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Table, Tooltip, Select, Button } from "antd";
 import { SwapLeftOutlined } from "@ant-design/icons";
+import {BsArrowLeft} from "react-icons/bs"
 import axios from "axios";
 import ManageSingleCourseModal from "./SingleModal";
 import {
@@ -120,16 +121,16 @@ export default function CourseClassList({ setLoading }) {
     };
 
     const scheduleRawToString = (rawData) => {
-        const res = [];
+        const result = [];
         const dates = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
         rawData.forEach((item) =>
-            res.push(
+            result.push(
                 `${dates[parseInt(item.dateInWeek)]},${item.startPeriod}-${
                     item.endPeriod
                 },${item.room}`
             )
         );
-        return res.join("; ");
+        return result.join("; ");
     };
 
     const handleSearch = (e) => {
@@ -157,20 +158,17 @@ export default function CourseClassList({ setLoading }) {
                 const { data: course } = await axios.get(
                     `/api/course/${courseId}`
                 );
-                const { data: courseClass } = await axios.get(
+                const { data: courseClasses } = await axios.get(
                     `/api/course-classroom/course/${courseId}`
                 );
                 const data = [];
-                courseClass.forEach(async (item) => {
-                    const { data: schedule } = await axios.get(
-                        `/api/schedules/${item.courseClassId}`
-                    );
+            courseClasses.forEach(async (item) => {
                     data.push({
-                        courseClassId: item.courseClassId,
+                        courseClassId: item.courseClassroom.courseClassId,
                         name: course.name,
                         credits: course.credits,
-                        teacher: item.teacherName,
-                        schedule: scheduleRawToString(schedule),
+                        teacher: item.courseClassroom.teacherName,
+                        schedule: scheduleRawToString(item.schedule),
                     });
                 });
                 setCourseClasses(data);
@@ -186,10 +184,11 @@ export default function CourseClassList({ setLoading }) {
     return (
         <div id="course-class-list">
             <Button
-                icon={<SwapLeftOutlined />}
+                icon={<BsArrowLeft className="text-lg" />}
                 onClick={() => {
                     navigate.push("/auth/manage-course-classroom/list");
                 }}
+                className="flex justify-center items-center gap-2"
             >
                 Quay lại
             </Button>

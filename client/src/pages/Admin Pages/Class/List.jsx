@@ -76,10 +76,10 @@ export default function ClassList({ setLoading }) {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const res = await axios.get("/api/faculty/")
+                const {data} = await axios.get("/api/faculty/")
                 setFaculties([
                     { facultyId: 0, name: "Tất cả" },
-                    ...res.data,
+                    ...data,
                 ]);
             } catch(err) {
                 setLoading(false);
@@ -95,18 +95,16 @@ export default function ClassList({ setLoading }) {
     const fetchClasses = async (data) => {
         setLoading(true);
         if (data.facultyId === 0) {
-            let temp = [];
             try {
-                const res = await axios.get("/api/classroom")
-                temp = res.data.map(_class => {
+                const { data: classesData } = await axios.get("/api/classroom")
+                setClasses(classesData.map(_class => {
                     return {
                         faculty: faculties.filter( (_faculty) => _class.classroomId.substring(0, 3) === _faculty.facultyId)[0].name,
                         key: _class.classroomId,
                         id: _class.classroomId,
                         name: _class.name,
                     };
-                });
-                setClasses(temp);
+                }));
             }
             catch (err) {
                 console.error("Error on fetching classes: ", err)
@@ -117,17 +115,15 @@ export default function ClassList({ setLoading }) {
         }
 
         try {
-            let temp = [];
-            const res = await axios.get(`/api/faculty/classes/${data.facultyId}`)
-            temp = res.data.map((_class) => {
+            const { data: classesData } = await axios.get(`/api/faculty/classes/${data.facultyId}`)
+            setClasses(classesData.map((_class) => {
                 return {
                     faculty: data.name,
                     key: _class.classroomId,
                     id: _class.classroomId,
                     name: _class.name,
                 };
-            });
-            setClasses(temp);
+            }));
         } catch(err) {
             console.error("Error on fetching classes: ", err);
         } finally {

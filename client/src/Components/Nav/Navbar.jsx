@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from 'react-router-dom'
 import {BsChevronDown, BsBell} from 'react-icons/bs'
-const Navbar = ({ auth, handleLogout }) => {
+const Navbar = ({ user, handleLogout }) => {
 
     return (
         <nav id="navbar">
@@ -16,8 +16,8 @@ const Navbar = ({ auth, handleLogout }) => {
                         <img src="https://aui.atlassian.com/aui/8.8/docs/images/avatar-person.svg" alt="1" />
                     </div>
                     <div className="profile-name-role">
-                        <div className="profile-name">Nguyễn Văn Hoàng Nhân</div>
-                        <div className="profile-role">{ auth.role === "student" ? "Sinh Viên" : auth.role === "teacher" ? "Giảng viên" : "Admin" }</div>
+                        <div className="profile-name">{ user.name }</div>
+                        <div className="profile-role">{ user.role === "Student" ? "Sinh Viên" : user.role === "Teacher" ? "Giảng viên" : "Admin" }</div>
                     </div>
                     <div className="drop-down-icon">
                         <BsChevronDown value={{ color: 'rgba(0,134,103,1)' }} className='BsIcon' />

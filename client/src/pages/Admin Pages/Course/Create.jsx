@@ -25,9 +25,8 @@ export default function CreateCourse({setLoading}) {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const res = await axios.get('/api/course')
-                console.log(res);
-                setCourses(courses.concat(res.data))
+                const {data} = await axios.get('/api/course')
+                setCourses(courses.concat(data))
             } catch (err) {
                 console.log(err)
             }
@@ -47,8 +46,7 @@ export default function CreateCourse({setLoading}) {
                 credits: e.credits,
                 requiredCourseId: e.requiredCourse,
             }
-            
-            const res = await axios.post('/api/course', data)
+            await axios.post('/api/course', data)
             setModal({
                 isShow: true,
                 Fn: () => setModal({...modal, isShow: false}),

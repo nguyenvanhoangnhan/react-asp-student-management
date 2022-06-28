@@ -561,14 +561,6 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
   right: 32.5%;
   top: 55%;
 }
-#login .logo,
-#forgot-password .logo {
-  color: #333;
-  font-weight: 900;
-  font-size: 50px;
-  user-select: none;
-  position: relative;
-}
 @media (max-width: 600px) {
   #login .logo,
   #forgot-password .logo {
