@@ -20,7 +20,7 @@ export default function ForgotPassword({setLoading}) {
     const [newPwd, setNewPwd] = useState("");
 
     //true == pass step 1 
-    const [isEmailCorrect, setIsEmailCorrect] = useState(false);
+    const [isEmailCorrect, setIsEmailCorrect] = useState(true);
 
     //true == pass step 2 
     const [isVerified, setIsVerified] = useState(false);
@@ -197,7 +197,7 @@ export default function ForgotPassword({setLoading}) {
                         </Link>
                         <div className="title font-black text-3xl mb-8 self-start">
                             Nhập <br />
-                            mã xác thực?
+                            mã xác thực
                         </div>
                         <div style={{ marginBottom: "20px" }}>
                             Nhập mã xác thực trong thư được gửi đến email của bạn

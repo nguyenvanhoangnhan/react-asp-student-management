@@ -2,20 +2,20 @@ import { React, useState } from "react";
 import { Route, Switch, useRouteMatch, Redirect } from "react-router-dom";
 import Navbar from "../components/Nav/Navbar";
 import Sidebar from "../components/Nav/Sidebar";
-import Schedule from "../pages/Student Pages/Schedule";
-import StudentList from "../pages/Common Pages/StudentList";
-import Score from "../pages/Student Pages/Score";
-import CourseRegister from "../pages/Student Pages/CourseRegister";
-import Profile from "../pages/Common Pages/Profile";
-import AccountManagement from "../pages/Admin Pages/Account/Index";
-import GenerateAccounts from "../pages/Admin Pages/Account/Generate";
+import Schedule from "../pages/Student/Schedule";
+import StudentList from "../pages/Common/StudentList";
+import Score from "../pages/Student/Score";
+import CourseRegister from "../pages/Student/CourseRegister";
+import Profile from "../pages/Common/Profile";
+import AccountManagement from "../pages/Admin/Account/Index";
+import GenerateAccounts from "../pages/Admin/Account/Generate";
 import MsgModal from "../components/MsgModal";
-import CourseInChargeList from "../pages/Teacher Pages/CourseInChargeList";
+import CourseInChargeList from "../pages/Teacher/CourseInChargeList";
 import Loading from "../components/Loading";
-import ClassManagement from "../pages/Admin Pages/Class/Index";
-import EduProgramManagement from "../pages/Admin Pages/Educational Program/Index";
-import CourseManagement from "../pages/Admin Pages/Course/Index"
-import CourseClassroomManagement from "../pages/Admin Pages/Course Classroom/Index"
+import ClassManagement from "../pages/Admin/Class/Index";
+import EduProgramManagement from "../pages/Admin/Educational Program/Index";
+import CourseManagement from "../pages/Admin/Course/Index"
+import CourseClassroomManagement from "../pages/Admin/Course Classroom/Index"
 export default function LoggedView({ user, handleLogout }) {
     let { path, url } = useRouteMatch();
 
