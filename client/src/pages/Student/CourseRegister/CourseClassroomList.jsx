@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Table, Tooltip, Select, Button } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import { BsArrowLeft } from "react-icons/bs";
+import { SwapLeftOutlined } from "@ant-design/icons";
+import {BsArrowLeft} from "react-icons/bs"
 import axios from "axios";
-import MsgModal from "../../components/MsgModal";
-import InputField from "../../components/InputField";
+import MsgModal from "../../../components/MsgModal";
 import {
     Switch,
     useRouteMatch,
@@ -12,19 +11,20 @@ import {
     useHistory,
     useParams,
 } from "react-router-dom";
+import InputField from "../../../components/InputField";
 
 // Show course class list depend on courseId that has been select on <List />
-export default function CourseInChargeList({ setLoading, user }) {
+export default function CourseClassList({ setLoading, user }) {
     document.title = "Danh sách lớp học phần";
     let { courseId } = useParams();
     let { path, url } = useRouteMatch();
     let navigate = useHistory();
     const [modal, setModal] = useState({
         isShow: false,
-        Fn: () => {},
+        Fn: () => { },
         isDanger: false,
-        msg: "",
-    });
+        msg: '',
+    })
 
     const columns = [
         {
@@ -70,19 +70,19 @@ export default function CourseInChargeList({ setLoading, user }) {
                 </Tooltip>
             ),
         },
-        // {
-        //     title: "Giảng viên",
-        //     dataIndex: "teacher",
-        //     key: "teacher",
-        //     ellipsis: {
-        //         showTitle: false,
-        //     },
-        //     render: (teacher) => (
-        //         <Tooltip placement="topLeft" title={teacher}>
-        //             {teacher}
-        //         </Tooltip>
-        //     ),
-        // },
+        {
+            title: "Giảng viên",
+            dataIndex: "teacher",
+            key: "teacher",
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (teacher) => (
+                <Tooltip placement="topLeft" title={teacher}>
+                    {teacher}
+                </Tooltip>
+            ),
+        },
         {
             title: "Thời khóa biểu",
             dataIndex: "schedule",
@@ -97,24 +97,24 @@ export default function CourseInChargeList({ setLoading, user }) {
                 </Tooltip>
             ),
         },
-        // {
-        //     title: "ĐK",
-        //     dataIndex: "registeredCount",
-        //     key: 'registeredCount',
-        //     width: "50px",
-        //     ellipsis: {
-        //         showTitle: false,
-        //     },
-        //     render: (registeredCount) => (
-        //         <Tooltip placement="topLeft" title={registeredCount}>
-        //             {registeredCount}
-        //         </Tooltip>
-        //     ),
-        // },
+        {
+            title: "ĐK",
+            dataIndex: "registeredCount",
+            key: 'registeredCount',
+            width: "50px",
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (registeredCount) => (
+                <Tooltip placement="topLeft" title={registeredCount}>
+                    {registeredCount}
+                </Tooltip>
+            ),
+        },
         {
             title: "SL",
             dataIndex: "capacity",
-            key: "capacity",
+            key: 'capacity',
             width: "50px",
             ellipsis: {
                 showTitle: false,
@@ -126,10 +126,10 @@ export default function CourseInChargeList({ setLoading, user }) {
             ),
         },
         {
-            title: "Chi tiết",
+            title: "Đăng ký",
             dataIndex: "courseClassId",
-            key: "detailButton",
-            width: "145px",
+            key: "register",
+            width: "125px",
             ellipsis: {
                 showTitle: false,
             },
@@ -137,10 +137,9 @@ export default function CourseInChargeList({ setLoading, user }) {
                 return (
                     <Button
                         type="primary"
-                        onClick={() => {navigate.push(`/auth/course-in-charge/${courseClassId}`)}}
-                        icon={<SearchOutlined />}
+                        onClick={() => handleRegister(courseClassId)}
                     >
-                        Chi tiết
+                        Đăng ký
                     </Button>
                 );
             },
@@ -173,31 +172,53 @@ export default function CourseInChargeList({ setLoading, user }) {
         setSearchText(inputSearchEl.current.value);
     };
 
+    const handleRegister = async (courseClassId) => {
+        try {
+            await axios.post(`/api/course-classroom/user/${user.name}/${courseClassId}`); //user.name = userId
+            setModal({
+                isShow: true,
+                Fn: () => (navigate.push("/auth/course-register/list")),
+                isDanger: false,
+                msg: 'Đăng ký thành công'
+            })
+        } catch (err) {
+            let msg = "";
+            msg = err.response.data === "Conflict Schedule" ? "Trùng thời khóa biểu" : msg;
+            msg = err.response.data === "This Classroom Is Full Now" ? "Lớp đã đầy" : msg;
+            msg = err.response.data === "Have Participated In This Course" ? "Đã đăng ký học phần này" : msg;
+            setModal({
+                isShow: true,
+                Fn: () => setModal({...modal, isShow: false}),
+                isDanger: true,
+                msg: 'Đăng ký thất bại\n' + msg
+            })
+            console.log(err);
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
+                const { data: course } = await axios.get(
+                    `/api/course/${courseId}`
+                );
                 const { data: courseClasses } = await axios.get(
-                    `/api/user/teacher/course-classroom/${user.name}`
+                    `/api/course-classroom/course/${courseId}`
                 );
                 console.log("classes: ", courseClasses);
                 const data = [];
-                for (let index = 0; index < courseClasses.length; index++) {
-                    let item = courseClasses[index];
-                    if (item.courseClassroom.isComplete) continue;
-                    let { data: course } = await axios.get(
-                        `/api/course/${item.courseClassroom.courseId}`
-                    );
+            courseClasses.forEach(async (item) => {
                     data.push({
                         courseClassId: item.courseClassroom.courseClassId,
                         name: course.name,
                         credits: course.credits,
-                        // teacher: item.teacherName,
+                        teacher: item.teacherName,
                         capacity: item.courseClassroom.capacity,
                         schedule: scheduleRawToString(item.schedule),
-                        registeredCount: item.numberOfRegisteredStudent,
+                        registeredCount: item.numberOfRegisteredStudent
                     });
-                }
+                });
                 setCourseClasses(data);
             } catch (err) {
                 console.log(err);
@@ -210,13 +231,16 @@ export default function CourseInChargeList({ setLoading, user }) {
 
     return (
         <div id="course-class-list">
-            <MsgModal
-                msg={modal.msg}
-                Fn={modal.Fn}
-                show={modal.isShow}
-                danger={modal.isDanger}
-            />
-            <h3 className="title">HỌC PHẦN PHỤ TRÁCH</h3>
+            <MsgModal msg={modal.msg} Fn={modal.Fn} show={modal.isShow} danger={modal.isDanger} />
+            <Button
+                icon={<BsArrowLeft className="text-lg" />}
+                onClick={() => {
+                    navigate.push("/auth/course-register/list");
+                }}
+                className="flex justify-center items-center gap-2"
+            >
+                Quay lại
+            </Button>
             <form
                 onSubmit={handleSearch}
                 action=""

@@ -8,7 +8,6 @@ document.title = "Danh sách tài khoản";
 let { path, url } = useRouteMatch();
 let navigate = useHistory();
 
-const imgLink = "https://aui.atlassian.com/aui/8.8/docs/images/avatar-person.svg";
 const [data, setData] = useState([]);
 const columns = [
     {
@@ -18,16 +17,16 @@ const columns = [
         width: "80px",
     },
     {
-        title: "MSSV",
-        dataIndex: "studentID",
-        key: "studentID",
+        title: "Mã số",
+        dataIndex: "userId",
+        key: "userId",
         width: "18%",
         ellipsis: {
             showTitle: false,
         },
-        render: (studentID) => (
-            <Tooltip placement="topLeft" title={studentID}>
-                {studentID}
+        render: (userId) => (
+            <Tooltip placement="topLeft" title={userId}>
+                {userId}
             </Tooltip>
         ),
     },
@@ -141,14 +140,14 @@ const handleSelectClass = (data) => {
             .then((res) => {
                 let tempData = [];
                 res.data.forEach((singleClass) => {
-                    singleClass.students.forEach((student) => {
+                    singleClass.students.forEach((user) => {
                         tempData.push({
-                            key: student.userId,
+                            key: user.userId,
                             avatar: (
-                                <img src={imgLink} className="students-table-avatar" alt="#" />
+                                <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656505482/${user.userId.substring(0,3)}/${user.userId}.jpg`} className="user-table-avatar" alt="#" />
                             ),
-                            name: student.name,
-                            studentID: student.userId,
+                            name: user.name,
+                            userId: user.userId,
                             _class: singleClass.name,
                         });
                     });
@@ -170,14 +169,14 @@ const handleSelectClass = (data) => {
             let tempData = [];
             console.log(res)
             let currentClassName = data.name;
-            res.data.forEach((item) => {
+            res.data.forEach((user) => {
                 tempData.push({
-                    key: item.userId,
+                    key: user.userId,
                     avatar: (
-                        <img src={imgLink} className="students-table-avatar" alt="#" />
+                        <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656505482/${user.userId.substring(0, 3)}/${user.userId}.jpg`} className="user-table-avatar" alt="#" />
                     ),
-                    name: item.name,
-                    studentID: item.userId,
+                    name: user.name,
+                    userId: user.userId,
                     _class: currentClassName,
                 });
             });

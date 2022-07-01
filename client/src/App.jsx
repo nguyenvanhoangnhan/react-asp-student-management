@@ -11,34 +11,32 @@ function App() {
     axios.defaults.timeout = "10000"
     axios.defaults.timeoutErrorMessage = "Request timeout"
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("jwt")}`;
-
-    const parseJwt = (token) => {
-        if (token === null)
-            return false
-        var base64Url = token.split('.')[1];
-        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
     
-        return JSON.parse(jsonPayload);
-    };
-
-    const [jwt, setJwt] = useState(localStorage.getItem("jwt"));
-    const [user, setUser] = useState(parseJwt(localStorage.getItem("jwt")));
-    // const [user, setUser] = useState({
-    //     role: 'Admin',
-    //     name: 'admin01'
-    // });
-
-    useEffect(() => {
-
-    }, [])
-
     const handleLogout = () => {
         localStorage.removeItem("jwt");
         window.location.reload();
     }
+    var user;
+
+    (function persistLoggedInUser() {
+        const parseJwt = (token) => {
+            if (token === null)
+                return false
+            var base64Url = token.split('.')[1];
+            var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+        
+            return JSON.parse(jsonPayload);
+        };
+
+        user = parseJwt(localStorage.getItem("jwt"));
+        
+        // handle expired
+        if (user.exp < Math.floor(Date.now() / 1000))
+            handleLogout();
+    })();    
 
     return (
         <div className="App">

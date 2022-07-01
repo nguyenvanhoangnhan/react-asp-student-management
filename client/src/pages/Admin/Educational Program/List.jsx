@@ -1,7 +1,6 @@
-import React, { useEffect, useState, useRef  } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Table, Tooltip, Select, Button } from "antd";
 import axios from "axios";
-// import ManageSingleEduProgramModal from "./SingleModal"
 import { SearchOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Switch, useRouteMatch, Route, useHistory } from "react-router-dom";
 import InputField from "../../../components/InputField";
@@ -49,18 +48,27 @@ export default function UserList({ setLoading }) {
             render: (educationalProgramId) => {
                 return (
                     <div className="flex gap-3">
-                        <Button type="primary" icon={<SearchOutlined />} onClick={() => navigate.push(`${path}/program/${educationalProgramId}`)}>
+                        <Button
+                            type="primary"
+                            icon={<SearchOutlined />}
+                            onClick={() => navigate.push(`${path}/program/${educationalProgramId}`)}
+                        >
                             Chi tiết
                         </Button>
-                        <Button type="primary" icon={<DeleteOutlined />} danger onClick={() => handleDelete(educationalProgramId)}>
+                        <Button
+                            type="primary"
+                            icon={<DeleteOutlined />}
+                            danger
+                            onClick={() => handleDelete(educationalProgramId)}
+                        >
                             Xóa
                         </Button>
                     </div>
-                )
-            }
+                );
+            },
         },
     ];
-    
+
     const [searchText, setSearchText] = useState("");
     const [programs, setPrograms] = useState([]);
     const inputSearchEl = useRef(null);
@@ -72,42 +80,54 @@ export default function UserList({ setLoading }) {
     const handleSearch = (e) => {
         e.preventDefault();
         setSearchText(inputSearchEl.current.value);
-    }
-    
+    };
+
     const handleDelete = async (id) => {
-        setLoading(true)
+        setLoading(true);
         try {
-            await axios.delete(`/api/education-program/${id}`)
-            setPrograms(programs.filter(item => item.educationalProgramId !== id))
-        }
-        catch (err) {
+            await axios.delete(`/api/education-program/${id}`);
+            setPrograms(
+                programs.filter((item) => item.educationalProgramId !== id)
+            );
+        } catch (err) {
             console.log(err);
         }
         setLoading(false);
-    }
-    
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const {data} = await axios.get("/api/education-program/")
-                setPrograms(data);
-            }
-            catch (err) {
+                const { data } = await axios.get("/api/education-program/");
+                setPrograms(data.filter(item => item.educationalProgramId !== "GV"))
+            } catch (err) {
                 console.log(err);
+                alert("Kết nối tới server thất bại");
+            } finally {
+                setLoading(false);
             }
-            setLoading(false)
-        }
+        };
         fetchData();
     }, []);
 
-
     return (
         <div id="user-list">
-            <form onSubmit={handleSearch} action="" className="mx-auto w-96 courses-search items-end flex mb-3">
-                    <InputField type="text" label="Tìm kiếm" ref={inputSearchEl} />
-                    <Button type="primary" size="medium" htmlType="submit" className="ml-5">Search</Button>
-                </form>
+            <form
+                onSubmit={handleSearch}
+                action=""
+                className="mx-auto w-96 courses-search items-end flex mb-3"
+            >
+                <InputField type="text" label="Tìm kiếm" ref={inputSearchEl} />
+                <Button
+                    type="primary"
+                    size="medium"
+                    htmlType="submit"
+                    className="ml-5"
+                >
+                    Search
+                </Button>
+            </form>
 
             <Table
                 className="students-table"
@@ -126,7 +146,6 @@ export default function UserList({ setLoading }) {
                 }}
                 rowKey="educationalProgramId"
             />
-
         </div>
     );
 }

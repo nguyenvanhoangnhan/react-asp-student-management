@@ -1,38 +1,39 @@
 import React, { useEffect } from "react";
 import { Route, Switch, useRouteMatch, Redirect } from "react-router-dom";
-import Create from "./Create";
-import List from "./List";
-import DetailList from "./DetailList"
+import CourseList from "./CourseList";
+import CourseClassroomList from "./CourseClassroomList"
+import RegisteredList from "./RegisteredList";
 import { Radio } from 'antd'
 import { useHistory } from 'react-router-dom'
-export default function CourseClassManagement({setLoading}) {
+export default function CourseClassManagement({setLoading, user}) {
     let { path, url } = useRouteMatch();
     const navigate = useHistory()
     const handleFnSelect = (e) => {
         navigate.push(`${path}/${e.target.value}`);
     } 
 
-    let defaultRdGrValue = document.location.pathname.includes("/list") ? "list" : "create"  ; 
+    let defaultRdGrValue = "list";
+    defaultRdGrValue = document.location.pathname.includes("registered") ? "registered" : defaultRdGrValue; 
 
     return (
         <div id="course-class-management">
             <h3 className="title">Quản lý lớp học phần</h3>
             <Radio.Group defaultValue={defaultRdGrValue} buttonStyle="solid" onChange={handleFnSelect}>
-                <Radio.Button value="create">Tạo lớp học phần</Radio.Button>
-                <Radio.Button value="list">Danh sách lớp học phần</Radio.Button>
+                <Radio.Button value="list">Đăng ký lớp học phần</Radio.Button>
+                <Radio.Button value="registered">Danh sách lớp đã đăng ký</Radio.Button>
             </Radio.Group>
             <div className="fns pt-5">
                 <Switch>
-                    <Route path={`${path}/create`}>
-                        <Create setLoading={setLoading}/>
+                    <Route path={`${path}/registered`}>
+                        <RegisteredList user={user} setLoading={setLoading}/>
                     </Route>
                     <Route path={`${path}/list/:courseId`}>
-                        <DetailList setLoading={setLoading}/>
+                        <CourseClassroomList user={user} setLoading={setLoading}/>
                     </Route>
                     <Route path={`${path}/list`}>
-                        <List setLoading={setLoading}/>
+                        <CourseList user={user} setLoading={setLoading}/>
                     </Route>
-                    <Redirect to={`${path}/create`} />
+                    <Redirect to={`${path}/list`} />
                 </Switch>
             </div>
             

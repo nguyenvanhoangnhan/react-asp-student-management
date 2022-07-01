@@ -20,15 +20,15 @@ const columns = [
     },
     {
         title: "MSSV",
-        dataIndex: "studentID",
-        key: "studentID",
+        dataIndex: "userId",
+        key: "userId",
         width: "18%",
         ellipsis: {
             showTitle: false,
         },
-        render: (studentID) => (
-            <Tooltip placement="topLeft" title={studentID}>
-                {studentID}
+        render: (userId) => (
+            <Tooltip placement="topLeft" title={userId}>
+                {userId}
             </Tooltip>
         ),
     },
@@ -75,7 +75,7 @@ useEffect(() => {
         .catch((err) => {
             setLoading(false);
             console.error("Error on fetching faculties:", err);
-            alert("Không thể kết nối đến server");
+            alert("Kết nối tới server thất bại")
         });
 }, []);
 
@@ -95,7 +95,6 @@ const handleSelectFaculty = (data) => {
                         name: _class.name,
                     };
                 });
-                console.log(temp);
                 setClasses(temp);
             })
             .catch((err) => {
@@ -142,14 +141,14 @@ const handleSelectClass = (data) => {
             .then((res) => {
                 let tempData = [];
                 res.data.forEach((singleClass) => {
-                    singleClass.students.forEach((student) => {
+                    singleClass.students.forEach((user) => {
                         tempData.push({
-                            key: student.userId,
+                            key: user.userId,
                             avatar: (
-                                <img src={imgLink} className="students-table-avatar" alt="#" />
+                                <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656505482/${user.userId.substring(0,3)}/${user.userId}.jpg`} className="user-table-avatar" alt="#" />
                             ),
-                            name: student.name,
-                            studentID: student.userId,
+                            name: user.name,
+                            userId: user.userId,
                             _class: singleClass.name,
                         });
                     });
@@ -169,16 +168,15 @@ const handleSelectClass = (data) => {
         .get(`/api/user/class/${data.id}`)
         .then((res) => {
             let tempData = [];
-            console.log(res)
             let currentClassName = data.name;
-            res.data.forEach((item) => {
+            res.data.forEach((user) => {
                 tempData.push({
-                    key: item.userId,
+                    key: user.userId,
                     avatar: (
-                        <img src={imgLink} className="students-table-avatar" alt="#" />
+                        <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656505482/${user.userId.substring(0, 3)}/${user.userId}.jpg`} className="user-table-avatar" alt="#" />
                     ),
-                    name: item.name,
-                    studentID: item.userId,
+                    name: user.name,
+                    userId: user.userId,
                     _class: currentClassName,
                 });
             });
@@ -193,7 +191,7 @@ const handleSelectClass = (data) => {
 
 const handleDeleteUser = (id) => {
     axios.delete(`/api/user/${id}`).then((res) => {
-        setData(data.filter(item => item.key !== id));
+        setData(data.filter(user => user.key !== id));
     }).catch(err => {
         console.log(JSON.stringify(err))
     }) 

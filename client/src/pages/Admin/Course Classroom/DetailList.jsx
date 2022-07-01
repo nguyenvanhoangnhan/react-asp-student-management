@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Table, Tooltip, Select, Button } from "antd";
-import { SwapLeftOutlined } from "@ant-design/icons";
-import {BsArrowLeft} from "react-icons/bs"
+import {BsArrowLeft, BsCheck2, BsX} from "react-icons/bs"
 import axios from "axios";
 import ManageSingleCourseModal from "./SingleModal";
 import {
@@ -91,6 +90,46 @@ export default function CourseClassList({ setLoading }) {
             ),
         },
         {
+            title: "SL",
+            dataIndex: "capacity",
+            key: 'capacity',
+            width: "80px",
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (capacity) => (
+                <Tooltip placement="topLeft" title={capacity}>
+                    {capacity}
+                </Tooltip>
+            ),
+        },
+        {
+            title: "Đã kết thúc",
+            dataIndex: "isCompleted",
+            key: 'isComplete',
+            width: "140px",
+            filters: [
+                {
+                    text: <BsCheck2 className="text-green-500 text-2xl"/>,
+                    value: true,
+                },
+                {
+                    text: <BsX className="text-red-500 text-2xl" />,
+                    value: false,
+                },
+            ],
+            onFilter: (value, record) => record.isComplete === value,
+            ellipsis: {
+                showTitle: false,
+            },
+            align: "center",
+            render: (isComplete) => (
+                <Tooltip placement="topLeft" title={isComplete} className="text-2xl">
+                    {isComplete ? <BsCheck2 className="text-green-500"/> : <BsX className="text-red-500" />}
+                </Tooltip>
+            ),
+        },
+        {
             title: "Xóa",
             dataIndex: "courseClassId",
             key: "delete",
@@ -125,7 +164,7 @@ export default function CourseClassList({ setLoading }) {
         const dates = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
         rawData.forEach((item) =>
             result.push(
-                `${dates[parseInt(item.dateInWeek)]},${item.startPeriod}-${
+                `${dates[parseInt(item.dateInWeek - 1)]},${item.startPeriod}-${
                     item.endPeriod
                 },${item.room}`
             )
@@ -161,13 +200,16 @@ export default function CourseClassList({ setLoading }) {
                 const { data: courseClasses } = await axios.get(
                     `/api/course-classroom/course/${courseId}`
                 );
+                console.log("classes: ", courseClasses);
                 const data = [];
             courseClasses.forEach(async (item) => {
                     data.push({
                         courseClassId: item.courseClassroom.courseClassId,
                         name: course.name,
                         credits: course.credits,
-                        teacher: item.courseClassroom.teacherName,
+                        capacity: item.courseClassroom.capacity,
+                        isComplete: item.courseClassroom.isComplete,
+                        teacher: item.teacherName,
                         schedule: scheduleRawToString(item.schedule),
                     });
                 });
@@ -207,7 +249,6 @@ export default function CourseClassList({ setLoading }) {
                     Search
                 </Button>
             </form>
-
             <Table
                 className="students-table"
                 dataSource={courseClasses.filter(

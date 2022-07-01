@@ -1,22 +1,23 @@
 import { React, useState } from "react";
 import { NavLink } from "react-router-dom";
-import { BsHouseDoor, BsPerson, BsTrophy, BsDoorOpen , BsChevronCompactLeft, BsChevronCompactRight, BsPersonBoundingBox, BsJournalBookmarkFill, BsDoorClosed, BsFillMenuButtonFill } from "react-icons/bs";
+import { BsHouseDoor, BsPerson, BsTrophy, BsDoorOpen , BsChevronCompactLeft, BsCalendarWeek, BsChevronCompactRight, BsPersonBoundingBox, BsJournalBookmarkFill, BsDoorClosed, BsFillMenuButtonFill } from "react-icons/bs";
 import { BiBuildingHouse } from "react-icons/bi";
 import { Tooltip } from "antd";
 export default function Sidebar({url, user}) {
     const menuItems = [
+        //student
         {
-            id: "menu-item-dashboard",
+            id: "menu-item-schedule",
             name: "Lịch học",
-            iconComponent: <BsHouseDoor className="BsIcon" />,
+            iconComponent: <BsCalendarWeek className="BsIcon" />,
             link: '/schedule',
             role: 'Student',
         },
         {
-            id: "menu-item-student-list",
-            name: "Danh sách sinh viên",
+            id: "menu-item-list",
+            name: "Danh sách",
             iconComponent: <BsPerson className="BsIcon" />,
-            link: '/students',
+            link: '/user-list',
             role: 'Student',
         },
         {
@@ -27,12 +28,21 @@ export default function Sidebar({url, user}) {
             role: 'Student'
         },
         {
+            id: "menu-item-educational-program",
+            name: "Chương trình đào tạo",
+            iconComponent: <BsFillMenuButtonFill className="BsIcon" />,
+            link: '/educational-program',
+            role: 'Student'
+        },
+        {
             id: "menu-item-score",
             name: "Điểm",
             iconComponent: <BsTrophy className="BsIcon" />,
             link: '/score',
             role: 'Student',
         },
+
+        //admin
         {
             id: "menu-item-manage-account",
             name: "Quản lý tài khoản",
@@ -68,8 +78,24 @@ export default function Sidebar({url, user}) {
             link: '/manage-program',
             role: 'Admin',
         },
+
+        //teacher
         {
-            id: "menu-item-create-account",
+            id: "menu-item-schedule",
+            name: "Lịch học",
+            iconComponent: <BsCalendarWeek className="BsIcon" />,
+            link: '/schedule',
+            role: 'Teacher',
+        },
+        {
+            id: "menu-item-user-list",
+            name: "Danh sách",
+            iconComponent: <BsPerson className="BsIcon" />,
+            link: '/user-list',
+            role: 'Teacher',
+        },
+        {
+            id: "menu-item-course-in-charge",
             name: "Học phần phụ trách",
             iconComponent: <BsJournalBookmarkFill className="BsIcon" />,
             link: '/course-in-charge',

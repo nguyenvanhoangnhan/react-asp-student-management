@@ -4,7 +4,7 @@ import { BsX } from "react-icons/bs";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Button, Form, Input, InputNumber } from "antd";
-export default function ManageSingleUserModal({handleDeleteClass}) {
+export default function ManageSingleUserModal({handleDelete}) {
     let { id } = useParams();
     const history = useHistory();
     const goBack = () => {

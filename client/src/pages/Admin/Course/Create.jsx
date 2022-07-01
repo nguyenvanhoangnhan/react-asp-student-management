@@ -2,38 +2,37 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { Form, Input, InputNumber, Button, Radio, Select } from "antd";
 import MsgModal from "../../../components/MsgModal";
-import { BsAppIndicator } from "react-icons/bs";
-import { type } from "@testing-library/user-event/dist/type";
 
 export default function CreateCourse({setLoading}) {
     document.title = "Tạo học phần"
 
-    const [courses, setCourses] = useState([{
-        courseId: "",
-        name: "Không",
-        credits: 2,
-        requiredCourseId: "",
-        isAvailable: null
-    }])
+    const [courses, setCourses] = useState([])
     const [modal, setModal] = useState({
         isShow: false,
         Fn: () => { },
         isDanger: false,
         msg: '',
     })
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const {data} = await axios.get('/api/course')
-                setCourses(courses.concat(data))
-            } catch (err) {
-                console.log(err)
-            }
-            setLoading(false);
+    
+    const fetchData = async () => {
+        setLoading(true);
+        try {
+            const {data} = await axios.get('/api/course')
+            setCourses([{
+                courseId: "",
+                name: "Không",
+                credits: 2,
+                requiredCourseId: "",
+                isAvailable: null
+            }].concat(data))
+        } catch (err) {
+            console.log(err)
+            alert("Kết nối tới server thất bại")
         }
+        setLoading(false);
+    }
+    useEffect(() => {
         fetchData();
-        
     }, [])
 
     const handleSubmit = async (e) => {
@@ -47,12 +46,14 @@ export default function CreateCourse({setLoading}) {
                 requiredCourseId: e.requiredCourse,
             }
             await axios.post('/api/course', data)
+            fetchData();
             setModal({
                 isShow: true,
                 Fn: () => setModal({...modal, isShow: false}),
                 isDanger: false,
                 msg: 'Thêm thành công'
             })
+
         } catch (err) {
             console.log(err)
             setModal({

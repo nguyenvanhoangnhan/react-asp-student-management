@@ -8,7 +8,7 @@ import MsgModal from "../../components/MsgModal";
 import axios from "axios";
 
 export default function Login( { setLoading }) {
-
+    document.title = "Đăng nhập"
     const [username, setUsername] = useState("");
     const [pwd, setPwd] = useState("");
     const [modal, setModal] = useState({
@@ -35,7 +35,6 @@ export default function Login( { setLoading }) {
                 }
             )
             localStorage.setItem("jwt", jwt)
-
             setModal({
                 isShow: true,
                 Fn: () => window.location.reload(),

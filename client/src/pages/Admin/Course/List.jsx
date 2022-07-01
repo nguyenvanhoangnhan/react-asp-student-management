@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef  } from "react";
-import { Table, Tooltip, Select, Button } from "antd";
+import { Table, Tooltip, Button, Switch as AntSwitch} from "antd";
 import axios from "axios";
 import ManageSingleCourseModal from "./SingleModal"
 import { Switch, useRouteMatch, Route, useHistory } from "react-router-dom";
@@ -15,6 +15,7 @@ export default function UserList({ setLoading }) {
             dataIndex: "courseId",
             key: "courseId",
             width: "200px",
+            sorter: (a, b) => a.courseId !== b.courseId,
             ellipsis: {
                 showTitle: false,
             },
@@ -68,6 +69,20 @@ export default function UserList({ setLoading }) {
             }
         },
         {
+            title: "Mở ĐK",
+            dataIndex: "courseId",
+            key: "isAvailable",
+            width: "80px",
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (courseId) => {
+                return (
+                    <AntSwitch checked={courses.find(c => c.courseId === courseId).isAvailable} onChange={(e) => handleChangeAvailable(e, courseId)} />
+                )
+            }
+        },
+        {
             title: "Xóa",
             dataIndex: "courseId",
             key: "delete",
@@ -97,6 +112,30 @@ export default function UserList({ setLoading }) {
         e.preventDefault();
         setSearchText(inputSearchEl.current.value);
     }
+
+    const handleChangeAvailable = async (e, courseId) => {
+        console.log(e, courseId);
+        let index = courses.findIndex(c => c.courseId === courseId);
+        let newCourse = {
+            courseId: courseId,
+            name: courses[index].name,
+            credits: courses[index].credits,
+            isAvailable: e,
+            requiredCourseId: courses[index].requiredCourseId,
+        }
+        console.log(index, newCourse)
+        setLoading(true);
+        try {
+            await axios.put(`/api/course`, newCourse);
+            courses[index].isAvailable = e;
+        }
+        catch (err) {
+            console.log(err);
+        }
+        finally {
+            setLoading(false);
+        }
+    }
     
     const handleDelete = async (courseId) => {
         try {
@@ -113,7 +152,8 @@ export default function UserList({ setLoading }) {
             setLoading(true);
             try {
                 const { data } = await axios.get("/api/course/")
-                setCourses( data );
+                console.log(data);
+                setCourses(data);
             }
             catch (err) {
                 console.log(err);
@@ -148,20 +188,20 @@ export default function UserList({ setLoading }) {
                     pageSizeOptions: ["10", "20", "50", "100"],
                 }}
                 rowKey="courseId"
-                onRow={(record, rowIndex) => {
-                    return {
-                        onClick: event => {
-                            navigate.push(`${path}/course/${record.courseId}`)
-                        },
-                    };
-                }}
+                // onRow={(record, rowIndex) => {
+                //     return {
+                //         onClick: event => {
+                //             navigate.push(`${path}/course/${record.courseId}`)
+                //         },
+                //     };
+                // }}
             />
 
-            <Switch>
+            {/* <Switch>
                 <Route path={`${path}/course/:id`}>
                     <ManageSingleCourseModal/>
                 </Route>
-            </Switch>
+            </Switch> */}
 
         </div>
     );

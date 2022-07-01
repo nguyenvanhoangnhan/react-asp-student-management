@@ -8,9 +8,9 @@ const Navbar = ({ user, handleLogout }) => {
             <div className="navbar-left">
             </div>
             <div className="navbar-right">
-                <div className="navbar-notification">
+                {/* <div className="navbar-notification">
                     <BsBell />
-                </div>
+                </div> */}
                 <div className="navbar-profile">
                     <div className="avatar">
                         <img src="https://aui.atlassian.com/aui/8.8/docs/images/avatar-person.svg" alt="1" />
@@ -23,9 +23,13 @@ const Navbar = ({ user, handleLogout }) => {
                         <BsChevronDown value={{ color: 'rgba(0,134,103,1)' }} className='BsIcon' />
                     </div>
                     <ul className="navbar-profile-drop-down">
-                        <Link to="/auth/profile">
-                            <li>Thông tin cá nhân</li>
-                        </Link>
+                        {
+                            user.role !== "Admin"
+                            &&
+                            <Link to="/auth/profile">
+                                <li>Thông tin cá nhân</li>
+                            </Link>
+                        }
                         <li onClick={handleLogout}>Đăng xuất</li> 
                     </ul>
                 </div>

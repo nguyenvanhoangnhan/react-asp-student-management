@@ -23,7 +23,8 @@ export default function CreateClass({setLoading}) {
                 let resPrograms = await axios.get("/api/education-program")
                 setPrograms(resPrograms.data)    
             } catch(err) {
-                console.error("error:" , err.message)
+                console.error("error:", err.message)
+                alert("Kết nối tới server thất bại")
             } finally {
                 setLoading(false)
             }

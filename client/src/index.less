@@ -41,7 +41,7 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
 }
 
 .box-shadow-default {
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 0px 2.6px;
 }
 
 
@@ -607,6 +607,8 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
 
         img {
           border-radius: 50%;
+          object-fit: cover;
+          object-position: center;
         }
 
         &-edit {
@@ -653,23 +655,38 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
           li {
             display: flex;
 
-            div {
+
+              & > div {
               margin-bottom: 24px;
               font-size: 14px;
+              line-height: 24px;
             }
 
-            div:first-child {
+            &> div:first-child {
               min-width: 120px;
-              width: 23%;
+              width: 165px;
               text-align: right;
               font-weight: 600;
             }
 
-            div:nth-child(2) {
+            &> div:nth-child(2) {
               margin-left: 30px;
               text-overflow: ellipsis;
               white-space: nowrap;
               overflow: hidden;
+            }
+            .ant-row, .ant-col, .ant-form-item-control-input, .ant-form-item-control-input-content {
+              margin: 0;
+            } 
+            .ant-form-item-control-input {
+              min-height: 24px;
+            }
+            .ant-form-item-explain.ant-form-item-explain-connected {
+              overflow: initial;
+              margin: 0;
+            }
+            .ant-form-item-explain-error {
+              margin: 0;
             }
           }
         }
@@ -783,7 +800,6 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
       .btns {
       }
     }
-    
   }
 }
 
@@ -881,6 +897,35 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
 
     &:focus {
       outline: none;
+    }
+  }
+}
+
+#upload-course {
+  .ant-form {
+    width: 384px;
+  }
+  .ant-btn-primary[disabled] {
+    span {
+      color: rgba(0,0,0,0.5);
+    }
+  }
+  .ant-upload.ant-upload-select {
+    width: 384px;
+    .ant-btn {
+      width: 100%;
+    }
+  }
+  .ant-upload-list.ant-upload-list-picture {
+    width: 100%;
+  }
+  .success {
+    .download-btn {
+      background: #15803D;
+      outline-color: #15803D;
+      border-color: #15803D;
+    }
+    .btns {
     }
   }
 }
@@ -998,4 +1043,13 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
       }
     }
   }
+}
+
+.user-table-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+  background-image:url('https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png');
 }

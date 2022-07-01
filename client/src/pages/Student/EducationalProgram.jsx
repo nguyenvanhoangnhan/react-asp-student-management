@@ -1,15 +1,13 @@
-import React, { useEffect, useState, useRef  } from "react";
+import React, { useEffect, useState  } from "react";
 import { Table, Tooltip, Select, Button } from "antd";
-import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { BsArrowLeft} from 'react-icons/bs'
 import axios from "axios";
-import { Switch, useRouteMatch, Route, useHistory, useParams } from "react-router-dom";
-import MsgModal from '../../../components/MsgModal'
-export default function EduProgramDetail({ setLoading }) {
+import { useRouteMatch, useHistory } from "react-router-dom";
+import MsgModal from "../../components/MsgModal";
+export default function EduProgramDetail({ setLoading, user }) {
     document.title = "test";
     let { path, url } = useRouteMatch();
     let navigate = useHistory();
-    let { id } = useParams();
 
     const columns = [
         {
@@ -134,9 +132,12 @@ export default function EduProgramDetail({ setLoading }) {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const { data: programData } = await axios.get(`/api/education-program/${id}`)
+                const { data: userInfor } = await axios.get(`/api/user/${user.name}`)
+                const educationalProgramId = userInfor.educationalProgram.educationalProgramId;
+
+                const { data: programData } = await axios.get(`/api/education-program/${educationalProgramId}`)
                 setProgram(programData);
-                const {data: coursesData } = await axios.get(`/api/education-program/course/${id}`)
+                const {data: coursesData } = await axios.get(`/api/education-program/course/${educationalProgramId}`)
                 setCourses(coursesData.sort((a, b) => a.semester > b.semester).map(c => {
                     return {
                         semester: c.semester,
@@ -159,55 +160,15 @@ export default function EduProgramDetail({ setLoading }) {
         fetchData();
     }, []);
 
-    const handleDelete = async () => {
-        setLoading(true)
-        try {
-            await axios.delete(`/api/education-program/${id}`)
-            navigate.push('/auth/manage-program/list/')
-        } catch (err) {
-            console.log(err);
-            setModal({
-                isShow: true,
-                Fn: () => setModal({ ...modal, isShow: false }),
-                isDanger: true,
-                msg: "Xóa chương trình thất bại.\n",
-            });
-        } finally {
-            setLoading(false);
-        }
-    }
-
 
     return (
         <div id="edu-program-course-list">
             <MsgModal msg={modal.msg} Fn={modal.Fn} show={modal.isShow} danger={modal.isDanger} />
-            <div className="flex items-center gap-5 mb-3">
-                <Button
-                    onClick={() => {
-                        navigate.push("/auth/manage-program/list/");
-                    }}
-                    className="w-20 flex justify-center items-center"
-                >
-                    <BsArrowLeft className="text-lg"/>
-                </Button>
+            <h3 className="title">Chương trình đào tạo</h3>
+            <div className="flex items-center gap-5 my-5 font-bold">
                 <span>
                     {program.educationalProgramId} - {program.name}
                 </span>
-                <Button
-                    icon={<PlusOutlined />}
-                    onClick={() => {
-                        navigate.push(`/auth/manage-program/list/add/${id}`);
-                    }}
-                >
-                    Thêm học phần
-                </Button>
-                <Button
-                    icon={<DeleteOutlined />}
-                    onClick={handleDelete}
-                    danger
-                >
-                    Xóa
-                </Button>
             </div>
 
             <Table
@@ -216,7 +177,6 @@ export default function EduProgramDetail({ setLoading }) {
                 columns={columns}
                 pagination={false} 
                 rowKey="courseId"
-                size="small"
             />
 
         </div>

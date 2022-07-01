@@ -1,30 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Table, Tooltip, Select, Button } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import { BsArrowLeft } from "react-icons/bs";
+import {BsArrowLeft} from "react-icons/bs"
 import axios from "axios";
-import MsgModal from "../../components/MsgModal";
-import InputField from "../../components/InputField";
 import {
-    Switch,
-    useRouteMatch,
-    Route,
-    useHistory,
     useParams,
 } from "react-router-dom";
+import InputField from "../../../components/InputField";
 
 // Show course class list depend on courseId that has been select on <List />
-export default function CourseInChargeList({ setLoading, user }) {
+export default function CourseClassList({ setLoading, user }) {
     document.title = "Danh sách lớp học phần";
-    let { courseId } = useParams();
-    let { path, url } = useRouteMatch();
-    let navigate = useHistory();
-    const [modal, setModal] = useState({
-        isShow: false,
-        Fn: () => {},
-        isDanger: false,
-        msg: "",
-    });
 
     const columns = [
         {
@@ -45,7 +30,6 @@ export default function CourseInChargeList({ setLoading, user }) {
             title: "Tên HP",
             dataIndex: "name",
             key: "name",
-            width: "260px",
             ellipsis: {
                 showTitle: false,
             },
@@ -70,24 +54,24 @@ export default function CourseInChargeList({ setLoading, user }) {
                 </Tooltip>
             ),
         },
-        // {
-        //     title: "Giảng viên",
-        //     dataIndex: "teacher",
-        //     key: "teacher",
-        //     ellipsis: {
-        //         showTitle: false,
-        //     },
-        //     render: (teacher) => (
-        //         <Tooltip placement="topLeft" title={teacher}>
-        //             {teacher}
-        //         </Tooltip>
-        //     ),
-        // },
+        {
+            title: "Giảng viên",
+            dataIndex: "teacher",
+            key: "teacher",
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (teacher) => (
+                <Tooltip placement="topLeft" title={teacher}>
+                    {teacher}
+                </Tooltip>
+            ),
+        },
         {
             title: "Thời khóa biểu",
             dataIndex: "schedule",
             key: "schedule",
-            // width: "260px",
+            width: "260px",
             ellipsis: {
                 showTitle: false,
             },
@@ -97,24 +81,24 @@ export default function CourseInChargeList({ setLoading, user }) {
                 </Tooltip>
             ),
         },
-        // {
-        //     title: "ĐK",
-        //     dataIndex: "registeredCount",
-        //     key: 'registeredCount',
-        //     width: "50px",
-        //     ellipsis: {
-        //         showTitle: false,
-        //     },
-        //     render: (registeredCount) => (
-        //         <Tooltip placement="topLeft" title={registeredCount}>
-        //             {registeredCount}
-        //         </Tooltip>
-        //     ),
-        // },
+        {
+            title: "ĐK",
+            dataIndex: "registeredCount",
+            key: 'registeredCount',
+            width: "50px",
+            ellipsis: {
+                showTitle: false,
+            },
+            render: (registeredCount) => (
+                <Tooltip placement="topLeft" title={registeredCount}>
+                    {registeredCount}
+                </Tooltip>
+            ),
+        },
         {
             title: "SL",
             dataIndex: "capacity",
-            key: "capacity",
+            key: 'capacity',
             width: "50px",
             ellipsis: {
                 showTitle: false,
@@ -126,10 +110,10 @@ export default function CourseInChargeList({ setLoading, user }) {
             ),
         },
         {
-            title: "Chi tiết",
+            title: "Hủy ĐK",
             dataIndex: "courseClassId",
-            key: "detailButton",
-            width: "145px",
+            key: "unregister",
+            width: "100px",
             ellipsis: {
                 showTitle: false,
             },
@@ -137,10 +121,11 @@ export default function CourseInChargeList({ setLoading, user }) {
                 return (
                     <Button
                         type="primary"
-                        onClick={() => {navigate.push(`/auth/course-in-charge/${courseClassId}`)}}
-                        icon={<SearchOutlined />}
+                        danger
+                        onClick={() => handleUnregister(courseClassId)}
+                        block
                     >
-                        Chi tiết
+                        Hủy
                     </Button>
                 );
             },
@@ -173,31 +158,42 @@ export default function CourseInChargeList({ setLoading, user }) {
         setSearchText(inputSearchEl.current.value);
     };
 
+    const handleUnregister = async (courseClassId) => {
+        try {
+            await axios.delete(`/api/course-classroom/user/${user.name}/${courseClassId}`);
+            setCourseClasses(
+                courseClasses.filter(
+                    (item) => item.courseClassId !== courseClassId
+                )
+            );
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
+                
                 const { data: courseClasses } = await axios.get(
-                    `/api/user/teacher/course-classroom/${user.name}`
+                    `/api/course-classroom/user/${user.name}`
                 );
-                console.log("classes: ", courseClasses);
                 const data = [];
-                for (let index = 0; index < courseClasses.length; index++) {
-                    let item = courseClasses[index];
-                    if (item.courseClassroom.isComplete) continue;
-                    let { data: course } = await axios.get(
-                        `/api/course/${item.courseClassroom.courseId}`
-                    );
+                courseClasses.forEach(async (item) => {
+                    const { data: course } = await axios.get(`/api/course/${item.courseClassroom.courseId}`)
+                    console.log(item);
                     data.push({
                         courseClassId: item.courseClassroom.courseClassId,
                         name: course.name,
                         credits: course.credits,
-                        // teacher: item.teacherName,
                         capacity: item.courseClassroom.capacity,
+                        teacher: item.teacherName,
                         schedule: scheduleRawToString(item.schedule),
                         registeredCount: item.numberOfRegisteredStudent,
+                        studied: item.courseClassroom.isComplete || !course.isAvailable
                     });
-                }
+                });
                 setCourseClasses(data);
             } catch (err) {
                 console.log(err);
@@ -210,13 +206,6 @@ export default function CourseInChargeList({ setLoading, user }) {
 
     return (
         <div id="course-class-list">
-            <MsgModal
-                msg={modal.msg}
-                Fn={modal.Fn}
-                show={modal.isShow}
-                danger={modal.isDanger}
-            />
-            <h3 className="title">HỌC PHẦN PHỤ TRÁCH</h3>
             <form
                 onSubmit={handleSearch}
                 action=""
@@ -237,9 +226,7 @@ export default function CourseInChargeList({ setLoading, user }) {
                 className="students-table"
                 dataSource={courseClasses.filter(
                     (item) =>
-                        objectToString(item)
-                            .toLowerCase()
-                            .indexOf(searchText.toLowerCase()) >= 0
+                        objectToString(item).toLowerCase().indexOf(searchText.toLowerCase()) >= 0 && !item.studied
                 )}
                 columns={columns}
                 pagination={{

@@ -4,8 +4,8 @@ import moment from "moment";
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import axios from "axios";
 
-export default function Schedule({ user, setLoading  }) {
-    document.title = 'Lịch học'
+export default function TeahcerSchedule({ user, setLoading  }) {
+    document.title = 'Lịch giảng dạy'
     const localizer = momentLocalizer(moment)
     const [events, setEvents] = useState([])
     const periodList = {
@@ -40,7 +40,7 @@ export default function Schedule({ user, setLoading  }) {
                 events.push({
                     id: id,
                     allDay: false,
-                    title: <span className="whitespace-pre-wrap">{`${item.name}\n${item.teacher}\n${scheduleItem.room}`}</span>,
+                    title: <span className="whitespace-pre-wrap">{`${item.name}\n${item.id}\n${scheduleItem.room}`}</span>,
                     start: new Date(date.getFullYear(), date.getMonth(), date.getDate(), startPeriodTime.startHour, startPeriodTime.startMinute),
                     end: new Date(date.getFullYear(), date.getMonth(), date.getDate(), endPeriodTime.endHour, endPeriodTime.endMinute)
                 })
@@ -54,7 +54,7 @@ export default function Schedule({ user, setLoading  }) {
         let data = [];
         setLoading(true);
         try {
-            const { data: courseClassroomsData } = await axios.get(`/api/course-classroom/user/${user.name}`)
+            const { data: courseClassroomsData } = await axios.get(`/api/user/teacher/course-classroom/${user.name}`)
             for (let index = 0; index < courseClassroomsData.length; index++) {
                 let item = courseClassroomsData[index];
                 if (item.courseClassroom.isComplete === true)
@@ -64,7 +64,7 @@ export default function Schedule({ user, setLoading  }) {
                 //     continue
                 data.push({
                     name: course.name,
-                    teacher: item.courseClassroom.teacherName,
+                    id: item.courseClassroom.courseClassId,
                     schedule: item.schedule
                 })
             }

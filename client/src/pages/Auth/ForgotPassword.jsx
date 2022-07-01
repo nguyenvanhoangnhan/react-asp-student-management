@@ -36,13 +36,13 @@ export default function ForgotPassword({setLoading}) {
         }
         if (e.target.name === "verifyToken") {
             setVerifyToken(e.target.value);
+            return;
         }
-
+        
         setNewPwd(e.target.value)
     };
     const handleSendVerifyCode = async (e) => {
         e.preventDefault();
-        console.log(userId, email, verifyToken);
         setLoading(true);
         try {
             await axios.post(`/api/account/send-email/${userId}/${email}`)
@@ -60,13 +60,8 @@ export default function ForgotPassword({setLoading}) {
         }
     };
 
-    const handleChangePwd = async (e) => {
-        e.preventDefault();
-    }
-
     const handleVerify = async (e) => {
         e.preventDefault();
-        console.log(userId, email, verifyToken);
         setLoading(true);
         try {
             const res = await axios.post(`/api/account/verify-token/${verifyToken}/${userId}`)

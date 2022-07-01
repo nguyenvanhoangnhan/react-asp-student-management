@@ -84,7 +84,7 @@ export default function ChangePasswordModal({user, handleLogout}) {
             <MsgModal msg={modal.msg} Fn={modal.Fn} show={modal.isShow} danger={modal.isDanger} />
             <div className="modal">
                 <div className="modal-title-bar">
-                    <h4 className="modal-title">Change password</h4>
+                    <h4 className="modal-title">Đổi mật khẩu</h4>
                     <div className="modal-close-icon" onClick={backToProfilePage}>
                         <BsX />
                     </div>

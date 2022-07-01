@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, Tooltip, Select, Button } from "antd";
 import axios from "axios";
-import ManageSingleClassModal from "./SingleModal";
-import { Switch, useRouteMatch, Route, useHistory } from "react-router-dom";
+import { useRouteMatch, useHistory } from "react-router-dom";
 
 export default function ClassList({ setLoading }) {
     document.title = "Danh sách lớp sinh hoạt";

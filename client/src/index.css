@@ -154,7 +154,7 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
   border: none;
 }
 .box-shadow-default {
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 0px 2.6px;
 }
 .ant-btn-primary span {
   color: white;
@@ -307,7 +307,7 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
   justify-content: space-between;
   background: white;
   user-select: none;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 0px 2.6px;
 }
 #navbar .navbar-right {
   display: flex;
@@ -365,7 +365,7 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
   transition: all ease 0.2s;
   opacity: 0;
   pointer-events: none;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 0px 2.6px;
 }
 #navbar .navbar-right .navbar-profile-drop-down a {
   text-decoration: none;
@@ -407,7 +407,7 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
   opacity: 0;
 }
 #sidebar {
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 0px 2.6px;
   position: relative;
   z-index: 30;
   background: white;
@@ -426,7 +426,7 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 0px 2.6px;
 }
 #sidebar .sidebar-menu {
   margin-top: 20px;
@@ -464,7 +464,7 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
   font-size: 18px;
   line-height: 14px;
   background: white;
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 0px 2.6px;
   border-radius: 0px 999px 999px 0;
   padding-block: 15px;
   padding-right: 5px;
@@ -629,6 +629,8 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
 }
 #profile .profile-content-left .avatar img {
   border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
 }
 #profile .profile-content-left .avatar-edit {
   position: absolute;
@@ -670,24 +672,48 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
 #profile .profile-content-right .school-information ul li {
   display: flex;
 }
-#profile .profile-content-right .personal-information ul li div,
-#profile .profile-content-right .school-information ul li div {
+#profile .profile-content-right .personal-information ul li > div,
+#profile .profile-content-right .school-information ul li > div {
   margin-bottom: 24px;
   font-size: 14px;
+  line-height: 24px;
 }
-#profile .profile-content-right .personal-information ul li div:first-child,
-#profile .profile-content-right .school-information ul li div:first-child {
+#profile .profile-content-right .personal-information ul li > div:first-child,
+#profile .profile-content-right .school-information ul li > div:first-child {
   min-width: 120px;
-  width: 23%;
+  width: 165px;
   text-align: right;
   font-weight: 600;
 }
-#profile .profile-content-right .personal-information ul li div:nth-child(2),
-#profile .profile-content-right .school-information ul li div:nth-child(2) {
+#profile .profile-content-right .personal-information ul li > div:nth-child(2),
+#profile .profile-content-right .school-information ul li > div:nth-child(2) {
   margin-left: 30px;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+}
+#profile .profile-content-right .personal-information ul li .ant-row,
+#profile .profile-content-right .school-information ul li .ant-row,
+#profile .profile-content-right .personal-information ul li .ant-col,
+#profile .profile-content-right .school-information ul li .ant-col,
+#profile .profile-content-right .personal-information ul li .ant-form-item-control-input,
+#profile .profile-content-right .school-information ul li .ant-form-item-control-input,
+#profile .profile-content-right .personal-information ul li .ant-form-item-control-input-content,
+#profile .profile-content-right .school-information ul li .ant-form-item-control-input-content {
+  margin: 0;
+}
+#profile .profile-content-right .personal-information ul li .ant-form-item-control-input,
+#profile .profile-content-right .school-information ul li .ant-form-item-control-input {
+  min-height: 24px;
+}
+#profile .profile-content-right .personal-information ul li .ant-form-item-explain.ant-form-item-explain-connected,
+#profile .profile-content-right .school-information ul li .ant-form-item-explain.ant-form-item-explain-connected {
+  overflow: initial;
+  margin: 0;
+}
+#profile .profile-content-right .personal-information ul li .ant-form-item-explain-error,
+#profile .profile-content-right .school-information ul li .ant-form-item-explain-error {
+  margin: 0;
 }
 #change-password .ant-btn-dangerous {
   margin-bottom: 10px;
@@ -847,6 +873,26 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
 #schedule .rbc-event:focus {
   outline: none;
 }
+#upload-course .ant-form {
+  width: 384px;
+}
+#upload-course .ant-btn-primary[disabled] span {
+  color: rgba(0, 0, 0, 0.5);
+}
+#upload-course .ant-upload.ant-upload-select {
+  width: 384px;
+}
+#upload-course .ant-upload.ant-upload-select .ant-btn {
+  width: 100%;
+}
+#upload-course .ant-upload-list.ant-upload-list-picture {
+  width: 100%;
+}
+#upload-course .success .download-btn {
+  background: #15803D;
+  outline-color: #15803D;
+  border-color: #15803D;
+}
 .lds-ring {
   display: inline-block;
   position: relative;
@@ -930,4 +976,12 @@ input[type="submit"]:not(.cancel-btn, .ant-btn .normal-btn) {
   border-top: 4px solid #161616;
   z-index: 1;
   transform: rotate(-90deg);
+}
+.user-table-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+  background-image: url('https://eitrawmaterials.eu/wp-content/uploads/2016/09/person-icon.png');
 }

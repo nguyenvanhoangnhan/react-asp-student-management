@@ -11,8 +11,10 @@ export default function AccountManagement({setLoading}) {
     const handleFnSelect = (e) => {
         navigate.push(`${path}/${e.target.value}`);
     } 
-    let defaultRdGrValue = document.location.pathname.includes("list") ? "list" : 
-        (document.location.pathname.includes("generate") ? "generate" : "create"); 
+    let defaultRdGrValue = "create";
+    defaultRdGrValue = document.location.pathname.includes("generate") ? "generate" : defaultRdGrValue; 
+    defaultRdGrValue = document.location.pathname.includes("list") ? "list" : defaultRdGrValue; 
+
     return (
         <div id="account-management">
             <h3 className="title">Quản lý tài khoản</h3>

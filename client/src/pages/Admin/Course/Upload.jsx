@@ -11,10 +11,9 @@ import axios from "axios";
 import MsgModal from "../../../components/MsgModal";
 
 
-export default function GenerateAccounts({setLoading}) {
+export default function UploadCourse({setLoading}) {
     document.title = "Sinh tài khoản"
     const uploadRef = useRef(null);
-    const [data, setData] = useState(null);
     const [success, setSuccess] = useState(false);
     const [file, setFile] = useState(   null);
     const [uploadFileList, setUploadFileList] = useState([]); 
@@ -25,62 +24,6 @@ export default function GenerateAccounts({setLoading}) {
         isDanger: false,
         msg: '',
     })
-
-    const responseColumns = [
-        {
-            title: "Tên",
-            dataIndex: "name",
-            key: "name",
-            // width: "80px",
-            render: (name) => (
-                <Tooltip placement="topLeft" title={name}>
-                    {name}
-                </Tooltip>
-            ),
-        },
-        {
-            title: "Lớp",
-            dataIndex: "className",
-            key: "className",
-            // width: "18%",
-            ellipsis: {
-                showTitle: false,
-            },
-            render: (className) => (
-                <Tooltip placement="topLeft" title={className}>
-                    {className}
-                </Tooltip>
-            ),
-        },
-        
-        {
-            title: "Tài khoản",
-            dataIndex: "username",
-            key: "username",
-            ellipsis: {
-                showTitle: false,
-            },
-            // width: "30%",
-            render: (data) => (
-                <Tooltip placement="topLeft" title={data}>
-                    {data}
-                </Tooltip>
-            ),
-        },
-        {
-            title: "Mật khẩu",
-            dataIndex: "password",
-            key: "password",
-            ellipsis: {
-                showTitle: false,
-            },
-            render: (data) => (
-                <Tooltip placement="topLeft" title={data}>
-                    {data}
-                </Tooltip>
-            ),
-        },
-    ];
 
     const onChangeHandle = async (e) => {
         setUploadFileList(e.fileList);
@@ -104,27 +47,19 @@ export default function GenerateAccounts({setLoading}) {
         setFile(e.fileList[0].originFileObj)
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         if (file != null) {
             setLoading(true);
             console.log(file)
             const formData = new FormData();
             formData.append("files", file);
             formData.append("fileName", file.name);
-            // post file to api
-            axios.post("/api/account/upload-file", formData).then((res) => {
-                
-                setData(res.data.map((item, index) => {
-                    return {
-                        key: index,
-                        name: item.name,
-                        className: item.className,
-                        username: item.account.username,
-                        password: item.account.password,
-                    };
-                }));
+            console.log(formData);
+            try {
+                await axios.post("/api/course/upload-file", formData)
                 setSuccess(true);
-            }).catch(err => {
+            }
+            catch (err) {
                 setModal({
                     isShow: true,
                     Fn: () => setModal({...modal, isShow: false}),
@@ -132,18 +67,12 @@ export default function GenerateAccounts({setLoading}) {
                     msg: 'Sinh tài khoản thất bại!'
                 })
                 console.error("error: ", err);
-            }).finally(() => {
+            }
+            finally {
                 setLoading(false)
-            })
-        }
-    };
+            }
 
-    // Convert JSON stored in 'data' -> .xlsx file and download
-    const handleDownloadXlsx = (e) => {
-        if (data === null) {
-            return;
         }
-        JSONtoExcelFile(data);
     };
 
     // clear form, back to initial state
@@ -151,55 +80,15 @@ export default function GenerateAccounts({setLoading}) {
         setSuccess(false)
         setFile(null)
         setUploadFileList([])
-        setData(null)
     }
-
-    const JSONtoExcelFile = (json) => {
-        try {
-            const workSheet = xlsxUtils.json_to_sheet(json);
-            const workBook = xlsxUtils.book_new();
-            xlsxUtils.book_append_sheet(workBook, workSheet);
-            // Gen buffer
-            xlsxWrite(workBook, { bookType: "xlsx", type: "buffer" });
-            // binary string
-            xlsxWrite(workBook, { bookType: "xlsx", type: "binary" });
-            // download
-            xlsxWriteFile(workBook, `accountsData${Date.now()}.xlsx`);
-        } catch (err) {
-            console.error(err);
-        }
-    };
-
-    // const excelFileToJSON = (file) => {
-    //     try {
-    //         var reader = new FileReader();
-    //         reader.readAsBinaryString(file);
-    //         reader.onload = (e) => {
-    //             var data = e.target.result;
-    //             var workbook = xlsxRead(data, {
-    //                 type: "binary",
-    //             });
-    //             var result = {};
-
-    //             var firstSheet = workbook.SheetNames[0];
-    //             console.log("firstSheet:", firstSheet);
-    //             var roa = xlsxUtils.sheet_to_row_object_array(
-    //                 workbook.Sheets[firstSheet]
-    //             );
-    //             if (roa.length > 0) {
-    //                 result = roa;
-    //             }
-    //             return result;
-    //         };
-    //     } catch (e) {
-    //         console.error(e);
-    //         return null;
-    //     }
-    // };
-
     return (
-        <div id="gen-accounts">
+        <div id="upload-course">
             <MsgModal msg={modal.msg} Fn={modal.Fn} show={modal.isShow} danger={modal.isDanger} />
+            <h4 className="text-blue-500">
+                Lưu ý: Nếu học phần chưa tồn tại trong hệ thống, học phần sẽ được tạo (mặc định trạng thái Đóng đăng ký). <br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Nếu học phần đã tồn tại trong hệ thống, trạng thái Mở / Đóng đăng ký của học phần sẽ được thay đổi.
+            </h4>
             <div className="top flex flex-col xl:flex-row xl:gap-10 w-96 xl:w-full mb-5">
                 <Form size="default" onFinish={handleSubmit} layout="vertical">
                     <Form.Item label="File thông tin tài khoản" required>
@@ -238,17 +127,9 @@ export default function GenerateAccounts({setLoading}) {
                 {success && (
                     <div className="success flex flex-col justify-center items-center flex-1">
                         <span className="text-green-700 text-lg mb-3">
-                            Sinh tài khoản thành công! <CheckOutlined />{" "}
+                            Upload thành công! <CheckOutlined />{" "}
                         </span>
                         <div className="btns flex flex-col gap-2">
-                            <Button
-                                className="download-btn"
-                                type="primary"
-                                icon={<DownloadOutlined />}
-                                onClick={handleDownloadXlsx}
-                            >
-                                Tải xuống file .xlsx
-                            </Button>
                             <Tooltip placement="right" title={'Trở về form ban đầu'}>
                                 <Button
                                     type="primary"
@@ -264,20 +145,6 @@ export default function GenerateAccounts({setLoading}) {
                     </div>
                 )}
             </div>
-            
-            {success && (
-                <Table
-                    className="response-table"
-                    dataSource={data}
-                    columns={responseColumns}
-                    pagination={{
-                        position: ["topRight"],
-                        defaultPageSize: 10,
-                        showSizeChanger: true,
-                        pageSizeOptions: ["10", "20", "50", "100"],
-                    }}
-                />
-            )}
         </div>
     );
 }

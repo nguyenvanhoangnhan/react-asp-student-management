@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Table, Tooltip, Select, Button, Switch as AntSwitch } from "antd";
+import { Table, Tooltip, Select, Button } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import axios from "axios";
-import ManageSingleCourseModal from "./SingleModal";
 import { Switch, useRouteMatch, Route, useHistory } from "react-router-dom";
 import InputField from "../../../components/InputField";
-export default function CourseList({ setLoading }) {
+export default function CourseList({ setLoading, user }) {
     document.title = "Danh sách học phần";
     let { path, url } = useRouteMatch();
     let navigate = useHistory();
@@ -73,20 +72,6 @@ export default function CourseList({ setLoading }) {
             },
         },
         {
-            title: "Mở ĐK",
-            dataIndex: "courseId",
-            key: "isAvailable",
-            width: "80px",
-            ellipsis: {
-                showTitle: false,
-            },
-            render: (courseId) => {
-                return (
-                    <AntSwitch checked={courses.find(c => c.courseId === courseId).isAvailable} onChange={(e) => handleChangeAvailable(e, courseId)} />
-                )
-            }
-        },
-        {
             title: "Danh sách",
             dataIndex: "courseId",
             key: "delete",
@@ -101,7 +86,7 @@ export default function CourseList({ setLoading }) {
                         icon={<SearchOutlined />}
                         onClick={() => {
                             navigate.push(
-                                `/auth/manage-course-classroom/list/${courseId}`
+                                `/auth/course-register/list/${courseId}`
                             );
                         }}
                     >
@@ -134,37 +119,15 @@ export default function CourseList({ setLoading }) {
         }
     };
 
-    const handleChangeAvailable = async (e, courseId) => {
-        console.log(e, courseId);
-        let index = courses.findIndex(c => c.courseId === courseId);
-        let newCourse = {
-            courseId: courseId,
-            name: courses[index].name,
-            credits: courses[index].credits,
-            isAvailable: e,
-            requiredCourseId: courses[index].requiredCourseId,
-        }
-        console.log(index, newCourse)
-        setLoading(true);
-        try {
-            await axios.put(`/api/course`, newCourse);
-            courses[index].isAvailable = e;
-        }
-        catch (err) {
-            console.log(err);
-        }
-        finally {
-            setLoading(false);
-        }
-    }
-
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const {data} = await axios.get("/api/course/");
+                const { data } = await axios.get(
+                    `/api/course/user/${user.name}`
+                );
                 setCourses(data);
-            } catch (err) {                
+            } catch (err) {
                 console.log(err);
                 alert("Không thể kết nối đến server");
             }
@@ -175,39 +138,48 @@ export default function CourseList({ setLoading }) {
 
     return (
         <div id="user-list">
-            <form
-                onSubmit={handleSearch}
-                action=""
-                className="mx-auto w-96 courses-search items-end flex mb-3"
-            >
-                <InputField type="text" label="Tìm kiếm" ref={inputSearchEl} />
-                <Button
-                    type="primary"
-                    size="medium"
-                    htmlType="submit"
-                    className="ml-5"
-                >
-                    Search
-                </Button>
-            </form>
-
-            <Table
-                className="students-table"
-                dataSource={courses.filter(
-                    (item) =>
-                        objectToString(item)
-                            .toLowerCase()
-                            .indexOf(searchText.toLowerCase()) >= 0
-                )}
-                columns={columns}
-                pagination={{
-                    position: ["topRight"],
-                    defaultPageSize: 10,
-                    showSizeChanger: true,
-                    pageSizeOptions: ["10", "20", "50", "100"],
-                }}
-                rowKey="courseId"
-            />
+            {courses.length === 0 ? (
+                <h4 className="text-red-500">Hiện không có học phần nào có thể đăng ký</h4>
+            ) : (
+                <>
+                    <form
+                        onSubmit={handleSearch}
+                        action=""
+                        className="mx-auto w-96 courses-search items-end flex mb-3"
+                    >
+                        <InputField
+                            type="text"
+                            label="Tìm kiếm"
+                            ref={inputSearchEl}
+                        />
+                        <Button
+                            type="primary"
+                            size="medium"
+                            htmlType="submit"
+                            className="ml-5"
+                        >
+                            Search
+                        </Button>
+                    </form>
+                    <Table
+                        className="students-table"
+                        dataSource={courses.filter(
+                            (item) =>
+                                objectToString(item)
+                                    .toLowerCase()
+                                    .indexOf(searchText.toLowerCase()) >= 0
+                        )}
+                        columns={columns}
+                        pagination={{
+                            position: ["topRight"],
+                            defaultPageSize: 10,
+                            showSizeChanger: true,
+                            pageSizeOptions: ["10", "20", "50", "100"],
+                        }}
+                        rowKey="courseId"
+                    />{" "}
+                </>
+            )}
         </div>
     );
 }

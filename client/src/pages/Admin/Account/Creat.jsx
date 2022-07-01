@@ -3,8 +3,8 @@ import axios from "axios";
 import { Form, Input, Button, Radio, Select } from "antd";
 import MsgModal from "../../../components/MsgModal";
 
-export default function CreateAccount({setLoading}) {
-    document.title = "Tạo tài khoản"
+export default function CreateAccount({ setLoading }) {
+    document.title = "Tạo tài khoản";
     const [formData, setFormData] = useState({
         name: "",
         role: "",
@@ -12,16 +12,16 @@ export default function CreateAccount({setLoading}) {
         faculty: "",
         gender: "",
         id: "",
-    })
+    });
 
-    const [faculties, setFaculties] = useState([])
-    const [classes, setClasses] = useState([])
+    const [faculties, setFaculties] = useState([]);
+    const [classes, setClasses] = useState([]);
     const [modal, setModal] = useState({
         isShow: false,
-        Fn: () => { },
+        Fn: () => {},
         isDanger: false,
-        msg: '',
-    })
+        msg: "",
+    });
     useEffect(() => {
         setLoading(true);
         axios
@@ -34,77 +34,89 @@ export default function CreateAccount({setLoading}) {
                 setLoading(false);
                 console.error("Error on fetching faculties:", err);
             });
-    }, [])
+    }, []);
 
     const handleInput = (e) => {
         setFormData({
             ...formData,
             [e.target.id]: e.target.value,
-        })
-    }
+        });
+    };
 
     const handleSelectFaculty = (data) => {
         data = JSON.parse(data);
         setFormData({
             ...formData,
             faculty: data.facultyId,
-        })
+        });
 
-        axios.get(`/api/faculty/classes/${data.facultyId}`).then(res => {
-            setClasses(res.data)
-        }).catch(err => {
-            console.error("Error on fetching class list", err)
-        })
-    }
-    
-    const handleSubmit = (e) => {
-        console.log(e)
-        setLoading(true)
-
-        let data = {
-            "name": e.name,
-            "gender": (e.gender === 'male' ? true : false),
-            "role": e.role,
-            "className": e.class,
-            "userId": e.id,
-            "dob": "string",
-            "email": "string",
-            "phoneNumber": "string",
-        }
-        console.log(data)
-        
         axios
-            .post(
-                `/api/account/register`
-            ,data)
+            .get(`/api/faculty/classes/${data.facultyId}`)
             .then((res) => {
-                setLoading(false)
-                console.log(res)
-                setModal({
-                    isShow: true,
-                    Fn: () => setModal({...modal, isShow: false}),
-                    isDanger: false,
-                    msg: `Thêm thành công\nTài khoản: ${res.data.username}\nMật khẩu: ${res.data.password}`
-                })
+                setClasses(res.data);
             })
             .catch((err) => {
-                setLoading(false)
-                console.error("Error on submit:", err)
-                setModal({
-                    isShow: true,
-                    Fn: () => setModal({...modal, isShow: false}),
-                    isDanger: true,
-                    msg: 'Thêm thất bại'
-                })
-            })
+                console.error("Error on fetching class list", err);
+            });
+    };
 
-    }
+    const handleSubmit = async (e) => {
+        let data = {};
+        if (e.role === "Teacher") {
+            data = {
+                name: e.name,
+                gender: e.gender === "male" ? true : false,
+                role: e.role,
+                className: "GV K. " + e.faculty,
+                userId: e.id,
+                dob: "",
+                email: "",
+                phoneNumber: "",
+            };
+        }
+        if (e.role === "Student") {
+            data = {
+                name: e.name,
+                gender: e.gender === "male" ? true : false,
+                role: e.role,
+                className: e.class,
+                userId: e.id,
+                dob: "string",
+                email: "string",
+                phoneNumber: "string",
+            };
+        }
 
-    
+        setLoading(true);
+        try {
+            const res = await axios.post(`/api/account/register`, data);
+            setModal({
+                isShow: true,
+                Fn: () => setModal({ ...modal, isShow: false }),
+                isDanger: false,
+                msg: `Thêm thành công\nTài khoản: ${res.data.username}\nMật khẩu: ${res.data.password}`,
+            });
+        } catch (err) {
+            console.error("Error on submit:", err);
+            setModal({
+                isShow: true,
+                Fn: () => setModal({ ...modal, isShow: false }),
+                isDanger: true,
+                msg: "Thêm thất bại",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div id="create-account">
-            <MsgModal msg={modal.msg} Fn={modal.Fn} show={modal.isShow} danger={modal.isDanger} />
+            <MsgModal
+                msg={modal.msg}
+                Fn={modal.Fn}
+                show={modal.isShow}
+                danger={modal.isDanger}
+            />
             <Form
                 labelCol={{
                     span: 4,
@@ -144,13 +156,13 @@ export default function CreateAccount({setLoading}) {
                             })
                         }
                     >
-                        <Select.Option value="teacher">
+                        <Select.Option value="Teacher">
                             Giảng viên
                         </Select.Option>
-                        <Select.Option value="student">Sinh viên</Select.Option>
+                        <Select.Option value="Student">Sinh viên</Select.Option>
                     </Select>
                 </Form.Item>
-                {formData.role === "student" && (
+                {formData.role === "Student" && (
                     <>
                         <Form.Item
                             label="Khoa"
@@ -197,11 +209,16 @@ export default function CreateAccount({setLoading}) {
                         >
                             <Select
                                 onChange={(value) =>
-                                    handleInput({ target: { id: "class", value: value } })
+                                    handleInput({
+                                        target: { id: "class", value: value },
+                                    })
                                 }
                             >
                                 {classes.map((item) => (
-                                    <Select.Option key={item.classroomId} value={item.name}>
+                                    <Select.Option
+                                        key={item.classroomId}
+                                        value={item.name}
+                                    >
                                         {item.name}
                                     </Select.Option>
                                 ))}
@@ -221,31 +238,49 @@ export default function CreateAccount({setLoading}) {
                         </Form.Item>
                     </>
                 )}
-                {formData.role === "teacher" && (
-                    <Form.Item
-                        label="Khoa giảng dạy"
-                        name="faculty"
-                        rules={[
-                            {
-                                required: true,
-                                message: "Bạn chưa chọn khoa!",
-                            },
-                        ]}
-                    >
-                        <Select
-                            onChange={(value) =>
-                                handleInput({
-                                    target: { id: "faculty", value: value },
-                                })
-                            }
+                {formData.role === "Teacher" && (
+                    <>
+                        <Form.Item
+                            label="Khoa giảng dạy"
+                            name="faculty"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Bạn chưa chọn khoa!",
+                                },
+                            ]}
                         >
-                            {faculties.map((item) => (
-                                <Select.Option key={item} value={item}>
-                                    {item}
-                                </Select.Option>
-                            ))}
-                        </Select>
-                    </Form.Item>
+                            <Select
+                                optionFilterProp="children"
+                                filterOption={(input, option) =>
+                                    option.children
+                                        .toLowerCase()
+                                        .indexOf(input.toLowerCase()) >= 0
+                                }
+                            >
+                                {faculties.map((item) => (
+                                    <Select.Option
+                                        key={item.facultyId}
+                                        value={item.name}
+                                    >
+                                        {item.name}
+                                    </Select.Option>
+                                ))}
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            label="MSGV"
+                            name="id"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: "Bạn chưa nhập MSSV!",
+                                },
+                            ]}
+                        >
+                            <Input className="id" onChange={handleInput} />
+                        </Form.Item>
+                    </>
                 )}
 
                 <Form.Item
@@ -254,7 +289,7 @@ export default function CreateAccount({setLoading}) {
                     rules={[
                         {
                             required: true,
-                        message: "Bạn chưa chọn giới tính!",
+                            message: "Bạn chưa chọn giới tính!",
                         },
                     ]}
                 >
