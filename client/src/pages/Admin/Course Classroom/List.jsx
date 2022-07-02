@@ -5,6 +5,7 @@ import axios from "axios";
 import ManageSingleCourseModal from "./SingleModal";
 import { Switch, useRouteMatch, Route, useHistory } from "react-router-dom";
 import InputField from "../../../components/InputField";
+import MsgModal from "../../../components/MsgModal";
 export default function CourseList({ setLoading }) {
     document.title = "Danh sách học phần";
     let { path, url } = useRouteMatch();
@@ -111,7 +112,12 @@ export default function CourseList({ setLoading }) {
             },
         },
     ];
-
+    const [modal, setModal] = useState({
+        isShow: false,
+        Fn: () => {},
+        isDanger: false,
+        msg: "",
+    });
     const [searchText, setSearchText] = useState("");
     const [courses, setCourses] = useState([]);
     const inputSearchEl = useRef(null);
@@ -157,6 +163,32 @@ export default function CourseList({ setLoading }) {
             setLoading(false);
         }
     }
+    
+    const handleFinishSemester = async () => {
+        setLoading(true);
+        try {
+            await axios.put(`/api/course-classroom/finish-all-classes`)
+            setModal({
+                isShow: true,
+                Fn: () => setModal({...modal, isShow: false}),
+                isDanger: false,
+                msg: 'Kết thúc học kì thành công.\nĐã khóa chỉnh sửa điểm tất cả học phần'
+            })
+        }
+        catch (err) {
+            console.log(err);
+            setModal({
+                isShow: true,
+                Fn: () => setModal({...modal, isShow: false}),
+                isDanger: true,
+                msg: 'Kết thúc học kì thất bại.\nLỗi server'
+            })
+            
+        }
+        finally {
+            setLoading(false);
+        }
+    }
 
     useEffect(() => {
         const fetchData = async () => {
@@ -175,6 +207,17 @@ export default function CourseList({ setLoading }) {
 
     return (
         <div id="user-list">
+            <MsgModal
+                msg={modal.msg}
+                Fn={modal.Fn}
+                show={modal.isShow}
+                danger={modal.isDanger}
+            />
+
+            {/* this set isComplete of all course classroom to TRUE */}
+            <div className="finish-semester flex justify-end"> 
+                <Button danger onClick={handleFinishSemester}>Kết thúc học kì</Button>
+            </div>
             <form
                 onSubmit={handleSearch}
                 action=""

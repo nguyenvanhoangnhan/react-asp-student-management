@@ -39,7 +39,9 @@ export default function LoggedView({ user, handleLogout }) {
             <Route path={`/auth/course-register`} key={1} >
                 <CourseRegister setLoading={customSetLoading} user={user} />
             </Route>,
-            <Route path={`/auth/score`} component={Score} key={2} />,
+            <Route path={`/auth/score`} key={2}>
+                <Score user={user} setLoading={customSetLoading} />
+            </Route>,
             <Route path={`/auth/user-list`} key={3}>
                 <UserList setLoading={customSetLoading} />
             </Route>,

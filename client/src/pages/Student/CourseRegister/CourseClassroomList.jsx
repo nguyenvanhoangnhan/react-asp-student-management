@@ -203,12 +203,21 @@ export default function CourseClassList({ setLoading, user }) {
                 const { data: course } = await axios.get(
                     `/api/course/${courseId}`
                 );
+                
+                if (!course.isAvailable) {
+                    navigate.push("/auth/course-register/list");
+                }
+
                 const { data: courseClasses } = await axios.get(
                     `/api/course-classroom/course/${courseId}`
                 );
                 console.log("classes: ", courseClasses);
                 const data = [];
-            courseClasses.forEach(async (item) => {
+                for (let index = 0; index < courseClasses.length; index++) {
+                    let item = courseClasses[index];
+                    if (item.courseClassroom.isComplete) {
+                        continue
+                    }
                     data.push({
                         courseClassId: item.courseClassroom.courseClassId,
                         name: course.name,
@@ -218,7 +227,7 @@ export default function CourseClassList({ setLoading, user }) {
                         schedule: scheduleRawToString(item.schedule),
                         registeredCount: item.numberOfRegisteredStudent
                     });
-                });
+                }
                 setCourseClasses(data);
             } catch (err) {
                 console.log(err);

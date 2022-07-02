@@ -1,212 +1,29 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Table, Tooltip } from "antd";
-export default function Score() {
+import axios from "axios";
+import { isBuffer } from "lodash";
+export default function Score({ setLoading, user }) {
     document.title = "Kết quả học tập";
-
-    const dataSource = [
-        {
-            key: "1",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "2",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "3",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "4",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "5",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "6",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "7",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "8",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "9",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "10",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "11",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "12",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "13",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "14",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "15",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "16",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-        {
-            key: "17",
-            name: "Xác suất thống kê",
-            credits: 3,
-            scoreFormula: "0.2*BT + 0.2*GK + 0.6*CK",
-            scoreBT: 10,
-            scoreGK: 10,
-            scoreCK: 10,
-            average__10: 10,
-            average__4: 4.0,
-        },
-    ];
 
     const columns = [
         {
-            title: "STT",
+            title: "Mã học phần",
             align: "center",
-            dataIndex: "key",
-            key: "key",
-            width: "60px",
+            dataIndex: "courseId",
+            key: "courseId",
+            width: "140px",
+            render: (courseId) => (
+                <Tooltip placement="topLeft" title={courseId}>
+                    {courseId}
+                </Tooltip>
+            ),
         },
         {
             title: "Tên học phần",
             dataIndex: "name",
             key: "name",
             ellipsis: {
-                showTitle: false
+                showTitle: false,
             },
             render: (name) => (
                 <Tooltip placement="topLeft" title={name}>
@@ -223,11 +40,7 @@ export default function Score() {
             ellipsis: {
                 showTitle: false,
             },
-            render: (credits) => (
-                <Tooltip placement="topLeft" title={credits}>
-                    {credits}
-                </Tooltip>
-            ),
+            render: (credits) => <>{credits}</>,
         },
         {
             title: "Công thức điểm",
@@ -238,11 +51,7 @@ export default function Score() {
             ellipsis: {
                 showTitle: false,
             },
-            render: (scoreFormula) => (
-                <Tooltip placement="topLeft" title={scoreFormula}>
-                    {scoreFormula}
-                </Tooltip>
-            ),
+            render: (scoreFormula) => <>{scoreFormula}</>,
         },
         {
             title: "Điểm",
@@ -257,11 +66,11 @@ export default function Score() {
                         showTitle: false,
                     },
                     render: (scoreBT) => (
-                        <Tooltip placement="topLeft" title={scoreBT}>
+                        <>
                             {scoreBT.toLocaleString(undefined, {
                                 minimumFractionDigits: 1,
                             })}
-                        </Tooltip>
+                        </>
                     ),
                 },
                 {
@@ -274,11 +83,11 @@ export default function Score() {
                         showTitle: false,
                     },
                     render: (scoreGK) => (
-                        <Tooltip placement="topLeft" title={scoreGK}>
+                        <>
                             {scoreGK.toLocaleString(undefined, {
                                 minimumFractionDigits: 1,
                             })}
-                        </Tooltip>
+                        </>
                     ),
                 },
                 {
@@ -291,11 +100,11 @@ export default function Score() {
                         showTitle: false,
                     },
                     render: (scoreCK) => (
-                        <Tooltip placement="topLeft" title={scoreCK}>
+                        <>
                             {scoreCK.toLocaleString(undefined, {
                                 minimumFractionDigits: 1,
                             })}
-                        </Tooltip>
+                        </>
                     ),
                 },
             ],
@@ -313,11 +122,11 @@ export default function Score() {
                         showTitle: false,
                     },
                     render: (average__10) => (
-                        <Tooltip placement="topLeft" title={average__10}>
+                        <>
                             {average__10.toLocaleString(undefined, {
                                 minimumFractionDigits: 1,
                             })}
-                        </Tooltip>
+                        </>
                     ),
                 },
                 {
@@ -330,27 +139,84 @@ export default function Score() {
                         showTitle: false,
                     },
                     render: (average__4) => (
-                        <Tooltip placement="topLeft" title={average__4}>
+                        <>
                             {average__4.toLocaleString(undefined, {
                                 minimumFractionDigits: 1,
                             })}
-                        </Tooltip>
+                        </>
                     ),
                 },
             ],
         },
     ];
 
+    const [score, setScore] = useState([]);
+
+    const convertGPA10to4 = (score10) => {
+        if (score10 === null) return null;
+        if (score10 < 4) return 0;
+        if (score10 < 5) return 1;
+        if (score10 < 5.5) return 1.5;
+        if (score10 < 6.5) return 2;
+        if (score10 < 7) return 2.5;
+        if (score10 < 8) return 3;
+        if (score10 < 8.5) return 3.5;
+        return 4.0;
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            let data = [];
+            try {
+                const { data: scoreData } = await axios.get(
+                    `/api/score/student/${user.name}`
+                );
+                console.log(scoreData);
+                for (let index = 0; index < scoreData.length; index++) {
+                    let item = scoreData[index];
+                    const { data: course } = await axios.get(
+                        `/api/course/${item.courseClassroom.courseId}`
+                    );
+                    console.log('course:', course, "item:", item);
+                    if (course.isAvailable && !item.courseClassroom.isComplete) {
+                        continue;
+                    }
+                    data.push({
+                        courseId: course.courseId,
+                        name: course.name,
+                        credits: course.credits,
+                        scoreFormula: `BT*${item.score.excerciseRate}+GK*${item.score.midTermRate}+CK*${item.score.finalTermRate}`,
+                        scoreBT: item.score.excerciseScore,
+                        scoreGK: item.score.midTermScore,
+                        scoreCK: item.score.finalTermScore,
+                        average__10: item.totalScore,
+                        average__4: convertGPA10to4(item.totalScore),
+                    });
+                }
+                console.log("data:", data);
+                setScore(data);
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     return (
         <div id="score">
             <h3 className="title">SCORE</h3>
             <Table
                 className="students-table"
-                dataSource={dataSource}
+                dataSource={score}
                 columns={columns}
                 bordered
                 size="small"
                 pagination={false}
+                rowKey="courseId"
                 // pagination={{
                 //     position: ["topRight"],
                 //     defaultPageSize: 10,

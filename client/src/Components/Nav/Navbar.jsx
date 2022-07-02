@@ -13,9 +13,14 @@ const Navbar = ({ user, handleLogout }) => {
                 </div> */}
                 <div className="navbar-profile">
                     <div className="avatar">
-                        {user.name ? 
-                            <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${user.name.includes("GV") ? 'Teacher' : user.name.substring(0,3)}/${user.name}.jpg`} className="user-table-avatar" alt="#" />
-                            :
+                        {user.role === "Student" &&
+                            <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${user.name.substring(0, 3)}/${user.name}.jpg`} className="user-table-avatar" alt="#" />
+                        }
+                        {user.role === "Teacher" &&
+                            <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${'Teacher'}/${user.name}.jpg`} className="user-table-avatar" alt="#" />
+                        }
+                        {
+                            user.role === "Admin" &&
                             <img src="https://aui.atlassian.com/aui/8.8/docs/images/avatar-person.svg" alt="#" />
                         }
                     </div>

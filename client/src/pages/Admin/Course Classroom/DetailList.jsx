@@ -105,7 +105,7 @@ export default function CourseClassList({ setLoading }) {
         },
         {
             title: "Đã kết thúc",
-            dataIndex: "isCompleted",
+            dataIndex: "isComplete",
             key: 'isComplete',
             width: "140px",
             filters: [
@@ -202,7 +202,8 @@ export default function CourseClassList({ setLoading }) {
                 );
                 console.log("classes: ", courseClasses);
                 const data = [];
-            courseClasses.forEach(async (item) => {
+                for (let index = 0; index < courseClasses.length; index++) {
+                    let item = courseClasses[index]; 
                     data.push({
                         courseClassId: item.courseClassroom.courseClassId,
                         name: course.name,
@@ -212,7 +213,7 @@ export default function CourseClassList({ setLoading }) {
                         teacher: item.teacherName,
                         schedule: scheduleRawToString(item.schedule),
                     });
-                });
+                }
                 setCourseClasses(data);
             } catch (err) {
                 console.log(err);

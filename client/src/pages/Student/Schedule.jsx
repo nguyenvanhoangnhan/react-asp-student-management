@@ -60,11 +60,11 @@ export default function Schedule({ user, setLoading  }) {
                 if (item.courseClassroom.isComplete === true)
                     continue;
                 const { data: course } = await axios.get(`/api/course/${item.courseClassroom.courseId}`)
-                // if (course.isAvailable === true)
-                //     continue
+                if (course.isAvailable === true)
+                    continue
                 data.push({
                     name: course.name,
-                    teacher: item.courseClassroom.teacherName,
+                    teacher: item.teacherName,
                     schedule: item.schedule
                 })
             }

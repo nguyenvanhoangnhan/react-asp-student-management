@@ -113,15 +113,15 @@ export default function CourseInChargeList({ setLoading, user }) {
         // },
         {
             title: "SL",
-            dataIndex: "capacity",
-            key: "capacity",
+            dataIndex: "registeredCount",
+            key: "registeredCount",
             width: "50px",
             ellipsis: {
                 showTitle: false,
             },
-            render: (capacity) => (
-                <Tooltip placement="topLeft" title={capacity}>
-                    {capacity}
+            render: (registeredCount) => (
+                <Tooltip placement="topLeft" title={registeredCount}>
+                    {registeredCount}
                 </Tooltip>
             ),
         },
