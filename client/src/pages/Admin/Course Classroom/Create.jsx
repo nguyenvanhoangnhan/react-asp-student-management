@@ -20,15 +20,16 @@ export default function CreateCourse({ setLoading }) {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const {data: coursesData} = await axios.get("/api/course");
+                const { data: coursesData } = await axios.get("/api/course");
                 setCourses(coursesData);
 
-                const { data: facultiesData } = await axios.get("/api/faculty/");
-                setFaculties(facultiesData)
-
+                const { data: facultiesData } = await axios.get(
+                    "/api/faculty/"
+                );
+                setFaculties(facultiesData);
             } catch (err) {
                 console.log(err);
-                alert("Kết nối tới server thất bại")
+                alert("Kết nối tới server thất bại");
             }
             setLoading(false);
         };
@@ -40,7 +41,7 @@ export default function CreateCourse({ setLoading }) {
             courseClassId: e.courseClassId,
             teacherName: e.teacher,
             courseId: e.course,
-            capacity: e.capacity
+            capacity: e.capacity,
         };
         let schedule = [];
 
@@ -52,7 +53,15 @@ export default function CreateCourse({ setLoading }) {
             let room = e[`room${i}`];
 
             // Validating
-            if (startDate !== endDate || endPeriod <= startPeriod) {
+            if (
+                startDate !== endDate ||
+                Number(endPeriod) <= Number(startPeriod)
+            ) {
+                console.log(endPeriod <= startPeriod);
+                console.log("startDate:", startDate);
+                console.log("endDate:", endDate);
+                console.log("startPeriod:", startPeriod);
+                console.log("endPeriod:", endPeriod);
                 setModal({
                     isShow: true,
                     Fn: () => setModal({ ...modal, isShow: false }),
@@ -107,19 +116,19 @@ export default function CreateCourse({ setLoading }) {
         setSessions(e);
     };
 
-
     const handleSelectFaculty = async (facultyId) => {
         setLoading(true);
         try {
-            const { data: teachersData } = await axios.get(`api/user/class/GV${facultyId}`)
+            const { data: teachersData } = await axios.get(
+                `api/user/class/GV${facultyId}`
+            );
             setTeachers(teachersData);
-        }
-        catch (err) {
+        } catch (err) {
             console.log(err);
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
-    }
+    };
 
     return (
         <div id="create-account">
@@ -172,7 +181,7 @@ export default function CreateCourse({ setLoading }) {
                     </Select>
                 </Form.Item>
                 <Form.Item
-                    name='faculty'
+                    name="faculty"
                     label="Khoa giảng dạy"
                     rules={[
                         {
@@ -180,64 +189,56 @@ export default function CreateCourse({ setLoading }) {
                             message: "Bạn chưa chọn khoa",
                         },
                     ]}
-                >   
-                    
-                        <Select
-                            name="faculty"
-                            showSearch
-                            placeholder="Chọn khoa"
-                            filterOption={(input, option) =>
-                                option.children
-                                    .join(" ")
-                                    .toLowerCase()
-                                    .includes(input.toLowerCase())
-                            }
-                            onChange={handleSelectFaculty}
-                        >
-                            {faculties.map((item) => (
-                                <Option key={item.facultyId} value={item.facultyId}>
-                                    {item.name}
-                                </Option>
-                            ))}
-                        </Select>
-                        </Form.Item>
-                        <Form.Item
-                            name='teacher'
-                            label='Giảng viên'
-                            rules={[
-                                {
-                                    required: true,
-                                    message: "Bạn chưa chọn giảng viên",
-                                },
-                            ]}
-                        >
-                        <Select
-                            name="teacher"
-                            showSearch
-                            placeholder="Chọn giảng viên"
-                            filterOption={(input, option) =>
-                                option.children
-                                    .join(" ")
-                                    .toLowerCase()
-                                    .includes(input.toLowerCase())
-                            }
-                        >
-                            {teachers.map((item) => (
-                                <Option key={item.userId} value={item.userId}>
-                                    {item.name}
-                                </Option>
-                            ))}
-                        </Select>  
-                    
-
-                    
-                    </Form.Item>
+                >
+                    <Select
+                        showSearch
+                        placeholder="Chọn khoa"
+                        filterOption={(input, option) =>
+                            option.children
+                               // .join(" ")
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                        }
+                        onChange={handleSelectFaculty}
+                    >
+                        {faculties.map((item) => (
+                            <Option key={item.facultyId} value={item.facultyId}>
+                               {item.name}
+                            </Option>
+                        ))}
+                    </Select>
+                </Form.Item>
+                <Form.Item
+                    name="teacher"
+                    label="Giảng viên"
+                    rules={[
+                        {
+                            required: true,
+                            message: "Bạn chưa chọn giảng viên",
+                        },
+                    ]}
+                >
+                    <Select
+                        showSearch
+                        placeholder="Chọn giảng viên"
+                        filterOption={(input, option) =>
+                            option.children
+                               // .join(" ")
+                                .toLowerCase()
+                                .includes(input.toLowerCase())
+                        }
+                    >
+                        {teachers.map((item) => (
+                            <Option key={item.userId} value={item.userId}>
+                                {item.name}
+                            </Option>
+                        ))}
+                    </Select>
+                </Form.Item>
                 <Form.Item
                     label="Số sinh viên"
                     name="capacity"
-                    rules={[
-                        { required: true, message: "Bạn chưa nhập !" },
-                    ]}
+                    rules={[{ required: true, message: "Bạn chưa nhập !" }]}
                 >
                     <InputNumber
                         min={15}

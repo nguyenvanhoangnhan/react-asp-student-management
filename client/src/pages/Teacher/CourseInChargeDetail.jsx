@@ -226,9 +226,9 @@ export default function CourseInChargeDetail({ setLoading }) {
 
     const handleToggleEdit = async (e, studentId) => {
         if (e === false) {
-            let scoreBT = $(`#score-bt-${studentId}`).value;
-            let scoreGK = $(`#score-gk-${studentId}`).value;
-            let scoreCK = $(`#score-ck-${studentId}`).value;
+            let scoreBT = $(`#score-bt-${studentId}`).value.replace(',','.');
+            let scoreGK = $(`#score-gk-${studentId}`).value.replace(',','.');
+            let scoreCK = $(`#score-ck-${studentId}`).value.replace(',','.');
             try {
                 setLoading(true);
                 await axios.put(`/api/score/${studentId}/${courseClassId}`, {

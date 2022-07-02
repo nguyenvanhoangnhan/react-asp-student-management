@@ -95,10 +95,16 @@ export default function Profile({ user, handleLogout, setLoading }) {
             <div className="profile-content">
                 <div className="profile-content-left">
                     <div className="avatar">
-                        <img
-                            src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${user.name.substring(0,3)}/${user.name}.jpg`}
-                            alt=""
-                        />
+                    {user.role === "Student" &&
+                            <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${user.name.substring(0, 3)}/${user.name}.jpg`} alt="#" />
+                        }
+                        {user.role === "Teacher" &&
+                            <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${'Teacher'}/${user.name}.jpg`} alt="#" />
+                        }
+                        {
+                            user.role === "Admin" &&
+                            <img src="https://aui.atlassian.com/aui/8.8/docs/images/avatar-person.svg" alt="#" />
+                        }
                         {/* <div className="avatar-edit">
                             <BsPencil />
                         </div> */}
