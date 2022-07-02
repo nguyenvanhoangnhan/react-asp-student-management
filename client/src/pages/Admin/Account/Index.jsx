@@ -5,7 +5,7 @@ import UserList from "./List";
 import GenerateAccounts from "./Generate";
 import { Radio } from 'antd'
 import { useHistory } from 'react-router-dom'
-export default function AccountManagement({setLoading}) {
+export default function AccountManagement({ setLoading }) {
     let { path, url } = useRouteMatch();
     const navigate = useHistory()
     const handleFnSelect = (e) => {

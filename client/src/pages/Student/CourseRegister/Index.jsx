@@ -5,7 +5,9 @@ import CourseClassroomList from "./CourseClassroomList"
 import RegisteredList from "./RegisteredList";
 import { Radio } from 'antd'
 import { useHistory } from 'react-router-dom'
-export default function CourseClassManagement({setLoading, user}) {
+export default function CourseClassManagement({ setLoading, user }) {
+    document.title = 'Đăng ký học phần'
+    
     let { path, url } = useRouteMatch();
     const navigate = useHistory()
     const handleFnSelect = (e) => {

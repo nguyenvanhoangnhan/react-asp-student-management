@@ -5,7 +5,7 @@ import axios from "axios";
 import { useRouteMatch, useHistory } from "react-router-dom";
 import MsgModal from "../../components/MsgModal";
 export default function EduProgramDetail({ setLoading, user }) {
-    document.title = "test";
+    document.title = "Chương trình đào tạo";
     let { path, url } = useRouteMatch();
     let navigate = useHistory();
 

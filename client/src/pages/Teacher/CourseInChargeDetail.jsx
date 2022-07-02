@@ -195,7 +195,7 @@ export default function CourseInChargeDetail({setLoading}) {
                         </>,
                     average__10: item.totalScore,
                     average__4: convertGPA10to4(item.totalScore),
-                    button: <AntSwitch onChange={(e) => handleToggleEdit(e, item.score.user.userId)} />
+                    button: <AntSwitch onChange={(e) => handleToggleEdit(e, item.score.user.userId)} defaultChecked={false} />
                 }
             });
             syncScore = [...scoreData];
@@ -250,7 +250,7 @@ export default function CourseInChargeDetail({setLoading}) {
                 scoreCK: <input className="ant-input" id={`score-ck-${studentId}`} defaultValue={syncScore[index].scoreCK.props.children} />,
                 average__10: syncScore[index].average__10,
                 average__4: syncScore[index].average__4,
-                button: <AntSwitch onChange={(e) => handleToggleEdit(e, syncScore[index].studentId)} />
+                button: <AntSwitch onChange={(e) => handleToggleEdit(e, syncScore[index].studentId)} checked={true} />
             }
             let newScore = [...syncScore];
             newScore[index] = newScoreItem;

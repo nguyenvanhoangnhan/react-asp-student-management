@@ -1,7 +1,7 @@
 import React from "react";
 import { Table, Tooltip } from "antd";
 export default function Score() {
-    document.title = "Điểm";
+    document.title = "Kết quả học tập";
 
     const dataSource = [
         {

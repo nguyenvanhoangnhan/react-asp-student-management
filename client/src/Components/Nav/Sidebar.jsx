@@ -82,7 +82,7 @@ export default function Sidebar({url, user}) {
         //teacher
         {
             id: "menu-item-schedule",
-            name: "Lịch học",
+            name: "Lịch giảng dạy",
             iconComponent: <BsCalendarWeek className="BsIcon" />,
             link: '/schedule',
             role: 'Teacher',

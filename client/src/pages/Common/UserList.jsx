@@ -4,7 +4,7 @@ import axios from "axios";
 import { Switch, useRouteMatch, Route, useHistory } from "react-router-dom";
 
 export default function UserList({ setLoading }) {
-document.title = "Danh sách tài khoản";
+document.title = "Danh sách";
 let { path, url } = useRouteMatch();
 let navigate = useHistory();
 
@@ -200,6 +200,7 @@ const handleDeleteUser = (id) => {
 
 return (
     <div id="user-list">
+        <h3 className="title">DANH SÁCH</h3>
         <div className="select-field mb-3">
             {/* Faculty */}
             <Select

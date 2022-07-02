@@ -86,7 +86,7 @@ export default function TeahcerSchedule({ user, setLoading  }) {
 
     return (
         <div id="schedule">
-            <h3 className="title">LỊCH HỌC</h3>
+            <h3 className="title">LỊCH GIẢNG DẠY</h3>
             <div className="calendar-container">
                 <Calendar
                     localizer={localizer}
