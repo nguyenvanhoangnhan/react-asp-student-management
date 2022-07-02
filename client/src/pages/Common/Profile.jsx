@@ -96,7 +96,7 @@ export default function Profile({ user, handleLogout, setLoading }) {
                 <div className="profile-content-left">
                     <div className="avatar">
                         <img
-                            src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656505482/${user.name.substring(0,3)}/${user.name}.jpg`}
+                            src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${user.name.substring(0,3)}/${user.name}.jpg`}
                             alt=""
                         />
                         {/* <div className="avatar-edit">

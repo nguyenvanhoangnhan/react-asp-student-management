@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from 'react-router-dom'
 import {BsChevronDown, BsBell} from 'react-icons/bs'
 const Navbar = ({ user, handleLogout }) => {
-
+    // console.log(user);
     return (
         <nav id="navbar">
             <div className="navbar-left">
@@ -13,7 +13,11 @@ const Navbar = ({ user, handleLogout }) => {
                 </div> */}
                 <div className="navbar-profile">
                     <div className="avatar">
-                        <img src="https://aui.atlassian.com/aui/8.8/docs/images/avatar-person.svg" alt="1" />
+                        {user.name ? 
+                            <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${user.name.includes("GV") ? 'Teacher' : user.name.substring(0,3)}/${user.name}.jpg`} className="user-table-avatar" alt="#" />
+                            :
+                            <img src="https://aui.atlassian.com/aui/8.8/docs/images/avatar-person.svg" alt="#" />
+                        }
                     </div>
                     <div className="profile-name-role">
                         <div className="profile-name">{ user.name }</div>

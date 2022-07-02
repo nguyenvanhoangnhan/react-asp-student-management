@@ -98,7 +98,16 @@ export default function ClassList({ setLoading }) {
                 const { data: classesData } = await axios.get("/api/classroom")
                 setClasses(classesData.map(_class => {
                     return {
-                        faculty: faculties.filter( (_faculty) => _class.classroomId.substring(0, 3) === _faculty.facultyId)[0].name,
+                        faculty: faculties.filter((_faculty) => {
+                            if (_class.classroomId.includes("GV")) {
+                                return _class.classroomId.substring(2, 5)  === _faculty.facultyId
+                            }
+                            else {
+                                return _class.classroomId.substring(0, 3) === _faculty.facultyId
+
+                            }
+                        }
+                        )[0].name,
                         key: _class.classroomId,
                         id: _class.classroomId,
                         name: _class.name,

@@ -144,7 +144,7 @@ const handleSelectClass = (data) => {
                         tempData.push({
                             key: user.userId,
                             avatar: (
-                                <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656505482/${user.userId.substring(0,3)}/${user.userId}.jpg`} className="user-table-avatar" alt="#" />
+                                <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${user.userId.includes("GV") ? 'Teacher' : user.userId.substring(0,3)}/${user.userId}.jpg`} className="user-table-avatar" alt="#" />
                             ),
                             name: user.name,
                             userId: user.userId,
@@ -173,8 +173,8 @@ const handleSelectClass = (data) => {
                 tempData.push({
                     key: user.userId,
                     avatar: (
-                        <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656505482/${user.userId.substring(0, 3)}/${user.userId}.jpg`} className="user-table-avatar" alt="#" />
-                    ),
+                        <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${user.userId.includes("GV") ? 'Teacher' : user.userId.substring(0,3)}/${user.userId}.jpg`} className="user-table-avatar" alt="#" />
+                        ),
                     name: user.name,
                     userId: user.userId,
                     _class: currentClassName,

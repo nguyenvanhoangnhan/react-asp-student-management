@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Button, Table, Tooltip, Switch as AntSwitch } from "antd";
 import { useHistory, useParams } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
-import {EditOutlined} from '@ant-design/icons'
+import { EditOutlined } from "@ant-design/icons";
 import axios from "axios";
 
-export default function CourseInChargeDetail({setLoading}) {
+export default function CourseInChargeDetail({ setLoading }) {
     const navigate = useHistory();
     const { courseClassId } = useParams();
     const [score, setScore] = useState([]);
@@ -28,7 +28,7 @@ export default function CourseInChargeDetail({setLoading}) {
             dataIndex: "name",
             key: "name",
             ellipsis: {
-                showTitle: false
+                showTitle: false,
             },
             render: (name) => (
                 <Tooltip placement="topLeft" title={name}>
@@ -45,11 +45,7 @@ export default function CourseInChargeDetail({setLoading}) {
             ellipsis: {
                 showTitle: false,
             },
-            render: (scoreFormula) => (
-                <>
-                    {scoreFormula}
-                </>
-            ),
+            render: (scoreFormula) => <>{scoreFormula}</>,
         },
         {
             title: "Điểm",
@@ -63,7 +59,7 @@ export default function CourseInChargeDetail({setLoading}) {
                     ellipsis: {
                         showTitle: false,
                     },
-                    render: (scoreBT) => (scoreBT),
+                    render: (scoreBT) => scoreBT,
                 },
                 {
                     title: "GK",
@@ -74,7 +70,7 @@ export default function CourseInChargeDetail({setLoading}) {
                     ellipsis: {
                         showTitle: false,
                     },
-                    render: (scoreGK) => (scoreGK),
+                    render: (scoreGK) => scoreGK,
                 },
                 {
                     title: "CK",
@@ -85,7 +81,7 @@ export default function CourseInChargeDetail({setLoading}) {
                     ellipsis: {
                         showTitle: false,
                     },
-                    render: (scoreCK) => (scoreCK),
+                    render: (scoreCK) => scoreCK,
                 },
             ],
         },
@@ -103,9 +99,10 @@ export default function CourseInChargeDetail({setLoading}) {
                     },
                     render: (average__10) => (
                         <>
-                            {average__10 !== null && average__10.toLocaleString(undefined, {
-                                minimumFractionDigits: 1,
-                            })}
+                            {average__10 !== null &&
+                                average__10.toLocaleString(undefined, {
+                                    minimumFractionDigits: 1,
+                                })}
                         </>
                     ),
                 },
@@ -143,121 +140,154 @@ export default function CourseInChargeDetail({setLoading}) {
 
     const $ = (query) => {
         return document.querySelector(query);
-    }
+    };
 
     const convertGPA10to4 = (score10) => {
-        if (score10 === null)
-            return null;
-        if (score10 < 4)
-            return 0
-        if (score10 < 5)
-            return 1
-        if (score10 < 5.5)
-            return 1.5
-        if (score10 < 6.5)
-            return 2
-        if (score10 < 7)
-            return 2.5
-        if (score10 < 8)
-            return 3
-        if (score10 < 8.5)
-            return 3.5
-        return 4.0
-    }
+        if (score10 === null) return null;
+        if (score10 < 4) return 0;
+        if (score10 < 5) return 1;
+        if (score10 < 5.5) return 1.5;
+        if (score10 < 6.5) return 2;
+        if (score10 < 7) return 2.5;
+        if (score10 < 8) return 3;
+        if (score10 < 8.5) return 3.5;
+        return 4.0;
+    };
 
     const fetchData = async () => {
-        setLoading(true)
+        setLoading(true);
         try {
-            let { data: scoreData } = await axios.get(`/api/score/class/${courseClassId}`)
+            let { data: scoreData } = await axios.get(
+                `/api/score/class/${courseClassId}`
+            );
             console.log(scoreData);
-            scoreData = scoreData.map(item => {
+            scoreData = scoreData.map((item) => {
                 return {
                     studentId: item.score.user.userId,
                     name: item.score.user.name,
                     scoreFormula: `BT*${item.score.excerciseRate}+GK*${item.score.midTermRate}+CK*${item.score.finalTermRate}`,
-                    scoreBT:
+                    scoreBT: (
                         <>
-                            {item.score.excerciseScore !== null && item.score.excerciseScore.toLocaleString(undefined, {
-                                minimumFractionDigits: 1,
-                            })}
-                        </>,
-                    scoreGK:
+                            {item.score.excerciseScore !== null &&
+                                item.score.excerciseScore.toLocaleString(
+                                    undefined,
+                                    {
+                                        minimumFractionDigits: 1,
+                                    }
+                                )}
+                        </>
+                    ),
+                    scoreGK: (
                         <>
-                            {item.score.midTermScore !== null && item.score.midTermScore.toLocaleString(undefined, {
-                                minimumFractionDigits: 1,
-                            })}
-                        </>,
-                    scoreCK:
+                            {item.score.midTermScore !== null &&
+                                item.score.midTermScore.toLocaleString(
+                                    undefined,
+                                    {
+                                        minimumFractionDigits: 1,
+                                    }
+                                )}
+                        </>
+                    ),
+                    scoreCK: (
                         <>
-                            {item.score.finalTermScore !== null && item.score.finalTermScore.toLocaleString(undefined, {
-                                minimumFractionDigits: 1,
-                            })}
-                        </>,
+                            {item.score.finalTermScore !== null &&
+                                item.score.finalTermScore.toLocaleString(
+                                    undefined,
+                                    {
+                                        minimumFractionDigits: 1,
+                                    }
+                                )}
+                        </>
+                    ),
                     average__10: item.totalScore,
                     average__4: convertGPA10to4(item.totalScore),
-                    button: <AntSwitch onChange={(e) => handleToggleEdit(e, item.score.user.userId)} defaultChecked={false} />
-                }
+                    button: (
+                        <AntSwitch
+                            onChange={(e) =>
+                                handleToggleEdit(e, item.score.user.userId)
+                            }
+                            defaultChecked={false}
+                        />
+                    ),
+                };
             });
             syncScore = [...scoreData];
-            setScore(scoreData)
-        } 
-        catch(err)  {
+            setScore(scoreData);
+        } catch (err) {
             console.log(err);
-        }
-        finally {
+        } finally {
             setLoading(false);
         }
     };
 
-    
-    
     useEffect(() => {
         fetchData();
     }, []);
 
     const handleToggleEdit = async (e, studentId) => {
         if (e === false) {
-            let scoreBT  = $(`#score-bt-${studentId}`).value
-            let scoreGK  = $(`#score-gk-${studentId}`).value
-            let scoreCK = $(`#score-ck-${studentId}`).value
+            let scoreBT = $(`#score-bt-${studentId}`).value;
+            let scoreGK = $(`#score-gk-${studentId}`).value;
+            let scoreCK = $(`#score-ck-${studentId}`).value;
             try {
                 setLoading(true);
-                await axios.put(`/api/score/${studentId}/${courseClassId}`,
-                    {
-                        excerciseScore: scoreBT,
-                        midTermScore: scoreGK,
-                        finalTermScore: scoreCK
-                    })
-                
-            }
-            catch(err) {
-                console.log(err)
-            }
-            finally {
+                await axios.put(`/api/score/${studentId}/${courseClassId}`, {
+                    excerciseScore: scoreBT,
+                    midTermScore: scoreGK,
+                    finalTermScore: scoreCK,
+                });
+            } catch (err) {
+                console.log(err);
+            } finally {
                 setLoading(false);
             }
             fetchData();
             return;
         }
-        if (e === true) { 
-            let index = syncScore.findIndex(s => s.studentId === studentId)
+        if (e === true) {
+            let index = syncScore.findIndex((s) => s.studentId === studentId);
             let newScoreItem = {
                 studentId: studentId,
                 name: syncScore[index].name,
                 scoreFormula: syncScore[index].scoreFormula,
-                scoreBT: <input className="ant-input" id={`score-bt-${studentId}`} defaultValue={syncScore[index].scoreBT.props.children} />,
-                scoreGK: <input className="ant-input" id={`score-gk-${studentId}`} defaultValue={syncScore[index].scoreGK.props.children} />,
-                scoreCK: <input className="ant-input" id={`score-ck-${studentId}`} defaultValue={syncScore[index].scoreCK.props.children} />,
+                scoreBT: (
+                    <input
+                        className="ant-input"
+                        id={`score-bt-${studentId}`}
+                        defaultValue={syncScore[index].scoreBT.props.children}
+                    />
+                ),
+                scoreGK: (
+                    <input
+                        className="ant-input"
+                        id={`score-gk-${studentId}`}
+                        defaultValue={syncScore[index].scoreGK.props.children}
+                    />
+                ),
+                scoreCK: (
+                    <input
+                        className="ant-input"
+                        id={`score-ck-${studentId}`}
+                        defaultValue={syncScore[index].scoreCK.props.children}
+                    />
+                ),
                 average__10: syncScore[index].average__10,
                 average__4: syncScore[index].average__4,
-                button: <AntSwitch onChange={(e) => handleToggleEdit(e, syncScore[index].studentId)} checked={true} />
-            }
+                button: (
+                    <AntSwitch
+                        onChange={(e) =>
+                            handleToggleEdit(e, syncScore[index].studentId)
+                        }
+                        checked={true}
+                    />
+                ),
+            };
             let newScore = [...syncScore];
             newScore[index] = newScoreItem;
             setScore(newScore);
             return;
         }
-    }
+    };
 
     return (
         <div id="course-in-charge-detail">

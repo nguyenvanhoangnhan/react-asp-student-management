@@ -11,8 +11,8 @@ import axios from "axios";
 import MsgModal from "../../../components/MsgModal";
 
 
-export default function UploadCourse({setLoading}) {
-    document.title = "Upload học phần"
+export default function UploadEducationalProgram({setLoading}) {
+    document.title = "Upload chương trình đào tạo"
     const uploadRef = useRef(null);
     const [success, setSuccess] = useState(false);
     const [file, setFile] = useState(   null);
@@ -56,7 +56,7 @@ export default function UploadCourse({setLoading}) {
             formData.append("fileName", file.name);
             console.log(formData);
             try {
-                await axios.post("/api/course/upload-file", formData)
+                await axios.post("/api/education-program/upload-file", formData)
                 setSuccess(true);
             }
             catch (err) {
@@ -84,11 +84,6 @@ export default function UploadCourse({setLoading}) {
     return (
         <div id="upload-course">
             <MsgModal msg={modal.msg} Fn={modal.Fn} show={modal.isShow} danger={modal.isDanger} />
-            <h4 className="text-blue-500">
-                Lưu ý: Nếu học phần chưa tồn tại trong hệ thống, học phần sẽ được tạo (mặc định trạng thái Đóng đăng ký). <br/>
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                Nếu học phần đã tồn tại trong hệ thống, trạng thái Mở / Đóng đăng ký của học phần sẽ được thay đổi.
-            </h4>
             <div className="top flex flex-col xl:flex-row xl:gap-10 w-96 xl:w-full mb-5">
                 <Form size="default" onFinish={handleSubmit} layout="vertical">
                     <Form.Item label="File thông tin tài khoản" required>
