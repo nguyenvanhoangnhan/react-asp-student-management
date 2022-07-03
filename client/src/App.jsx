@@ -6,8 +6,8 @@ import Auth from "./layouts/Auth"
 import { useEffect } from "react";
 import axios from 'axios'
 function App() {
-    // axios.defaults.baseURL = "http://172.21.10.108:5193/"
-    axios.defaults.baseURL = "http://192.168.206.69:5193/"
+    const [host, port] = ["",""]
+    axios.defaults.baseURL = `${host}:${port}`
     // axios.defaults.timeout = "10000"
     // axios.defaults.timeoutErrorMessage = "Request timeout"
     axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem("jwt")}`;
