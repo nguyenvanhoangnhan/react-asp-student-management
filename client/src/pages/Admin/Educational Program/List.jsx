@@ -136,6 +136,8 @@ export default function UserList({ setLoading }) {
                         objectToString(item)
                             .toLowerCase()
                             .indexOf(searchText.toLowerCase()) >= 0
+                        && 
+                        item.educationalProgramId !== "0000"
                 )}
                 columns={columns}
                 pagination={{

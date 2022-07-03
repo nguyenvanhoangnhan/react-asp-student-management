@@ -228,7 +228,13 @@ export default function CourseInChargeDetail({ setLoading }) {
         if (e === false) {
             let scoreBT = $(`#score-bt-${studentId}`).value.replace(',','.');
             let scoreGK = $(`#score-gk-${studentId}`).value.replace(',','.');
-            let scoreCK = $(`#score-ck-${studentId}`).value.replace(',','.');
+            let scoreCK = $(`#score-ck-${studentId}`).value.replace(',', '.');
+            if (Number(scoreBT) > 10 || Number(scoreGK) > 10 || Number(scoreCK) > 10) {
+                return;
+            }
+            if (Number(scoreBT) < 0 || Number(scoreGK) < 0 || Number(scoreCK) < 0) {
+                return;
+            }
             try {
                 setLoading(true);
                 await axios.put(`/api/score/${studentId}/${courseClassId}`, {

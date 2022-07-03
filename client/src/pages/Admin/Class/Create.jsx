@@ -21,7 +21,7 @@ export default function CreateClass({setLoading}) {
                 let resFaculties = await axios.get("/api/faculty")
                 setFaculties(resFaculties.data);
                 let resPrograms = await axios.get("/api/education-program")
-                setPrograms(resPrograms.data)    
+                setPrograms(resPrograms.data.filter(item => item.educationalProgramId !== "0000"))    
             } catch(err) {
                 console.error("error:", err.message)
                 alert("Kết nối tới server thất bại")
