@@ -1,265 +1,274 @@
-import React, { useEffect, useState  } from "react";
-import { Table, Tooltip, Select } from "antd";
-import axios from "axios";
-import { Switch, useRouteMatch, Route, useHistory } from "react-router-dom";
+import React, { useEffect, useState } from 'react'
+import { Table, Tooltip, Select } from 'antd'
+import axios from 'axios'
 
 export default function UserList({ setLoading }) {
-document.title = "Danh sách";
-let { path, url } = useRouteMatch();
-let navigate = useHistory();
+    document.title = 'Danh sách'
 
-const [data, setData] = useState([]);
-const columns = [
-    {
-        title: "Ảnh",
-        dataIndex: "avatar",
-        key: "avatar",
-        width: "80px",
-    },
-    {
-        title: "Mã số",
-        dataIndex: "userId",
-        key: "userId",
-        width: "18%",
-        ellipsis: {
-            showTitle: false,
+    const [data, setData] = useState([])
+    const columns = [
+        {
+            title: 'Ảnh',
+            dataIndex: 'avatar',
+            key: 'avatar',
+            width: '80px'
         },
-        render: (userId) => (
-            <Tooltip placement="topLeft" title={userId}>
-                {userId}
-            </Tooltip>
-        ),
-    },
-    {
-        title: "Họ tên",
-        dataIndex: "name",
-        key: "name",
-        ellipsis: {
-            showTitle: false,
+        {
+            title: 'Mã số',
+            dataIndex: 'userId',
+            key: 'userId',
+            width: '18%',
+            ellipsis: {
+                showTitle: false
+            },
+            render: (userId) => (
+                <Tooltip placement="topLeft" title={userId}>
+                    {userId}
+                </Tooltip>
+            )
         },
-        width: "30%",
-        render: (name) => (
-            <Tooltip placement="topLeft" title={name}>
-                {name}
-            </Tooltip>
-        ),
-    },
-    {
-        title: "Lớp",
-        dataIndex: "_class",
-        key: "_class",
-        ellipsis: {
-            showTitle: false,
+        {
+            title: 'Họ tên',
+            dataIndex: 'name',
+            key: 'name',
+            ellipsis: {
+                showTitle: false
+            },
+            width: '30%',
+            render: (name) => (
+                <Tooltip placement="topLeft" title={name}>
+                    {name}
+                </Tooltip>
+            )
         },
-        render: (_class) => (
-            <Tooltip placement="topLeft" title={_class}>
-                {_class}
-            </Tooltip>
-        ),
-    },
-];
+        {
+            title: 'Lớp',
+            dataIndex: '_class',
+            key: '_class',
+            ellipsis: {
+                showTitle: false
+            },
+            render: (_class) => (
+                <Tooltip placement="topLeft" title={_class}>
+                    {_class}
+                </Tooltip>
+            )
+        }
+    ]
 
-const [faculties, setFaculties] = useState([]);
-const [classes, setClasses] = useState([]);
+    const [faculties, setFaculties] = useState([])
+    const [classes, setClasses] = useState([])
 
-useEffect(() => {
-    setLoading(true);
-    axios
-        .get("/api/faculty/")
-        .then((res) => {
-            setFaculties(res.data);
-            setLoading(false);
-        })
-        .catch((err) => {
-            setLoading(false);
-            console.error("Error on fetching faculties:", err);
-            alert("Không thể kết nối đến server");
-        });
-}, []);
-
-const handleSelectFaculty = (data) => {
-    data = JSON.parse(data);
-    if (data.facultyId === 0) {
-        let temp = [];
+    useEffect(() => {
+        setLoading(true)
         axios
-            .get(`/api/classroom`)
+            .get('/api/faculty/')
             .then((res) => {
-                temp = res.data;
-                temp = temp.map(_class => {
-                    return {
-                        faculty: faculties.filter( (_faculty) => _class.classroomId.substring(0, 3) === _faculty.facultyId)[0].name,
-                        key: _class.classroomId,
-                        id: _class.classroomId,
-                        name: _class.name,
-                    };
-                });
-                console.log(temp);
-                setClasses(temp);
+                setFaculties(res.data)
+                setLoading(false)
             })
             .catch((err) => {
-                setLoading(false);
-                console.error("Error on fetching classes: ", err);
-            });
-        return;
-    }
+                setLoading(false)
+                console.error('Error on fetching faculties:', err)
+                alert('Không thể kết nối đến server')
+            })
+    }, [])
 
-    let temp = [{
-        key: 0,
-        faculty: data.facultyId,
-        id: 0,
-        name: 'Tất cả',
-    }]
-    axios
-        .get(`/api/faculty/classes/${data.facultyId}`)
-        .then((res) => {
-            temp = temp.concat(res.data.map((_class) => {
-                return {
-                    key: _class.classroomId,
-                    faculty: data.name,
-                    id: _class.classroomId,
-                    name: _class.name,
-                };
-            }));
-            setClasses(temp);
-        })
-        .catch((err) => {
-            setLoading(false);
-            console.error("Error on fetching classes: ", err);
-        });
-    return;
-};
+    const handleSelectFaculty = (data) => {
+        data = JSON.parse(data)
+        if (data.facultyId === 0) {
+            let temp = []
+            axios
+                .get(`/api/classroom`)
+                .then((res) => {
+                    temp = res.data
+                    temp = temp.map((_class) => {
+                        return {
+                            faculty: faculties.filter(
+                                (_faculty) =>
+                                    _class.classroomId.substring(0, 3) === _faculty.facultyId
+                            )[0].name,
+                            key: _class.classroomId,
+                            id: _class.classroomId,
+                            name: _class.name
+                        }
+                    })
+                    console.log(temp)
+                    setClasses(temp)
+                })
+                .catch((err) => {
+                    setLoading(false)
+                    console.error('Error on fetching classes: ', err)
+                })
+            return
+        }
 
-const handleSelectClass = (data) => {
-    setLoading(true);
-    data = JSON.parse(data);
-
-    //handle select multiple class in faculty
-    if (data.id === 0) { 
+        let temp = [
+            {
+                key: 0,
+                faculty: data.facultyId,
+                id: 0,
+                name: 'Tất cả'
+            }
+        ]
         axios
-            .get(`/api/user/faculty/${data.faculty}`) 
+            .get(`/api/faculty/classes/${data.facultyId}`)
             .then((res) => {
-                let tempData = [];
-                res.data.forEach((singleClass) => {
-                    singleClass.students.forEach((user) => {
-                        tempData.push({
-                            key: user.userId,
-                            avatar: (
-                                <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${user.userId.includes("GV") ? 'Teacher' : user.userId.substring(0,3)}/${user.userId}.jpg`} className="user-table-avatar" alt="#" />
-                            ),
-                            name: user.name,
-                            userId: user.userId,
-                            _class: singleClass.name,
-                        });
-                    });
-                });
-                setData(tempData);
-                setLoading(false);
+                temp = temp.concat(
+                    res.data.map((_class) => {
+                        return {
+                            key: _class.classroomId,
+                            faculty: data.name,
+                            id: _class.classroomId,
+                            name: _class.name
+                        }
+                    })
+                )
+                setClasses(temp)
             })
             .catch((err) => {
-                setLoading(false);
-                console.error("Error on fetching students:", err);
-            });
-        return;
+                setLoading(false)
+                console.error('Error on fetching classes: ', err)
+            })
+        return
     }
 
-    // handle select single class
-    axios
-        .get(`/api/user/class/${data.id}`)
-        .then((res) => {
-            let tempData = [];
-            console.log(res)
-            let currentClassName = data.name;
-            res.data.forEach((user) => {
-                tempData.push({
-                    key: user.userId,
-                    avatar: (
-                        <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${user.userId.includes("GV") ? 'Teacher' : user.userId.substring(0,3)}/${user.userId}.jpg`} className="user-table-avatar" alt="#" />
+    const handleSelectClass = (data) => {
+        setLoading(true)
+        data = JSON.parse(data)
+
+        //handle select multiple class in faculty
+        if (data.id === 0) {
+            axios
+                .get(`/api/user/faculty/${data.faculty}`)
+                .then((res) => {
+                    let tempData = []
+                    res.data.forEach((singleClass) => {
+                        singleClass.students.forEach((user) => {
+                            tempData.push({
+                                key: user.userId,
+                                avatar: (
+                                    <img
+                                        src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${
+                                            user.userId.includes('GV')
+                                                ? 'Teacher'
+                                                : user.userId.substring(0, 3)
+                                        }/${user.userId}.jpg`}
+                                        className="user-table-avatar"
+                                        alt="#"
+                                    />
+                                ),
+                                name: user.name,
+                                userId: user.userId,
+                                _class: singleClass.name
+                            })
+                        })
+                    })
+                    setData(tempData)
+                    setLoading(false)
+                })
+                .catch((err) => {
+                    setLoading(false)
+                    console.error('Error on fetching students:', err)
+                })
+            return
+        }
+
+        // handle select single class
+        axios
+            .get(`/api/user/class/${data.id}`)
+            .then((res) => {
+                let tempData = []
+                console.log(res)
+                let currentClassName = data.name
+                res.data.forEach((user) => {
+                    tempData.push({
+                        key: user.userId,
+                        avatar: (
+                            <img
+                                src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${
+                                    user.userId.includes('GV')
+                                        ? 'Teacher'
+                                        : user.userId.substring(0, 3)
+                                }/${user.userId}.jpg`}
+                                className="user-table-avatar"
+                                alt="#"
+                            />
                         ),
-                    name: user.name,
-                    userId: user.userId,
-                    _class: currentClassName,
-                });
-            });
-            setData(tempData);
-            setLoading(false);
-        })
-        .catch((err) => {
-            setLoading(false);
-            console.error("Error on fetching students:", err);
-        });
-};
+                        name: user.name,
+                        userId: user.userId,
+                        _class: currentClassName
+                    })
+                })
+                setData(tempData)
+                setLoading(false)
+            })
+            .catch((err) => {
+                setLoading(false)
+                console.error('Error on fetching students:', err)
+            })
+    }
 
-const handleDeleteUser = (id) => {
-    axios.delete(`/api/user/${id}`).then((res) => {
-        setData(data.filter(item => item.key !== id));
-    }).catch(err => {
-        console.log(JSON.stringify(err))
-    }) 
-}
+    // const handleDeleteUser = (id) => {
+    //     axios
+    //         .delete(`/api/user/${id}`)
+    //         .then((res) => {
+    //             setData(data.filter((item) => item.key !== id))
+    //         })
+    //         .catch((err) => {
+    //             console.log(JSON.stringify(err))
+    //         })
+    // }
 
+    return (
+        <div id="user-list">
+            <h3 className="title">DANH SÁCH</h3>
+            <div className="select-field mb-3">
+                {/* Faculty */}
+                <Select
+                    className="select-faculty"
+                    showSearch
+                    placeholder="Chọn khoa"
+                    optionFilterProp="children"
+                    onChange={handleSelectFaculty}
+                    filterOption={(input, option) =>
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }>
+                    {faculties.map((item) => (
+                        <Select.Option key={item.facultyId} value={JSON.stringify(item)}>
+                            {item.name}
+                        </Select.Option>
+                    ))}
+                </Select>
+                {/* Class */}
+                <Select
+                    className="select-class"
+                    showSearch
+                    placeholder="Chọn một lớp"
+                    optionFilterProp="children"
+                    onChange={handleSelectClass}
+                    filterOption={(input, option) =>
+                        option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    }>
+                    {classes.map((item) => (
+                        <Select.Option key={item.id} value={JSON.stringify(item)}>
+                            {item.name}
+                        </Select.Option>
+                    ))}
+                </Select>
+            </div>
 
-return (
-    <div id="user-list">
-        <h3 className="title">DANH SÁCH</h3>
-        <div className="select-field mb-3">
-            {/* Faculty */}
-            <Select
-                className="select-faculty"
-                showSearch
-                placeholder="Chọn khoa"
-                optionFilterProp="children"
-                onChange={handleSelectFaculty}
-                filterOption={(input, option) =>
-                    option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
-                }
-            >
-                {faculties.map((item) => (
-                    <Select.Option
-                        key={item.facultyId}
-                        value={JSON.stringify(item)}
-                    >
-                        {item.name}
-                    </Select.Option>
-                ))}
-            </Select>
-            {/* Class */}
-            <Select
-                className="select-class"
-                showSearch
-                placeholder="Chọn một lớp"
-                optionFilterProp="children"
-                onChange={handleSelectClass}
-                filterOption={(input, option) =>
-                    option.children
-                        .toLowerCase()
-                        .indexOf(input.toLowerCase()) >= 0
-                }
-            >
-                {classes.map((item) => (
-                    <Select.Option
-                        key={item.id}
-                        value={JSON.stringify(item)}
-                    >
-                        {item.name}
-                    </Select.Option>
-                ))}
-            </Select>
+            <Table
+                className="students-table"
+                dataSource={data}
+                columns={columns}
+                pagination={{
+                    position: ['topRight'],
+                    defaultPageSize: 10,
+                    showSizeChanger: true,
+                    pageSizeOptions: ['10', '20', '50', '100']
+                }}
+            />
         </div>
-
-        <Table
-            className="students-table"
-            dataSource={data}
-            columns={columns}
-            pagination={{
-                position: ["topRight"],
-                defaultPageSize: 10,
-                showSizeChanger: true,
-                pageSizeOptions: ["10", "20", "50", "100"],
-            }}
-        />
-
-    </div>
-);
+    )
 }

@@ -1,42 +1,42 @@
-import { React, useState } from "react";
-import { Route, Switch, useRouteMatch, Redirect } from "react-router-dom";
-import Navbar from "../components/Nav/Navbar";
-import Sidebar from "../components/Nav/Sidebar";
-import Schedule from "../pages/Student/Schedule";
-import UserList from "../pages/Common/UserList";
-import Score from "../pages/Student/Score";
-import CourseRegister from "../pages/Student/CourseRegister/Index";
-import Profile from "../pages/Common/Profile";
-import AccountManagement from "../pages/Admin/Account/Index";
-import CourseInChargeList from "../pages/Teacher/CourseInChargeList";
-import Loading from "../components/Loading";
-import ClassManagement from "../pages/Admin/Class/Index";
-import EduProgramManagement from "../pages/Admin/Educational Program/Index";
-import CourseManagement from "../pages/Admin/Course/Index"
-import CourseClassroomManagement from "../pages/Admin/Course Classroom/Index"
+import { React, useState } from 'react'
+import { Route, Switch, useRouteMatch, Redirect } from 'react-router-dom'
+import Navbar from '../components/Nav/Navbar'
+import Sidebar from '../components/Nav/Sidebar'
+import Schedule from '../pages/Student/Schedule'
+import UserList from '../pages/Common/UserList'
+import Score from '../pages/Student/Score'
+import CourseRegister from '../pages/Student/CourseRegister/Index'
+import Profile from '../pages/Common/Profile'
+import AccountManagement from '../pages/Admin/Account/Index'
+import CourseInChargeList from '../pages/Teacher/CourseInChargeList'
+import Loading from '../components/Loading'
+import ClassManagement from '../pages/Admin/Class/Index'
+import EduProgramManagement from '../pages/Admin/Educational Program/Index'
+import CourseManagement from '../pages/Admin/Course/Index'
+import CourseClassroomManagement from '../pages/Admin/Course Classroom/Index'
 import EducationalProgram from '../pages/Student/EducationalProgram'
-import CourseInChargeDetail from "../pages/Teacher/CourseInChargeDetail";
-import TeahcerSchedule from "../pages/Teacher/Schedule";
+import CourseInChargeDetail from '../pages/Teacher/CourseInChargeDetail'
+import TeahcerSchedule from '../pages/Teacher/Schedule'
 export default function LoggedView({ user, handleLogout }) {
-    let { path, url } = useRouteMatch();
+    let { path, url } = useRouteMatch()
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false)
     const customSetLoading = (state) => {
         if (state === false) {
             setTimeout(() => {
-                setLoading(state);
-            }, 250);
-        } else setLoading(state);
-    };
+                setLoading(state)
+            }, 250)
+        } else setLoading(state)
+    }
 
-    let routesByRole;
+    let routesByRole
 
-    if (user.role === "Student") {
+    if (user.role === 'Student') {
         routesByRole = [
             <Route path={`/auth/schedule`} key={0}>
-                 <Schedule setLoading={customSetLoading} user={user} />
+                <Schedule setLoading={customSetLoading} user={user} />
             </Route>,
-            <Route path={`/auth/course-register`} key={1} >
+            <Route path={`/auth/course-register`} key={1}>
                 <CourseRegister setLoading={customSetLoading} user={user} />
             </Route>,
             <Route path={`/auth/score`} key={2}>
@@ -49,15 +49,14 @@ export default function LoggedView({ user, handleLogout }) {
                 <EducationalProgram user={user} setLoading={customSetLoading} />
             </Route>,
             <Route path={`/auth/profile`} key={4}>
-                <Profile setLoading={customSetLoading}  user={user} handleLogout={handleLogout} />
+                <Profile setLoading={customSetLoading} user={user} handleLogout={handleLogout} />
             </Route>,
-            <Route path="*" key={5} >
+            <Route path="*" key={5}>
                 <Redirect to="/auth/schedule" />
-            </Route>,
-            
-        ];
+            </Route>
+        ]
     }
-    if (user.role === "Admin") {
+    if (user.role === 'Admin') {
         routesByRole = [
             <Route path={`/auth/manage-account`} key={0}>
                 <AccountManagement setLoading={customSetLoading} />
@@ -75,38 +74,31 @@ export default function LoggedView({ user, handleLogout }) {
                 <CourseClassroomManagement setLoading={customSetLoading} />
             </Route>,
             <Route path="*" key={5}>
-                <Redirect to="/auth/manage-account"  />
+                <Redirect to="/auth/manage-account" />
             </Route>
-        ];
+        ]
     }
-    if (user.role === "Teacher") {
+    if (user.role === 'Teacher') {
         routesByRole = [
-            <Route
-                path={`/auth/course-in-charge/:courseClassId`}
-                key={0}
-            >
+            <Route path={`/auth/course-in-charge/:courseClassId`} key={0}>
                 <CourseInChargeDetail user={user} setLoading={customSetLoading} />
             </Route>,
-            <Route
-                path={`/auth/course-in-charge`}
-                key={1}
-            >
+            <Route path={`/auth/course-in-charge`} key={1}>
                 <CourseInChargeList user={user} setLoading={customSetLoading} />
             </Route>,
             <Route path={`/auth/profile`} key={2}>
                 <Profile setLoading={customSetLoading} user={user} handleLogout={handleLogout} />
             </Route>,
             <Route path={`/auth/user-list`} key={3}>
-                <UserList  setLoading={customSetLoading} user={user} />
+                <UserList setLoading={customSetLoading} user={user} />
             </Route>,
             <Route path={`/auth/schedule`} key={4}>
-                <TeahcerSchedule  setLoading={customSetLoading} user={user}  />
+                <TeahcerSchedule setLoading={customSetLoading} user={user} />
             </Route>,
             <Route path="*" key={5}>
-                <Redirect to="/auth/course-in-charge"  />
-            </Route>,
-            
-        ];
+                <Redirect to="/auth/course-in-charge" />
+            </Route>
+        ]
     }
 
     return (
@@ -118,14 +110,12 @@ export default function LoggedView({ user, handleLogout }) {
                     <div className="content-inner-container relative w-full py-5 px-10">
                         {loading && <Loading />}
                         <Switch>
-
                             {/* Conditional Views */}
                             {routesByRole}
-                            
                         </Switch>
                     </div>
                 </div>
             </div>
         </div>
-    );
+    )
 }

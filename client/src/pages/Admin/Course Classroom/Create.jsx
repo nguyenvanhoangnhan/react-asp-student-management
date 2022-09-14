@@ -1,74 +1,69 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
-import { Form, Input, InputNumber, Button, Select } from "antd";
-import MsgModal from "../../../components/MsgModal";
-import SelectScheduleFields from "../../../components/SelectScheduleFields";
-const { Option } = Select;
+import React, { useState, useEffect, useRef } from 'react'
+import axios from 'axios'
+import { Form, Input, InputNumber, Button, Select } from 'antd'
+import MsgModal from '../../../components/MsgModal'
+import SelectScheduleFields from '../../../components/SelectScheduleFields'
+const { Option } = Select
 export default function CreateCourse({ setLoading }) {
-    document.title = "Tạo lớp học phần";
-    const [courses, setCourses] = useState([]);
-    const [faculties, setFaculties] = useState([]);
-    const [teachers, setTeachers] = useState([]);
-    const [sessions, setSessions] = useState(1);
+    document.title = 'Tạo lớp học phần'
+    const [courses, setCourses] = useState([])
+    const [faculties, setFaculties] = useState([])
+    const [teachers, setTeachers] = useState([])
+    const [sessions, setSessions] = useState(1)
     const [modal, setModal] = useState({
         isShow: false,
         Fn: () => {},
         isDanger: false,
-        msg: "",
-    });
+        msg: ''
+    })
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true);
+            setLoading(true)
             try {
-                const { data: coursesData } = await axios.get("/api/course");
-                setCourses(coursesData);
+                const { data: coursesData } = await axios.get('/api/course')
+                setCourses(coursesData)
 
-                const { data: facultiesData } = await axios.get(
-                    "/api/faculty/"
-                );
-                setFaculties(facultiesData);
+                const { data: facultiesData } = await axios.get('/api/faculty/')
+                setFaculties(facultiesData)
             } catch (err) {
-                console.log(err);
-                alert("Kết nối tới server thất bại");
+                console.log(err)
+                alert('Kết nối tới server thất bại')
             }
-            setLoading(false);
-        };
-        fetchData();
-    }, []);
+            setLoading(false)
+        }
+        fetchData()
+    }, [])
 
     const handleSubmit = async (e) => {
         let data = {
             courseClassId: e.courseClassId,
             teacherName: e.teacher,
             courseId: e.course,
-            capacity: e.capacity,
-        };
-        let schedule = [];
+            capacity: e.capacity
+        }
+        let schedule = []
 
         for (let i = 0; i < e.sessions; i++) {
-            let startDate = e[`startPeriod${i}`].split("-")[0];
-            let endDate = e[`endPeriod${i}`].split("-")[0];
-            let startPeriod = e[`startPeriod${i}`].split("-")[1];
-            let endPeriod = e[`endPeriod${i}`].split("-")[1];
-            let room = e[`room${i}`];
+            let startDate = e[`startPeriod${i}`].split('-')[0]
+            let endDate = e[`endPeriod${i}`].split('-')[0]
+            let startPeriod = e[`startPeriod${i}`].split('-')[1]
+            let endPeriod = e[`endPeriod${i}`].split('-')[1]
+            let room = e[`room${i}`]
 
             // Validating
-            if (
-                startDate !== endDate ||
-                Number(endPeriod) <= Number(startPeriod)
-            ) {
-                console.log(endPeriod <= startPeriod);
-                console.log("startDate:", startDate);
-                console.log("endDate:", endDate);
-                console.log("startPeriod:", startPeriod);
-                console.log("endPeriod:", endPeriod);
+            if (startDate !== endDate || Number(endPeriod) <= Number(startPeriod)) {
+                console.log(endPeriod <= startPeriod)
+                console.log('startDate:', startDate)
+                console.log('endDate:', endDate)
+                console.log('startPeriod:', startPeriod)
+                console.log('endPeriod:', endPeriod)
                 setModal({
                     isShow: true,
                     Fn: () => setModal({ ...modal, isShow: false }),
                     isDanger: true,
-                    msg: `Dữ liệu tiết học buổi ${i + 1} không hợp lệ`,
-                });
-                return;
+                    msg: `Dữ liệu tiết học buổi ${i + 1} không hợp lệ`
+                })
+                return
             }
 
             schedule.push({
@@ -76,103 +71,87 @@ export default function CreateCourse({ setLoading }) {
                 startPeriod: startPeriod,
                 endPeriod: endPeriod,
                 room: room,
-                courseClassId: e.courseClassId,
-            });
+                courseClassId: e.courseClassId
+            })
         }
-        setLoading(true);
+        setLoading(true)
         try {
-            await axios.post("/api/course-classroom", data);
+            await axios.post('/api/course-classroom', data)
 
             try {
                 schedule.forEach(async (session) => {
-                    await axios.post("/api/schedules", session);
-                });
+                    await axios.post('/api/schedules', session)
+                })
             } catch (err) {
-                await axios.delete(`/api/course-classroom/${e.courseClassId}`);
-                throw err;
+                await axios.delete(`/api/course-classroom/${e.courseClassId}`)
+                throw err
             }
 
             setModal({
                 isShow: true,
                 Fn: () => setModal({ ...modal, isShow: false }),
                 isDanger: false,
-                msg: "Thêm thành công",
-            });
+                msg: 'Thêm thành công'
+            })
         } catch (err) {
-            console.log(err);
+            console.log(err)
 
             setModal({
                 isShow: true,
                 Fn: () => setModal({ ...modal, isShow: false }),
                 isDanger: true,
-                msg: "Thêm thất bại.\nKiểm tra lại dữ liệu",
-            });
+                msg: 'Thêm thất bại.\nKiểm tra lại dữ liệu'
+            })
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
     const handleSessionsChange = (e) => {
-        setSessions(e);
-    };
+        setSessions(e)
+    }
 
     const handleSelectFaculty = async (facultyId) => {
-        setLoading(true);
+        setLoading(true)
         try {
-            const { data: teachersData } = await axios.get(
-                `api/user/class/GV${facultyId}`
-            );
-            setTeachers(teachersData);
+            const { data: teachersData } = await axios.get(`api/user/class/GV${facultyId}`)
+            setTeachers(teachersData)
         } catch (err) {
-            console.log(err);
+            console.log(err)
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
     return (
         <div id="create-account">
-            <MsgModal
-                msg={modal.msg}
-                Fn={modal.Fn}
-                show={modal.isShow}
-                danger={modal.isDanger}
-            />
+            <MsgModal msg={modal.msg} Fn={modal.Fn} show={modal.isShow} danger={modal.isDanger} />
             <Form
                 labelCol={{
-                    span: 4,
+                    span: 4
                 }}
                 wrapperCol={{
-                    span: 10,
+                    span: 10
                 }}
                 size="default"
                 onFinish={handleSubmit}
-                initialValues={{ sessions: 1 }}
-            >
+                initialValues={{ sessions: 1 }}>
                 <Form.Item
                     label="Mã lớp học phần"
                     name="courseClassId"
-                    rules={[{ required: true, message: "Bạn chưa nhập mã!" }]}
-                >
+                    rules={[{ required: true, message: 'Bạn chưa nhập mã!' }]}>
                     <Input className="courseClassId" />
                 </Form.Item>
                 <Form.Item
                     label="Học phần"
                     name="course"
-                    rules={[
-                        { required: true, message: "Bạn chưa chọn học phần!" },
-                    ]}
-                >
+                    rules={[{ required: true, message: 'Bạn chưa chọn học phần!' }]}>
                     <Select
                         showSearch
                         placeholder="Chọn học phần"
                         filterOption={(input, option) =>
-                            option.children
-                                .join(" ")
-                                .toLowerCase()
-                                .includes(input.toLowerCase())
-                        }
-                    >
+                            option.children.join(' ').toLowerCase().includes(input.toLowerCase())
+                        }>
                         {courses.map((item) => (
                             <Option key={item.courseId} value={item.courseId}>
                                 {item.courseId} - {item.name}
@@ -186,24 +165,22 @@ export default function CreateCourse({ setLoading }) {
                     rules={[
                         {
                             required: true,
-                            message: "Bạn chưa chọn khoa",
-                        },
-                    ]}
-                >
+                            message: 'Bạn chưa chọn khoa'
+                        }
+                    ]}>
                     <Select
                         showSearch
                         placeholder="Chọn khoa"
                         filterOption={(input, option) =>
                             option.children
-                               // .join(" ")
+                                // .join(" ")
                                 .toLowerCase()
                                 .includes(input.toLowerCase())
                         }
-                        onChange={handleSelectFaculty}
-                    >
+                        onChange={handleSelectFaculty}>
                         {faculties.map((item) => (
                             <Option key={item.facultyId} value={item.facultyId}>
-                               {item.name}
+                                {item.name}
                             </Option>
                         ))}
                     </Select>
@@ -214,20 +191,18 @@ export default function CreateCourse({ setLoading }) {
                     rules={[
                         {
                             required: true,
-                            message: "Bạn chưa chọn giảng viên",
-                        },
-                    ]}
-                >
+                            message: 'Bạn chưa chọn giảng viên'
+                        }
+                    ]}>
                     <Select
                         showSearch
                         placeholder="Chọn giảng viên"
                         filterOption={(input, option) =>
                             option.children
-                               // .join(" ")
+                                // .join(" ")
                                 .toLowerCase()
                                 .includes(input.toLowerCase())
-                        }
-                    >
+                        }>
                         {teachers.map((item) => (
                             <Option key={item.userId} value={item.userId}>
                                 {item.name}
@@ -238,21 +213,13 @@ export default function CreateCourse({ setLoading }) {
                 <Form.Item
                     label="Số sinh viên"
                     name="capacity"
-                    rules={[{ required: true, message: "Bạn chưa nhập !" }]}
-                >
-                    <InputNumber
-                        min={15}
-                        name="capacity"
-                        className="capacity"
-                    />
+                    rules={[{ required: true, message: 'Bạn chưa nhập !' }]}>
+                    <InputNumber min={15} name="capacity" className="capacity" />
                 </Form.Item>
                 <Form.Item
                     label="Số buổi"
                     name="sessions"
-                    rules={[
-                        { required: true, message: "Bạn chưa nhập số buổi!" },
-                    ]}
-                >
+                    rules={[{ required: true, message: 'Bạn chưa nhập số buổi!' }]}>
                     <InputNumber
                         min={1}
                         name="sessions"
@@ -265,14 +232,13 @@ export default function CreateCourse({ setLoading }) {
 
                 <Form.Item
                     wrapperCol={{
-                        offset: 4,
-                    }}
-                >
+                        offset: 4
+                    }}>
                     <Button type="primary" htmlType="submit">
                         Tạo
                     </Button>
                 </Form.Item>
             </Form>
         </div>
-    );
+    )
 }

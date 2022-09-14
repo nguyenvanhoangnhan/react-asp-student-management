@@ -1,82 +1,78 @@
-import React, { useRef, useState } from "react";
-import { Form, Upload, Button, Table, Tooltip } from "antd";
-import { UploadOutlined, DownloadOutlined, CheckOutlined } from "@ant-design/icons";
-import {
-    read as xlsxRead,
-    utils as xlsxUtils,
-    write as xlsxWrite,
-    writeFile as xlsxWriteFile,
-} from "xlsx";
-import axios from "axios";
-import MsgModal from "../../../components/MsgModal";
+import React, { useRef, useState } from 'react'
+import { Form, Upload, Button, Tooltip } from 'antd'
+import { UploadOutlined, CheckOutlined } from '@ant-design/icons'
+// import {
+//     read as xlsxRead,
+//     utils as xlsxUtils,
+//     write as xlsxWrite,
+//     writeFile as xlsxWriteFile
+// } from 'xlsx'
+import axios from 'axios'
+import MsgModal from '../../../components/MsgModal'
 
-
-export default function UploadEducationalProgram({setLoading}) {
-    document.title = "Upload chương trình đào tạo"
-    const uploadRef = useRef(null);
-    const [success, setSuccess] = useState(false);
-    const [file, setFile] = useState(   null);
-    const [uploadFileList, setUploadFileList] = useState([]); 
-    const [uploadMsg, setUploadMsg] = useState(null);
+export default function UploadEducationalProgram({ setLoading }) {
+    document.title = 'Upload chương trình đào tạo'
+    const uploadRef = useRef(null)
+    const [success, setSuccess] = useState(false)
+    const [file, setFile] = useState(null)
+    const [uploadFileList, setUploadFileList] = useState([])
+    const [uploadMsg, setUploadMsg] = useState(null)
     const [modal, setModal] = useState({
         isShow: false,
-        Fn: () => { },
+        Fn: () => {},
         isDanger: false,
-        msg: '',
+        msg: ''
     })
 
     const onChangeHandle = async (e) => {
-        setUploadFileList(e.fileList);
+        setUploadFileList(e.fileList)
         if (e.fileList.length === 0) {
-            setFile(null);
+            setFile(null)
             setUploadMsg("You haven't upload any file yet")
-            return;
+            return
         }
         if (e.fileList.length > 1) {
-            setFile(null);
-            setUploadMsg("Only accept 1 .xlsx file");
-            return;
+            setFile(null)
+            setUploadMsg('Only accept 1 .xlsx file')
+            return
         }
-        if (e.fileList[0].name.split(".").slice(-1).pop() !== "xlsx") {
-            setUploadMsg("Only accept .xlsx file");
-            setFile(null);
-            return;
+        if (e.fileList[0].name.split('.').slice(-1).pop() !== 'xlsx') {
+            setUploadMsg('Only accept .xlsx file')
+            setFile(null)
+            return
         }
         setUploadMsg(null)
-        console.log(e.fileList[0]);
+        console.log(e.fileList[0])
         setFile(e.fileList[0].originFileObj)
-    };
+    }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async () => {
         if (file != null) {
-            setLoading(true);
+            setLoading(true)
             console.log(file)
-            const formData = new FormData();
-            formData.append("files", file);
-            formData.append("fileName", file.name);
-            console.log(formData);
+            const formData = new FormData()
+            formData.append('files', file)
+            formData.append('fileName', file.name)
+            console.log(formData)
             try {
-                await axios.post("/api/education-program/upload-file", formData)
-                setSuccess(true);
-            }
-            catch (err) {
+                await axios.post('/api/education-program/upload-file', formData)
+                setSuccess(true)
+            } catch (err) {
                 setModal({
                     isShow: true,
-                    Fn: () => setModal({...modal, isShow: false}),
+                    Fn: () => setModal({ ...modal, isShow: false }),
                     isDanger: true,
                     msg: 'Sinh tài khoản thất bại!'
                 })
-                console.error("error: ", err);
-            }
-            finally {
+                console.error('error: ', err)
+            } finally {
                 setLoading(false)
             }
-
         }
-    };
+    }
 
     // clear form, back to initial state
-    const handleFinish = (e) => {
+    const handleFinish = () => {
         setSuccess(false)
         setFile(null)
         setUploadFileList([])
@@ -93,15 +89,12 @@ export default function UploadEducationalProgram({setLoading}) {
                             ref={uploadRef}
                             listType="picture"
                             beforeUpload={() => {
-                                return false;
+                                return false
                             }}
                             accept=".xlsx"
                             fileList={uploadFileList}
-                            disabled={success}
-                        >
-                            <Button icon={<UploadOutlined />}
-                                disabled={success}
-                            >
+                            disabled={success}>
+                            <Button icon={<UploadOutlined />} disabled={success}>
                                 Click to Upload
                             </Button>
                         </Upload>
@@ -113,8 +106,7 @@ export default function UploadEducationalProgram({setLoading}) {
                             htmlType="submit"
                             className="gen-btn"
                             block
-                            disabled={!file || success}
-                        >
+                            disabled={!file || success}>
                             Sinh
                         </Button>
                     </Form.Item>
@@ -122,24 +114,21 @@ export default function UploadEducationalProgram({setLoading}) {
                 {success && (
                     <div className="success flex flex-col justify-center items-center flex-1">
                         <span className="text-green-700 text-lg mb-3">
-                            Upload thành công! <CheckOutlined />{" "}
+                            Upload thành công! <CheckOutlined />{' '}
                         </span>
                         <div className="btns flex flex-col gap-2">
                             <Tooltip placement="right" title={'Trở về form ban đầu'}>
                                 <Button
                                     type="primary"
-                                    icon={<CheckOutlined /> }
-                                    onClick={handleFinish}
-                                >
+                                    icon={<CheckOutlined />}
+                                    onClick={handleFinish}>
                                     Hoàn tất
                                 </Button>
                             </Tooltip>
-                            
                         </div>
-                        
                     </div>
                 )}
             </div>
         </div>
-    );
+    )
 }

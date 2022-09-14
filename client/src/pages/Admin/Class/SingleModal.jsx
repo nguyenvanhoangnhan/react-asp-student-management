@@ -1,43 +1,42 @@
-import React, { useEffect, useRef, useState } from "react";
-import { useHistory } from "react-router-dom";
-import { BsX } from "react-icons/bs";
-import { useParams } from "react-router-dom";
-import axios from "axios";
-import { Button, Form, Input } from "antd";
-export default function ManageSingleUserModal({handleDeleteClass}) {
-    let { id } = useParams();
-    const history = useHistory();
+import React, { useEffect, useRef, useState } from 'react'
+import { useHistory } from 'react-router-dom'
+import { BsX } from 'react-icons/bs'
+import { useParams } from 'react-router-dom'
+import axios from 'axios'
+import { Button, Form, Input } from 'antd'
+export default function ManageSingleUserModal({ handleDeleteClass }) {
+    let { id } = useParams()
+    const history = useHistory()
     const goBack = () => {
-    history.push("/auth/manage-class/list")
-    };
+        history.push('/auth/manage-class/list')
+    }
     const [formData, setFormData] = useState({
         userInformation: {
-            name: "",
+            name: ''
         },
         classroom: {
-            name: "",
-        },
-    }); 
+            name: ''
+        }
+    })
 
-
-    const [loading, setLoading] = useState(true);
-    const formRef = useRef(null);
+    const [loading, setLoading] = useState(true)
+    const formRef = useRef(null)
     useEffect(() => {
         axios
             .get(`/api/classroom/${id}`)
             .then((res) => {
-                setFormData(res.data);
+                setFormData(res.data)
                 formRef.current.setFieldsValue({
                     id: id,
-                    name: res.data.name,
-                });
-                setLoading(false);
+                    name: res.data.name
+                })
+                setLoading(false)
             })
             .catch((err) => {
-                console.log(err);
-                setLoading(false);
-            });
-    }, []);
+                console.log(err)
+                setLoading(false)
+            })
+    }, [])
 
     const handleEdit = () => {
         //
@@ -65,30 +64,26 @@ export default function ManageSingleUserModal({handleDeleteClass}) {
 
                 <Form
                     // {...formItemLayout}
-                    layout='vertical'
+                    layout="vertical"
                     className="form-user w-96"
-                    onFinish={e => {e.preventDefault()}}
-                    ref={formRef}
-                >
+                    onFinish={(e) => {
+                        e.preventDefault()
+                    }}
+                    ref={formRef}>
                     <Form.Item
                         name="id"
                         label="ID"
                         rules={[
                             {
-                                type: "text",
-                                message: "The input is not valid!",
+                                type: 'text',
+                                message: 'The input is not valid!'
                             },
                             {
                                 required: true,
-                                message: "Please input !",
-                            },
-                        ]}
-                    >
-                        <Input
-                            value={id}
-                            size="large"
-                            disabled
-                        />
+                                message: 'Please input !'
+                            }
+                        ]}>
+                        <Input value={id} size="large" disabled />
                     </Form.Item>
                     <Form.Item
                         name="name"
@@ -96,22 +91,20 @@ export default function ManageSingleUserModal({handleDeleteClass}) {
                         rules={[
                             {
                                 required: true,
-                                message: "Please input !",
-                            },
-                        ]}
-                    >
-                        <Input
-                            value={formData.name}
-                            size="large"
-                        />
+                                message: 'Please input !'
+                            }
+                        ]}>
+                        <Input value={formData.name} size="large" />
                     </Form.Item>
 
                     <Form.Item className="mb-0">
-                        <Button size="large" onClick={handleEdit} block>Sửa thông tin</Button>
+                        <Button size="large" onClick={handleEdit} block>
+                            Sửa thông tin
+                        </Button>
                     </Form.Item>
                 </Form>
             </div>
             <div className="overlay" onClick={goBack}></div>
         </div>
-    );
+    )
 }

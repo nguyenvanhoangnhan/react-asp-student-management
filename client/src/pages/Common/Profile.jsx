@@ -1,65 +1,58 @@
-import React, { useEffect, useState } from "react";
-import { BsAppIndicator, BsPencil } from "react-icons/bs";
-import ChangePasswordModal from "../../components/ChangePasswordModal";
-import { Switch, Route, useRouteMatch, Link } from "react-router-dom";
-import { Button, Form, Input, Switch as AntSwitch } from "antd";
-import axios from "axios";
-import MsgModal from '../../components/MsgModal';
-
-
+import React, { useEffect, useState } from 'react'
+import ChangePasswordModal from '../../components/ChangePasswordModal'
+import { Switch, Route, Link } from 'react-router-dom'
+import { Button, Form, Input, Switch as AntSwitch } from 'antd'
+import axios from 'axios'
+import MsgModal from '../../components/MsgModal'
 
 export default function Profile({ user, handleLogout, setLoading }) {
-    document.title = "Thông tin cá nhân";
+    document.title = 'Thông tin cá nhân'
 
-    const [modal, setModal] = useState({
+    const [modal] = useState({
         isShow: false,
-        Fn: () => { },
+        Fn: () => {},
         isDanger: false,
-        msg: '',
+        msg: ''
     })
 
     const [info, setInfo] = useState({
         userInformation: {
-            userId: "",
-            name: "",
-            dob: "1/1/1900",
-            phoneNumber: "",
-            email: "",
+            userId: '',
+            name: '',
+            dob: '1/1/1900',
+            phoneNumber: '',
+            email: '',
             gender: true,
-            imageUrl: "",
+            imageUrl: ''
         },
-        classroomName: "",
+        classroomName: '',
         educationalProgram: {
-            educationalProgramId: "",
-            name: "",
+            educationalProgramId: '',
+            name: ''
         },
         faculty: {
-            facultyId: "",
-            name: "",
-        },
-    });
+            facultyId: '',
+            name: ''
+        }
+    })
 
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditing, setIsEditing] = useState(false)
 
     const fetchData = async () => {
-        setLoading(true);
+        setLoading(true)
         try {
-            const { data } = await axios.get(`/api/user/${user.name}`); //user.name = username = id
-            setInfo(data);
+            const { data } = await axios.get(`/api/user/${user.name}`) //user.name = username = id
+            setInfo(data)
+        } catch (err) {
+            alert('Không thể kết nối đến server')
+        } finally {
+            setLoading(false)
         }
-        catch (err) {
-            alert("Không thể kết nối đến server")
-        }
-        finally {
-            setLoading(false);
-        }
-    };
+    }
 
-    useEffect(() => {        
-        fetchData();
-    }, []);
-
-
+    useEffect(() => {
+        fetchData()
+    }, [])
 
     const handleEdit = async (e) => {
         const data = {
@@ -67,44 +60,54 @@ export default function Profile({ user, handleLogout, setLoading }) {
             dob: info.userInformation.dob,
             phoneNumber: e.phoneNumber,
             email: e.email,
-            gender: info.userInformation.gender,
-        };
+            gender: info.userInformation.gender
+        }
         setLoading(true)
         try {
             await axios.put(`/api/user/${user.name}`, data) //user.name = userId
-            fetchData();
-            setIsEditing(false);
+            fetchData()
+            setIsEditing(false)
         } catch (err) {
-            alert("Không thể kết nối đến server")
+            alert('Không thể kết nối đến server')
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
     return (
         <div id="profile">
             <MsgModal msg={modal.msg} Fn={modal.Fn} show={modal.isShow} danger={modal.isDanger} />
             <Switch>
                 <Route exact path="/auth/profile/change-password">
-                    <ChangePasswordModal
-                        user={user}
-                        handleLogout={handleLogout}
-                    />
+                    <ChangePasswordModal user={user} handleLogout={handleLogout} />
                 </Route>
             </Switch>
             <h3 className="title">THÔNG TIN CÁ NHÂN</h3>
             <div className="profile-content">
                 <div className="profile-content-left">
                     <div className="avatar">
-                    {user.role === "Student" &&
-                            <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${user.name.substring(0, 3)}/${user.name}.jpg`} alt="#" />
-                        }
-                        {user.role === "Teacher" &&
-                            <img src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${'Teacher'}/${user.name}.jpg`} alt="#" />
-                        }
-                        {
-                            user.role === "Admin" &&
-                            <img src="https://aui.atlassian.com/aui/8.8/docs/images/avatar-person.svg" alt="#" />
-                        }
+                        {user.role === 'Student' && (
+                            <img
+                                src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${user.name.substring(
+                                    0,
+                                    3
+                                )}/${user.name}.jpg`}
+                                alt="#"
+                            />
+                        )}
+                        {user.role === 'Teacher' && (
+                            <img
+                                src={`https://res.cloudinary.com/hungsvdut2k2/image/upload/v1656735851/${'Teacher'}/${
+                                    user.name
+                                }.jpg`}
+                                alt="#"
+                            />
+                        )}
+                        {user.role === 'Admin' && (
+                            <img
+                                src="https://aui.atlassian.com/aui/8.8/docs/images/avatar-person.svg"
+                                alt="#"
+                            />
+                        )}
                         {/* <div className="avatar-edit">
                             <BsPencil />
                         </div> */}
@@ -135,9 +138,7 @@ export default function Profile({ user, handleLogout, setLoading }) {
                             </li>
                             <li>
                                 <div>Giới tính</div>
-                                <div>
-                                    {info.userInformation.gender ? "Nam" : "Nữ"}
-                                </div>
+                                <div>{info.userInformation.gender ? 'Nam' : 'Nữ'}</div>
                             </li>
                             <li>
                                 <div>Ngày sinh</div>
@@ -149,10 +150,8 @@ export default function Profile({ user, handleLogout, setLoading }) {
                                     onFinish={handleEdit}
                                     initialValues={{
                                         email: info.userInformation.email,
-                                        phoneNumber:
-                                            info.userInformation.phoneNumber,
-                                    }}
-                                >
+                                        phoneNumber: info.userInformation.phoneNumber
+                                    }}>
                                     <li>
                                         <div>Điện thoại</div>
                                         <div>
@@ -161,15 +160,10 @@ export default function Profile({ user, handleLogout, setLoading }) {
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        message:
-                                                            "Bạn chưa nhập SĐT!",
-                                                    },
-                                                ]}
-                                            >
-                                                <Input
-                                                    size="small"
-                                                    className="w-96"
-                                                />
+                                                        message: 'Bạn chưa nhập SĐT!'
+                                                    }
+                                                ]}>
+                                                <Input size="small" className="w-96" />
                                             </Form.Item>
                                         </div>
                                     </li>
@@ -181,26 +175,18 @@ export default function Profile({ user, handleLogout, setLoading }) {
                                                 rules={[
                                                     {
                                                         required: true,
-                                                        type: "email",
-                                                        message:
-                                                            "Bạn chưa nhập email!",
-                                                    },
-                                                ]}
-                                            >
-                                                <Input
-                                                    size="small"
-                                                    className="w-96"
-                                                />
+                                                        type: 'email',
+                                                        message: 'Bạn chưa nhập email!'
+                                                    }
+                                                ]}>
+                                                <Input size="small" className="w-96" />
                                             </Form.Item>
                                         </div>
                                     </li>
                                     <li className="absolute -bottom-10">
                                         <div></div>
                                         <Form.Item>
-                                            <Button
-                                                type="primary"
-                                                htmlType="submit"
-                                            >
+                                            <Button type="primary" htmlType="submit">
                                                 Lưu thông tin
                                             </Button>
                                         </Form.Item>
@@ -210,9 +196,7 @@ export default function Profile({ user, handleLogout, setLoading }) {
                                 <>
                                     <li>
                                         <div>Điện thoại</div>
-                                        <div>
-                                            {info.userInformation.phoneNumber}
-                                        </div>
+                                        <div>{info.userInformation.phoneNumber}</div>
                                     </li>
                                     <li>
                                         <div>Email</div>
@@ -246,5 +230,5 @@ export default function Profile({ user, handleLogout, setLoading }) {
                 </div>
             </div>
         </div>
-    );
+    )
 }

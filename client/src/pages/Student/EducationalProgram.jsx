@@ -1,93 +1,89 @@
-import React, { useEffect, useState  } from "react";
-import { Table, Tooltip, Select, Button } from "antd";
-import { BsArrowLeft} from 'react-icons/bs'
-import axios from "axios";
-import { useRouteMatch, useHistory } from "react-router-dom";
-import MsgModal from "../../components/MsgModal";
+import React, { useEffect, useState } from 'react'
+import { Table, Tooltip } from 'antd'
+import axios from 'axios'
+import MsgModal from '../../components/MsgModal'
 export default function EduProgramDetail({ setLoading, user }) {
-    document.title = "Chương trình đào tạo";
-    let { path, url } = useRouteMatch();
-    let navigate = useHistory();
+    document.title = 'Chương trình đào tạo'
 
     const columns = [
         {
-            title: "Kì",
-            dataIndex: "semester",
-            key: "semester",
-            width: "80px",
+            title: 'Kì',
+            dataIndex: 'semester',
+            key: 'semester',
+            width: '80px',
             filters: [
                 {
                     text: '1',
-                    value: 1,
+                    value: 1
                 },
                 {
                     text: '2',
-                    value: 2,
+                    value: 2
                 },
                 {
                     text: '3',
-                    value: 3,
+                    value: 3
                 },
                 {
                     text: '4',
-                    value: 4,
+                    value: 4
                 },
                 {
                     text: '5',
-                    value: 5,
+                    value: 5
                 },
                 {
                     text: '6',
-                    value: 6,
+                    value: 6
                 },
                 {
                     text: '7',
-                    value: 7,
+                    value: 7
                 },
                 {
                     text: '8',
-                    value: 8,
+                    value: 8
                 },
                 {
                     text: '9',
-                    value: 9,
+                    value: 9
                 },
                 {
                     text: '10',
-                    value: 10,
-                },
+                    value: 10
+                }
             ],
             onFilter: (value, record) => record.semester === value,
             sorter: (a, b) => a.semester - b.semester,
             ellipsis: {
-                showTitle: false,
+                showTitle: false
             },
             render: (semester) => (
                 <Tooltip placement="topLeft" title={semester}>
                     {semester}
                 </Tooltip>
-            ),
+            )
         },
         {
-            title: "Mã HP",
-            dataIndex: "courseId",
-            key: "courseId",
+            title: 'Mã HP',
+            dataIndex: 'courseId',
+            key: 'courseId',
             ellipsis: {
-                showTitle: false,
+                showTitle: false
             },
-            width: "150px",
+            width: '150px',
             render: (courseId) => (
                 <Tooltip placement="topLeft" title={courseId}>
                     {courseId}
                 </Tooltip>
-            ),
+            )
         },
         {
-            title: "Tên HP",
-            dataIndex: "name",
-            key: "name",
+            title: 'Tên HP',
+            dataIndex: 'name',
+            key: 'name',
             ellipsis: {
-                showTitle: false,
+                showTitle: false
             },
             render: (name) => {
                 return (
@@ -98,68 +94,74 @@ export default function EduProgramDetail({ setLoading, user }) {
             }
         },
         {
-            title: "TC",
-            dataIndex: "credits",
-            key: "credits",
+            title: 'TC',
+            dataIndex: 'credits',
+            key: 'credits',
             ellipsis: {
-                showTitle: false,
+                showTitle: false
             },
-            width: "70px",
+            width: '70px',
             render: (credits) => {
                 return (
                     <Tooltip placement="topLeft" title={credits}>
                         {credits}
                     </Tooltip>
                 )
-            },
-        },
-    ];
-    
-    const [courses, setCourses] = useState([]);
+            }
+        }
+    ]
+
+    const [courses, setCourses] = useState([])
     const [program, setProgram] = useState({
-        educationalProgramId: "",
-        name: ""
-    });
-    
+        educationalProgramId: '',
+        name: ''
+    })
+
     const [modal, setModal] = useState({
         isShow: false,
         Fn: () => {},
         isDanger: false,
-        msg: "",
-    });
-    
+        msg: ''
+    })
+
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true);
+            setLoading(true)
             try {
                 const { data: userInfor } = await axios.get(`/api/user/${user.name}`)
-                const educationalProgramId = userInfor.educationalProgram.educationalProgramId;
+                const educationalProgramId = userInfor.educationalProgram.educationalProgramId
 
-                const { data: programData } = await axios.get(`/api/education-program/${educationalProgramId}`)
-                setProgram(programData);
-                const {data: coursesData } = await axios.get(`/api/education-program/course/${educationalProgramId}`)
-                setCourses(coursesData.sort((a, b) => a.semester > b.semester).map(c => {
-                    return {
-                        semester: c.semester,
-                        courseId: c.course.courseId,
-                        name: c.course.name,
-                        credits: c.course.credits,
-                    }
-                }));
-            }
-            catch (err) {
+                const { data: programData } = await axios.get(
+                    `/api/education-program/${educationalProgramId}`
+                )
+                setProgram(programData)
+                const { data: coursesData } = await axios.get(
+                    `/api/education-program/course/${educationalProgramId}`
+                )
+                setCourses(
+                    coursesData
+                        .sort((a, b) => a.semester > b.semester)
+                        .map((c) => {
+                            return {
+                                semester: c.semester,
+                                courseId: c.course.courseId,
+                                name: c.course.name,
+                                credits: c.course.credits
+                            }
+                        })
+                )
+            } catch (err) {
                 setModal({
                     isShow: true,
                     Fn: () => setModal({ ...modal, isShow: false }),
                     isDanger: true,
-                    msg: "Tải dữ liệu thất bại\n",
-                });
+                    msg: 'Tải dữ liệu thất bại\n'
+                })
             }
             setLoading(false)
         }
-        fetchData();
-    }, []);
-
+        fetchData()
+    }, [])
 
     return (
         <div id="edu-program-course-list">
@@ -175,10 +177,9 @@ export default function EduProgramDetail({ setLoading, user }) {
                 className="courses-table"
                 dataSource={courses}
                 columns={columns}
-                pagination={false} 
+                pagination={false}
                 rowKey="courseId"
             />
-
         </div>
-    );
+    )
 }

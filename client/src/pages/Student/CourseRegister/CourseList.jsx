@@ -1,83 +1,79 @@
-import React, { useEffect, useState, useRef } from "react";
-import { Table, Tooltip, Select, Button } from "antd";
-import { SearchOutlined } from "@ant-design/icons";
-import axios from "axios";
-import { Switch, useRouteMatch, Route, useHistory } from "react-router-dom";
-import InputField from "../../../components/InputField";
+import React, { useEffect, useState, useRef } from 'react'
+import { Table, Tooltip, Button } from 'antd'
+import { SearchOutlined } from '@ant-design/icons'
+import axios from 'axios'
+import { useHistory } from 'react-router-dom'
+import InputField from '../../../components/InputField'
 export default function CourseList({ setLoading, user }) {
-    document.title = "Danh sách học phần";
-    let { path, url } = useRouteMatch();
-    let navigate = useHistory();
+    document.title = 'Danh sách học phần'
+    let navigate = useHistory()
 
     const columns = [
         {
-            title: "Mã HP",
-            dataIndex: "courseId",
-            key: "courseId",
-            width: "200px",
+            title: 'Mã HP',
+            dataIndex: 'courseId',
+            key: 'courseId',
+            width: '200px',
             ellipsis: {
-                showTitle: false,
+                showTitle: false
             },
             render: (courseId) => (
                 <Tooltip placement="topLeft" title={courseId}>
                     {courseId}
                 </Tooltip>
-            ),
+            )
         },
         {
-            title: "Tên HP",
-            dataIndex: "name",
-            key: "name",
+            title: 'Tên HP',
+            dataIndex: 'name',
+            key: 'name',
             ellipsis: {
-                showTitle: false,
+                showTitle: false
             },
-            width: "30%",
+            width: '30%',
             render: (name) => (
                 <Tooltip placement="topLeft" title={name}>
                     {name}
                 </Tooltip>
-            ),
+            )
         },
         {
-            title: "TC",
-            dataIndex: "credits",
-            key: "credits",
+            title: 'TC',
+            dataIndex: 'credits',
+            key: 'credits',
             ellipsis: {
-                showTitle: false,
+                showTitle: false
             },
-            width: "60px",
+            width: '60px',
             render: (credits) => (
                 <Tooltip placement="topLeft" title={credits}>
                     {credits}
                 </Tooltip>
-            ),
+            )
         },
         {
-            title: "Học phần học trước",
-            dataIndex: "requiredCourseId",
-            key: "requiredCourseId",
+            title: 'Học phần học trước',
+            dataIndex: 'requiredCourseId',
+            key: 'requiredCourseId',
             ellipsis: {
-                showTitle: false,
+                showTitle: false
             },
             render: (requiredCourseId) => {
-                let requireCourse = courses.find(
-                    (course) => course.courseId === requiredCourseId
-                );
+                let requireCourse = courses.find((course) => course.courseId === requiredCourseId)
                 return (
                     <Tooltip placement="topLeft" title={requiredCourseId}>
-                        {requireCourse &&
-                            requireCourse.courseId + " - " + requireCourse.name}
+                        {requireCourse && requireCourse.courseId + ' - ' + requireCourse.name}
                     </Tooltip>
-                );
-            },
+                )
+            }
         },
         {
-            title: "Danh sách",
-            dataIndex: "courseId",
-            key: "delete",
-            width: "160px",
+            title: 'Danh sách',
+            dataIndex: 'courseId',
+            key: 'delete',
+            width: '160px',
             ellipsis: {
-                showTitle: false,
+                showTitle: false
             },
             render: (courseId) => {
                 return (
@@ -85,56 +81,51 @@ export default function CourseList({ setLoading, user }) {
                         type="primary"
                         icon={<SearchOutlined />}
                         onClick={() => {
-                            navigate.push(
-                                `/auth/course-register/list/${courseId}`
-                            );
-                        }}
-                    >
+                            navigate.push(`/auth/course-register/list/${courseId}`)
+                        }}>
                         Danh sách
                     </Button>
-                );
-            },
-        },
-    ];
+                )
+            }
+        }
+    ]
 
-    const [searchText, setSearchText] = useState("");
-    const [courses, setCourses] = useState([]);
-    const inputSearchEl = useRef(null);
+    const [searchText, setSearchText] = useState('')
+    const [courses, setCourses] = useState([])
+    const inputSearchEl = useRef(null)
 
     const objectToString = (classObject) => {
-        return Object.values(classObject).join(" ");
-    };
+        return Object.values(classObject).join(' ')
+    }
 
     const handleSearch = (e) => {
-        e.preventDefault();
-        setSearchText(inputSearchEl.current.value);
-    };
+        e.preventDefault()
+        setSearchText(inputSearchEl.current.value)
+    }
 
-    const handleDelete = async (courseId) => {
-        try {
-            await axios.delete(`/api/course/${courseId}`);
-            setCourses(courses.filter((item) => item.courseId !== courseId));
-        } catch (err) {
-            console.log(err);
-        }
-    };
+    // const handleDelete = async (courseId) => {
+    //     try {
+    //         await axios.delete(`/api/course/${courseId}`)
+    //         setCourses(courses.filter((item) => item.courseId !== courseId))
+    //     } catch (err) {
+    //         console.log(err)
+    //     }
+    // }
 
     useEffect(() => {
         const fetchData = async () => {
-            setLoading(true);
+            setLoading(true)
             try {
-                const { data } = await axios.get(
-                    `/api/course/user/${user.name}`
-                );
-                setCourses(data);
+                const { data } = await axios.get(`/api/course/user/${user.name}`)
+                setCourses(data)
             } catch (err) {
-                console.log(err);
-                alert("Không thể kết nối đến server");
+                console.log(err)
+                alert('Không thể kết nối đến server')
             }
-            setLoading(false);
-        };
-        fetchData();
-    }, []);
+            setLoading(false)
+        }
+        fetchData()
+    }, [])
 
     return (
         <div id="user-list">
@@ -145,19 +136,9 @@ export default function CourseList({ setLoading, user }) {
                     <form
                         onSubmit={handleSearch}
                         action=""
-                        className="mx-auto w-96 courses-search items-end flex mb-3"
-                    >
-                        <InputField
-                            type="text"
-                            label="Tìm kiếm"
-                            ref={inputSearchEl}
-                        />
-                        <Button
-                            type="primary"
-                            size="medium"
-                            htmlType="submit"
-                            className="ml-5"
-                        >
+                        className="mx-auto w-96 courses-search items-end flex mb-3">
+                        <InputField type="text" label="Tìm kiếm" ref={inputSearchEl} />
+                        <Button type="primary" size="medium" htmlType="submit" className="ml-5">
                             Search
                         </Button>
                     </form>
@@ -171,15 +152,15 @@ export default function CourseList({ setLoading, user }) {
                         )}
                         columns={columns}
                         pagination={{
-                            position: ["topRight"],
+                            position: ['topRight'],
                             defaultPageSize: 10,
                             showSizeChanger: true,
-                            pageSizeOptions: ["10", "20", "50", "100"],
+                            pageSizeOptions: ['10', '20', '50', '100']
                         }}
                         rowKey="courseId"
-                    />{" "}
+                    />{' '}
                 </>
             )}
         </div>
-    );
+    )
 }
